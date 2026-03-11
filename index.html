@@ -78,12 +78,12 @@ button,input{font-family:'Nunito',sans-serif}
 .hamburger span{width:24px;height:2.5px;background:var(--dark-green);border-radius:4px;transition:transform .3s,opacity .3s}
 .mobile-menu{
   display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(255,248,240,.97);backdrop-filter:blur(20px);z-index:99;
+  background:rgba(255,248,240,.97);backdrop-filter:blur(20px);z-index:200;
   flex-direction:column;align-items:center;justify-content:center;gap:32px;
 }
 .mobile-menu.open{display:flex}
 .mobile-menu a{font-family:'Fredoka',sans-serif;font-size:1.5rem;color:var(--dark-green);font-weight:600}
-.mobile-menu .close-btn{position:absolute;top:20px;right:24px;font-size:2rem;background:none;border:none;color:var(--dark-green);cursor:pointer}
+.mobile-menu .close-btn{position:absolute;top:20px;right:24px;font-size:2.5rem;background:none;border:none;color:var(--dark-green);cursor:pointer;width:48px;height:48px;display:flex;align-items:center;justify-content:center;z-index:201}
 @media(max-width:768px){
   .nav-links{display:none}
   .hamburger{display:flex}
@@ -801,11 +801,11 @@ button,input{font-family:'Nunito',sans-serif}
   <div class="container">
     <h2 class="reveal">Ready to transform your kitchen?</h2>
     <p class="cta-sub reveal reveal-delay-1">Join thousands of home cooks already on the waitlist.</p>
-    <form class="cta-form reveal reveal-delay-2" id="betaForm">
-      <input type="email" placeholder="Enter your email" required aria-label="Email address">
-      <button type="submit">Request Beta Access</button>
+    <form class="cta-form reveal reveal-delay-2" id="betaForm" onsubmit="return false">
+      <input type="email" name="email" id="betaEmail" placeholder="Enter your email" required aria-label="Email address">
+      <button type="button" id="betaSubmitBtn" onclick="submitBeta()">Request Beta Access</button>
     </form>
-    <p class="cta-note reveal reveal-delay-3">We'll send you a TestFlight invite within 24 hours</p>
+    <p class="cta-note reveal reveal-delay-3">We'll send you a TestFlight invite within 48 hours ✨</p>
     <div class="trust-badges reveal reveal-delay-4">
       <span class="trust-badge">&#x1F512; No spam, ever</span>
       <span class="trust-badge">&#x1F34E; iOS TestFlight</span>
@@ -822,15 +822,13 @@ button,input{font-family:'Nunito',sans-serif}
       <span class="footer-brand">Fridgenie</span>
     </div>
     <div class="footer-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Contact</a>
+      <a href="https://feedmiyo6.github.io/shared-files/mj/fridgenie/legal/privacy.html" target="_blank">Privacy Policy</a>
+      <a href="https://feedmiyo6.github.io/shared-files/mj/fridgenie/legal/terms.html" target="_blank">Terms of Service</a>
+      <a href="mailto:fridgenie.app@gmail.com">Contact</a>
     </div>
     <p class="footer-made">Made with &#x1F49A; in Phoenix, AZ</p>
     <div class="footer-social">
-      <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg></a>
-      <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg></a>
-      <a href="#" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+      <a href="mailto:fridgenie.app@gmail.com" aria-label="Email">📧</a>
     </div>
     <p class="footer-copy">&copy; 2026 Fridgenie. All rights reserved.</p>
   </div>
@@ -856,10 +854,10 @@ window.addEventListener('scroll', () => {
 const hamburger = document.getElementById('hamburgerBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const closeMenu = document.getElementById('closeMenu');
-hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
-closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
+hamburger.addEventListener('click', () => { mobileMenu.classList.add('open'); hamburger.style.display='none'; });
+closeMenu.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamburger.style.display='flex'; });
 document.querySelectorAll('.mobile-link').forEach(a => {
-  a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamburger.style.display='flex'; });
 });
 
 /* ── FAQ accordion ─────────────────────────── */
@@ -881,15 +879,38 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 });
 
 /* ── Beta form ─────────────────────────────── */
-const betaForm = document.getElementById('betaForm');
 const toast = document.getElementById('toast');
-betaForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const input = betaForm.querySelector('input');
-  if (!input.value) return;
-  showToast("\uD83C\uDF89 You're on the list! Check your email for a TestFlight invite.");
-  input.value = '';
-});
+const SUPABASE_URL = 'https://rhhaojpsqfbapltcvsbz.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoaGFvanBzcWZiYXBsdGN2c2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3NjM2NDksImV4cCI6MjA1NTMzOTY0OX0.ZXQT8YNKK5VaMLIFMc5LzxAFcGCxOULKqwdAzgWQsoc';
+async function submitBeta() {
+  const email = document.getElementById('betaEmail').value.trim();
+  if (!email) return;
+  const btn = document.getElementById('betaSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/beta_signups', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': 'Bearer ' + SUPABASE_ANON,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email: email })
+    });
+    if (res.ok || res.status === 201) {
+      showToast("\uD83C\uDF89 You're on the list! We'll send a TestFlight invite soon.");
+      document.getElementById('betaEmail').value = '';
+    } else if (res.status === 409) {
+      showToast("\uD83D\uDC4D You're already on the list! We'll be in touch soon.");
+    } else {
+      showToast("\u26A0\uFE0F Something went wrong. Try again or email fridgenie.app@gmail.com");
+    }
+  } catch (e) {
+    showToast("\u26A0\uFE0F Network error. Try again or email fridgenie.app@gmail.com");
+  }
+  btn.disabled = false; btn.textContent = 'Request Beta Access';
+}
 function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
