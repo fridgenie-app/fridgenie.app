@@ -486,7 +486,7 @@ button,input{font-family:'Nunito',sans-serif}
       <li><a href="#how-it-works">How It Works</a></li>
       <li><a href="#screenshots">Screenshots</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><a href="#beta" class="nav-cta">Join Beta</a></li>
+      <li><a href="https://testflight.apple.com/join/dgMH2Qkp" class="nav-cta" target="_blank">Download Beta</a></li>
     </ul>
     <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -501,7 +501,7 @@ button,input{font-family:'Nunito',sans-serif}
   <a href="#how-it-works" class="mobile-link">How It Works</a>
   <a href="#screenshots" class="mobile-link">Screenshots</a>
   <a href="#faq" class="mobile-link">FAQ</a>
-  <a href="#beta" class="mobile-link">Join Beta</a>
+  <a href="https://testflight.apple.com/join/dgMH2Qkp" class="mobile-link" target="_blank">Download Beta</a>
 </div>
 
 <!-- ─── Hero ────────────────────────────────── -->
@@ -518,7 +518,7 @@ button,input{font-family:'Nunito',sans-serif}
     <p class="tagline reveal reveal-delay-2">Your magical kitchen companion</p>
     <p class="tagline-sub reveal reveal-delay-3">Smart pantry tracking, AI-powered recipes, and zero food waste — all in one app.</p>
     <div class="hero-buttons reveal reveal-delay-4">
-      <a href="#beta" class="btn btn-primary">Join the Beta &#10024;</a>
+      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn btn-primary" target="_blank">Download Beta &#127822;</a>
       <a href="#features" class="btn btn-outline">Learn More</a>
     </div>
   </div>
@@ -800,13 +800,19 @@ button,input{font-family:'Nunito',sans-serif}
 <section class="cta-section" id="beta">
   <div class="container">
     <h2 class="reveal">Ready to transform your kitchen?</h2>
-    <p class="cta-sub reveal reveal-delay-1">Join thousands of home cooks already on the waitlist.</p>
-    <form class="cta-form reveal reveal-delay-2" id="betaForm" onsubmit="return false">
-      <input type="email" name="email" id="betaEmail" placeholder="Enter your email" required aria-label="Email address">
-      <button type="button" id="betaSubmitBtn" onclick="submitBeta()">Request Beta Access</button>
-    </form>
-    <p class="cta-note reveal reveal-delay-3">We'll send you a TestFlight invite within 48 hours ✨</p>
-    <div class="trust-badges reveal reveal-delay-4">
+    <p class="cta-sub reveal reveal-delay-1">Try Fridgenie free on TestFlight — no waitlist, instant access.</p>
+    <div class="reveal reveal-delay-2" style="margin-bottom:28px">
+      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn" style="background:#fff;color:var(--dark-green);font-size:1.1rem;padding:16px 40px;box-shadow:0 6px 20px rgba(0,0,0,.15)" target="_blank">Download on TestFlight &#127822;</a>
+    </div>
+    <p class="cta-note reveal reveal-delay-3" style="margin-bottom:16px">iOS only &middot; Requires TestFlight app &middot; Free during beta</p>
+    <div class="reveal reveal-delay-4" style="border-top:1px solid rgba(255,255,255,.15);padding-top:24px;max-width:480px;margin:0 auto">
+      <p style="font-size:.88rem;opacity:.8;margin-bottom:12px">Don't have an iPhone? Get notified when we launch on Android:</p>
+      <form class="cta-form" id="betaForm" onsubmit="return false" style="margin-bottom:8px">
+        <input type="email" name="email" id="betaEmail" placeholder="Enter your email" required aria-label="Email address">
+        <button type="button" id="betaSubmitBtn" onclick="submitBeta()">Notify Me</button>
+      </form>
+    </div>
+    <div class="trust-badges reveal reveal-delay-5" style="margin-top:20px">
       <span class="trust-badge">&#x1F512; No spam, ever</span>
       <span class="trust-badge">&#x1F34E; iOS TestFlight</span>
       <span class="trust-badge">&#10024; Free during beta</span>
