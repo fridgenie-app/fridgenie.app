@@ -16,513 +16,261 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --primary:#B63F39;--primary-light:#C94B44;--primary-dark:#8A2E2A;
-  --bg:#F4EFE7;--surface:#FAF7F2;--text:#2C2420;--text-light:#6B6B6B;--text-muted:#9A9590;
-  --gold:#DEB887;--card:#FFFFFF;
-  --shadow:0 4px 24px rgba(182,63,57,.06);--shadow-lg:0 12px 48px rgba(182,63,57,.10);
-  --radius:18px;--radius-sm:14px;
-}
+:root{--primary:#B63F39;--primary-dark:#8A2E2A;--bg:#F4EFE7;--text:#2C2420;--text-light:#6B6B6B;--gold:#DEB887;--border:#E0DAD0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:'Shippori Mincho',serif;line-height:1.25}
-img{max-width:100%;display:block}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Shippori Mincho',serif;line-height:1.2;font-weight:700}
 a{color:inherit;text-decoration:none}
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
-.section-label{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
-.section-title{font-size:clamp(1.8rem,4vw,2.5rem);color:var(--primary-dark);margin-bottom:12px}
-.section-sub{font-size:1.05rem;color:var(--text-light);max-width:540px;margin:0 auto 48px}
-.text-center{text-align:center}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}.reveal-delay-5{transition-delay:.5s}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-
-/* Food icon background */
-.food-icons{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.food-icon{position:absolute;opacity:.05}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
 
 /* Navbar */
-.navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 0;transition:all .35s}
-.navbar.scrolled{background:rgba(244,239,231,.92);backdrop-filter:blur(14px);box-shadow:0 2px 20px rgba(182,63,57,.06);padding:10px 0}
-.navbar .container{display:flex;align-items:center;justify-content:space-between}
-.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-weight:800;font-size:1.2rem;color:var(--primary)}
-.nav-logo img{width:34px;height:34px;border-radius:50%;flex-shrink:0}
-.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
-.nav-links a{font-weight:600;font-size:.9rem;color:var(--text);transition:color .2s}
-.nav-links a:hover{color:var(--primary)}
-.nav-cta{background:var(--primary);color:#fff;padding:10px 24px;border-radius:50px;font-weight:700;font-size:.85rem;border:none;cursor:pointer;transition:all .25s;box-shadow:0 2px 12px rgba(182,63,57,.15)}
-.nav-cta:hover{background:var(--primary-dark);transform:translateY(-1px)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
-.hamburger span{width:24px;height:2.5px;background:var(--primary-dark);border-radius:4px;transition:.3s}
-.mobile-menu{display:none;position:fixed;inset:0;background:rgba(244,239,231,.97);backdrop-filter:blur(20px);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:32px}
-.mobile-menu.open{display:flex}
-.mobile-menu a{font-family:'Shippori Mincho',serif;font-size:1.5rem;color:var(--primary-dark);font-weight:600}
-.mobile-menu .close-btn{position:absolute;top:20px;right:24px;font-size:2.5rem;background:none;border:none;color:var(--primary-dark);cursor:pointer}
-@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;transition:all .3s}
+nav.scrolled{background:rgba(244,239,231,.93);backdrop-filter:blur(12px);padding:12px 0;box-shadow:0 1px 12px rgba(0,0,0,.04)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;color:var(--primary)}
+.nav-brand img{width:32px;height:32px;border-radius:50%}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--text-light);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.btn-pill{display:inline-block;background:var(--primary);color:#fff;font-size:.85rem;font-weight:600;padding:10px 24px;border-radius:50px;transition:background .2s}
+.btn-pill:hover{background:var(--primary-dark)}
 
 /* Hero */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero-content{position:relative;z-index:2;max-width:680px}
-.hero-brand{margin:0 auto 32px;text-align:center}
-.hero-brand svg{width:80px;height:80px;margin-bottom:16px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(182,63,57,.2))}
-.hero-brand-text{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(3rem,8vw,4.5rem);color:var(--primary);letter-spacing:-2px;line-height:1}
-.hero-brand-dot{display:inline-block;width:10px;height:10px;background:var(--gold);border-radius:50%;margin-left:2px;vertical-align:super;font-size:0}
-.hero h1,.hero .hero-brand-text{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.8rem,7vw,4rem);color:var(--primary);margin-bottom:10px;letter-spacing:-.02em}
-.hero .tagline{font-family:'Shippori Mincho',serif;font-size:clamp(1.1rem,2.5vw,1.3rem);color:var(--primary-dark);font-weight:600;margin-bottom:8px}
-.hero .tagline-sub{font-size:clamp(.92rem,2vw,1.05rem);color:var(--text-light);max-width:500px;margin:0 auto 32px;line-height:1.75}
-.hero-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:50px;font-family:'Inter',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);border:2px solid transparent;min-width:170px}
-.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 4px 16px rgba(182,63,57,.18)}
-.btn-primary:hover{background:var(--primary-dark);border-color:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 28px rgba(182,63,57,.25)}
-.btn-outline{background:rgba(182,63,57,.06);color:var(--primary-dark);border-color:rgba(182,63,57,.18)}
-.btn-outline:hover{background:var(--primary);color:#fff;border-color:var(--primary);transform:translateY(-2px)}
-.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:40px;flex-wrap:wrap}
-.hero-stat{text-align:center}
-.hero-stat-num{font-family:'Shippori Mincho',serif;font-size:1.8rem;font-weight:700;color:var(--primary)}
-.hero-stat-label{font-size:.75rem;color:var(--text-muted);font-weight:600}
+.hero{position:relative;padding:160px 0 100px;overflow:hidden}
+.hero-content{max-width:600px}
+.hero h1{font-size:clamp(2.4rem,5.5vw,3.6rem);color:var(--text);margin-bottom:20px}
+.hero p{font-size:1.1rem;color:var(--text-light);max-width:440px;margin-bottom:36px;line-height:1.75}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.hero-actions .btn-pill{padding:14px 32px;font-size:.95rem}
+.email-group{display:flex;gap:0;max-width:300px}
+.email-group input{flex:1;min-width:0;border:1.5px solid var(--border);border-right:none;border-radius:50px 0 0 50px;padding:12px 18px;font-size:.88rem;font-family:inherit;background:#fff;outline:none;transition:border-color .2s}
+.email-group input:focus{border-color:var(--primary)}
+.email-group button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:0 50px 50px 0;font-size:.82rem;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .2s}
+.email-group button:hover{background:var(--primary-dark)}
+.hero-note{margin-top:14px;font-size:.78rem;color:var(--text-light)}
 
-/* Sparkle decoration */
-.sparkle{display:inline-block;width:20px;height:20px}
-.sparkle svg{width:100%;height:100%}
+/* Hero food icons */
+.hero-icon{position:absolute;opacity:.04;pointer-events:none}
 
-/* Features */
-.features{padding:100px 0}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.feature-card{background:var(--card);border-radius:var(--radius);padding:30px 22px;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;border:1px solid rgba(182,63,57,.04);text-align:center}
-.feature-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
-.feature-icon-wrap{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.feature-icon-wrap svg{width:24px;height:24px}
-.feature-card h3{font-size:1.08rem;color:var(--primary-dark);margin-bottom:8px}
-.feature-card p{font-size:.88rem;color:var(--text-light);line-height:1.65}
-@media(max-width:900px){.features-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:580px){.features-grid{grid-template-columns:1fr}}
-
-/* AI Showcase */
-.ai-showcase{padding:100px 0;background:linear-gradient(180deg,transparent,rgba(182,63,57,.02),transparent)}
-.showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.showcase-visual{background:var(--card);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-lg);border:1px solid rgba(182,63,57,.05);position:relative;overflow:hidden}
-.showcase-visual::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--gold),var(--primary))}
-.showcase-content h3{font-size:clamp(1.4rem,3vw,1.7rem);color:var(--primary-dark);margin-bottom:12px}
-.showcase-content p{color:var(--text-light);margin-bottom:20px;line-height:1.7}
-.showcase-features{list-style:none;display:flex;flex-direction:column;gap:11px}
-.showcase-features li{display:flex;align-items:flex-start;gap:10px;font-size:.9rem;color:var(--text)}
-.showcase-features li::before{content:'✓';background:var(--primary);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:2px}
-.demo-card{background:var(--bg);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;border:1px solid rgba(182,63,57,.06)}
-.demo-card:last-child{margin-bottom:0}
-.demo-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px}
-.demo-title{font-family:'Shippori Mincho',serif;font-size:1rem;color:var(--primary-dark);margin-bottom:4px}
-.demo-text{font-size:.82rem;color:var(--text-light);line-height:1.55}
-.demo-tag{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:8px;margin-top:6px}
-.demo-tag-red{background:rgba(182,63,57,.1);color:var(--primary)}
-.demo-tag-gold{background:rgba(222,184,135,.2);color:#B8860B}
-@media(max-width:800px){.showcase-grid{grid-template-columns:1fr}.showcase-visual{order:2}}
-
-/* How It Works */
-.how-it-works{padding:100px 0}
-.steps{display:flex;gap:40px;align-items:flex-start;position:relative;margin-top:8px}
-.steps::before{content:'';position:absolute;top:36px;left:36px;right:36px;height:3px;background:linear-gradient(90deg,var(--primary),var(--gold),var(--primary));border-radius:4px;opacity:.18}
-.step{flex:1;text-align:center;position:relative;z-index:1}
-.step-num{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-family:'Shippori Mincho',serif;font-size:1.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 6px 20px rgba(182,63,57,.18)}
-.step h3{font-size:1.08rem;color:var(--primary-dark);margin-bottom:8px}
-.step p{font-size:.86rem;color:var(--text-light);max-width:260px;margin:0 auto}
-@media(max-width:700px){.steps{flex-direction:column;align-items:center}.steps::before{display:none}}
-
-/* Testimonials */
-.testimonials{padding:100px 0;background:linear-gradient(180deg,transparent,rgba(182,63,57,.015),transparent)}
-.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.testimonial-card{background:var(--card);border-radius:var(--radius);padding:30px 22px;box-shadow:var(--shadow);border:1px solid rgba(182,63,57,.04);transition:transform .3s}
-.testimonial-card:hover{transform:translateY(-4px)}
-.stars{color:var(--gold);font-size:1rem;margin-bottom:14px;letter-spacing:2px}
-.testimonial-card blockquote{font-size:.92rem;color:var(--text);line-height:1.7;margin-bottom:18px;font-style:italic}
-.testimonial-author{text-align:center;padding-top:6px;border-top:1px solid rgba(182,63,57,.06)}
-.author-name{font-family:'Shippori Mincho',serif;font-weight:600;font-size:.95rem;color:var(--primary-dark);margin-bottom:2px}
-.author-role{font-size:.78rem;color:var(--text-muted);font-weight:500}
-@media(max-width:800px){.testimonials-grid{grid-template-columns:1fr}}
-
-/* FAQ */
-.faq{padding:100px 0}
-.faq-list{max-width:700px;margin:0 auto}
-.faq-item{background:var(--card);border-radius:var(--radius-sm);margin-bottom:12px;box-shadow:0 2px 12px rgba(182,63,57,.04);overflow:hidden;border:1px solid rgba(182,63,57,.04)}
-.faq-question{width:100%;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;text-align:left;font-family:'Inter',sans-serif;font-size:.93rem;font-weight:700;color:var(--primary-dark);transition:color .2s}
-.faq-question:hover{color:var(--primary)}
-.faq-icon{width:28px;height:28px;border-radius:50%;background:rgba(182,63,57,.06);display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0;font-size:.8rem;color:var(--primary)}
-.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--primary);color:#fff}
-.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s ease}
-.faq-answer-inner{padding:0 24px 20px;font-size:.87rem;color:var(--text-light);line-height:1.7}
+/* Feature sections */
+.feature{padding:80px 0}
+.feature .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.feature:nth-child(even) .feat-img{order:-1}
+.feat-text h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin-bottom:16px;color:var(--text)}
+.feat-text p{font-size:1rem;color:var(--text-light);line-height:1.75;margin-bottom:20px;max-width:420px}
+.feat-link{font-size:.88rem;font-weight:600;color:var(--primary);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.feat-link:hover{gap:10px}
+.feat-img{background:#EDE8DF;border-radius:16px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
+.feat-img span{font-size:.85rem;color:var(--text-light)}
 
 /* CTA */
-.cta-section{padding:100px 0;background:linear-gradient(135deg,var(--primary-dark),var(--primary),var(--primary-light));text-align:center;color:#fff;position:relative;overflow:hidden}
-.cta-section::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.04)}
-.cta-section::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.03)}
-.cta-section h2{font-size:clamp(1.8rem,4vw,2.3rem);margin-bottom:12px;position:relative;z-index:1}
-.cta-sub{font-size:1rem;opacity:.85;margin-bottom:28px;position:relative;z-index:1}
-.cta-form{display:flex;gap:10px;max-width:440px;margin:0 auto 16px;position:relative;z-index:1;flex-wrap:wrap;justify-content:center}
-.cta-form input{flex:1;min-width:200px;padding:14px 22px;border-radius:50px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:.9rem;font-weight:600;outline:none;transition:all .2s}
-.cta-form input::placeholder{color:rgba(255,255,255,.5)}
-.cta-form input:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.15)}
-.cta-form button{padding:14px 26px;border-radius:50px;border:none;background:#fff;color:var(--primary-dark);font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s}
-.cta-form button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
-.cta-note{font-size:.78rem;opacity:.6;position:relative;z-index:1}
-.trust-badges{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;margin-top:20px}
-.trust-badge{font-size:.8rem;opacity:.85;font-weight:600;display:flex;align-items:center;gap:5px}
+.cta{padding:80px 0 60px}
+.cta-box{border:1.5px solid var(--border);border-radius:24px;padding:64px 48px;text-align:center;max-width:680px;margin:0 auto}
+.cta-box h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin-bottom:12px}
+.cta-box p{color:var(--text-light);margin-bottom:32px;font-size:1rem}
+.cta-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px}
+.cta-actions .email-group{max-width:280px}
 
 /* Footer */
-.footer{padding:48px 0 32px;background:var(--primary-dark);color:rgba(255,255,255,.7);text-align:center;font-size:.85rem}
-.footer-top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px}
-.footer-logo{width:28px;height:28px}
-.footer-brand{font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:800;color:#fff}
-.footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
-.footer-links a:hover{color:#fff}
-.footer-copy{font-size:.75rem;opacity:.5;margin-top:16px}
+footer{border-top:1px solid var(--border);padding:56px 0 32px;margin-top:40px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-weight:800;font-size:1.05rem;color:var(--primary);margin-bottom:6px}
+.footer-tagline{font-size:.85rem;color:var(--text-light);line-height:1.6}
+.footer-col h4{font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px}
+.footer-col a{display:block;font-size:.88rem;color:var(--text-light);margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:var(--primary)}
+.footer-copy{font-size:.78rem;color:var(--text-light);text-align:center;padding-top:24px;border-top:1px solid var(--border)}
+
+/* Reveal */
+.reveal{opacity:0;transition:opacity .6s ease}
+.reveal.visible{opacity:1}
 
 /* Toast */
-.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--card);color:var(--primary-dark);padding:16px 28px;border-radius:16px;box-shadow:var(--shadow-lg);font-weight:700;font-size:.88rem;z-index:200;transition:transform .4s cubic-bezier(.22,1,.36,1);white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:600px){.section-title{font-size:1.5rem}.hero-stats{gap:20px}.hero-stat-num{font-size:1.4rem}}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:14px 28px;border-radius:50px;font-size:.88rem;font-weight:500;opacity:0;transition:all .35s;z-index:200;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Mobile */
+@media(max-width:768px){
+  .nav-links a:not(.btn-pill){display:none}
+  .hero{padding:120px 0 64px}
+  .hero h1{font-size:2rem}
+  .hero-actions{flex-direction:column;align-items:flex-start}
+  .email-group{max-width:100%;width:100%}
+  .feature .wrap{grid-template-columns:1fr;gap:32px}
+  .feature:nth-child(even) .feat-img{order:0}
+  .feat-img{max-height:240px}
+  .cta-box{padding:40px 24px}
+  .cta-actions{flex-direction:column}
+  .cta-actions .email-group{max-width:100%;width:100%}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:28px}
+}
+@media(max-width:480px){
+  .footer-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar" id="navbar">
-  <div class="container">
-    <a href="#" class="nav-logo"><img src="logo.png" alt="Fridgenie"><span>Fridgenie</span></a>
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#ai-showcase">AI Power</a></li>
-      <li><a href="#how-it-works">How It Works</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="https://testflight.apple.com/join/dgMH2Qkp" class="nav-cta" target="_blank">Download Beta</a></li>
-    </ul>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+<nav>
+  <div class="wrap">
+    <a href="/" class="nav-brand"><img src="logo.png" alt="Fridgenie">Fridgenie</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill" target="_blank">Get Beta</a>
+    </div>
   </div>
 </nav>
-<div class="mobile-menu" id="mobileMenu">
-  <button class="close-btn" id="closeMenu">&times;</button>
-  <a href="#features" class="mobile-link">Features</a>
-  <a href="#ai-showcase" class="mobile-link">AI Power</a>
-  <a href="#how-it-works" class="mobile-link">How It Works</a>
-  <a href="#faq" class="mobile-link">FAQ</a>
-  <a href="https://testflight.apple.com/join/dgMH2Qkp" class="mobile-link" target="_blank">Download Beta</a>
-</div>
 
 <!-- Hero -->
 <section class="hero">
-  <div class="food-icons" id="foodIcons"></div>
-  <div class="hero-content">
+  <!-- Subtle scattered food icons -->
+  <svg class="hero-icon" style="top:12%;left:8%;width:14px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2C11 2 10 3 10 5v7H8V5c0-2 1-3 2-3h4c1 0 2 1 2 3v7h-2V5c0-2-1-3-2-3zm-4 14l1 6h6l1-6H8z"/></svg>
+  <svg class="hero-icon" style="top:28%;right:12%;width:16px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2L2 19h20L12 2zm0 4l6.5 11h-13L12 6z"/></svg>
+  <svg class="hero-icon" style="top:55%;left:65%;width:13px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2c-3 0-8 2-8 7 0 3 2 5 4 6l-1 7h10l-1-7c2-1 4-3 4-6 0-5-5-7-8-7z"/></svg>
+  <svg class="hero-icon" style="top:18%;left:78%;width:12px" viewBox="0 0 24 24" fill="#B63F39"><path d="M2 4h20v14H2V4zm2 2v10h16V6H4zm3 2h10v6H7V8z"/></svg>
+  <svg class="hero-icon" style="top:70%;left:15%;width:15px" viewBox="0 0 24 24" fill="#B63F39"><path d="M4 18c0 2 4 4 8 4s8-2 8-4c0-6-4-16-8-16S4 12 4 18z"/></svg>
+  <svg class="hero-icon" style="top:42%;left:5%;width:12px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2L2 19h20L12 2zm0 4l6.5 11h-13L12 6z"/></svg>
+  <svg class="hero-icon" style="top:82%;right:22%;width:14px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2c-3 0-8 2-8 7 0 3 2 5 4 6l-1 7h10l-1-7c2-1 4-3 4-6 0-5-5-7-8-7z"/></svg>
+  <svg class="hero-icon" style="top:8%;left:42%;width:13px" viewBox="0 0 24 24" fill="#B63F39"><path d="M2 4h20v14H2V4zm2 2v10h16V6H4zm3 2h10v6H7V8z"/></svg>
+  <svg class="hero-icon" style="top:60%;right:6%;width:14px" viewBox="0 0 24 24" fill="#B63F39"><path d="M4 18c0 2 4 4 8 4s8-2 8-4c0-6-4-16-8-16S4 12 4 18z"/></svg>
 
-    <div class="reveal reveal-delay-1"><span class="hero-brand-text">Fridgenie</span><span class="hero-brand-dot">.</span></div>
-    <p class="tagline reveal reveal-delay-2">Your AI-powered kitchen companion</p>
-    <p class="tagline-sub reveal reveal-delay-3">Smart pantry tracking, chef-level recipes, voice input, and receipt scanning — all powered by AI. Say goodbye to food waste.</p>
-    <div class="hero-buttons reveal reveal-delay-4">
-      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn btn-primary" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-        Download Beta
-      </a>
-      <a href="#features" class="btn btn-outline">Learn More</a>
-    </div>
-    <div class="hero-stats reveal reveal-delay-5">
-      <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-label">Pantry Items</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">8</div><div class="hero-stat-label">Cuisines</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">Languages</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">Free</div><div class="hero-stat-label">Beta Access</div></div>
+  <div class="wrap">
+    <div class="hero-content reveal">
+      <h1>Your AI kitchen companion.</h1>
+      <p>Track what you have, discover what to cook, and never waste food again. Powered by AI that understands your pantry.</p>
+      <div class="hero-actions">
+        <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill" target="_blank">Download on TestFlight</a>
+        <div class="email-group">
+          <input type="email" id="heroEmail" placeholder="Email for Android beta">
+          <button onclick="submitBeta('heroEmail')">Notify me</button>
+        </div>
+      </div>
+      <p class="hero-note">Free on iOS via TestFlight. Android coming soon.</p>
     </div>
   </div>
 </section>
 
 <!-- Features -->
-<section class="features" id="features">
-  <div class="container text-center">
-    <p class="section-label reveal">Features</p>
-    <h2 class="section-title reveal">Everything Your Kitchen Needs</h2>
-    <p class="section-sub reveal">Powered by AI, designed for real home cooks. Every feature works together seamlessly.</p>
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon-wrap" style="background:rgba(182,63,57,.08)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#B63F39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-        </div>
-        <h3>Smart Pantry</h3>
-        <p>Track your fridge, freezer, and pantry in one place. Organize by category with beautiful custom icons.</p>
+<div id="features">
+  <section class="feature">
+    <div class="wrap reveal">
+      <div class="feat-text">
+        <h2>Smart Pantry</h2>
+        <p>Add items with a tap. Track expiration dates, quantities, and categories automatically. Your fridge and pantry, always organized and up to date.</p>
+        <a href="#" class="feat-link">Learn more ></a>
       </div>
-      <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon-wrap" style="background:rgba(222,184,135,.18)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#B63F39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </div>
-        <h3>Voice Input</h3>
-        <p>Say what you bought — AI transcribes and categorizes everything. 2-minute recording with live timer and auto-save.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon-wrap" style="background:rgba(182,63,57,.08)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#B63F39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M6 12h.01M6 16h.01M10 8h8M10 12h8M10 16h8"/></svg>
-        </div>
-        <h3>Receipt Scanning</h3>
-        <p>Snap a receipt photo. AI extracts every item — groceries, produce, meats — and adds them to your pantry.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-3">
-        <div class="feature-icon-wrap" style="background:rgba(222,184,135,.18)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#B63F39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5"/></svg>
-        </div>
-        <h3>AI Recipe Discovery</h3>
-        <p>Chef-level recipes personalized to your skill level. 14-day no-repeat system, cuisine preferences, special instructions.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-4">
-        <div class="feature-icon-wrap" style="background:rgba(182,63,57,.08)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#B63F39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <h3>Clean Recipe</h3>
-        <p>Extract any recipe from the web — no ads, no popups. Get clean ingredients, numbered steps, and community tips.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-5">
-        <div class="feature-icon-wrap" style="background:rgba(222,184,135,.18)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#B63F39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        </div>
-        <h3>Household Sharing</h3>
-        <p>Share your kitchen with family. Everyone stays in sync — no duplicate purchases, real-time pantry updates.</p>
-      </div>
+      <div class="feat-img"><span>Screenshot coming soon</span></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- AI Showcase -->
-<section class="ai-showcase" id="ai-showcase">
-  <div class="container">
-    <div class="text-center" style="margin-bottom:60px">
-      <p class="section-label reveal">AI-Powered</p>
-      <h2 class="section-title reveal">Recipes That Actually Work</h2>
-      <p class="section-sub reveal">Not just suggestions — Fridgenie generates full recipes based on what's in your kitchen right now.</p>
+  <section class="feature">
+    <div class="wrap reveal">
+      <div class="feat-text">
+        <h2>Voice & Receipt Input</h2>
+        <p>Say what you bought or snap a receipt photo. Fridgenie parses everything and adds items to your pantry instantly. No manual entry needed.</p>
+        <a href="#" class="feat-link">Learn more ></a>
+      </div>
+      <div class="feat-img"><span>Screenshot coming soon</span></div>
     </div>
-    <div class="showcase-grid reveal" style="margin-bottom:80px">
-      <div class="showcase-visual">
-        <div class="demo-card">
-          <div class="demo-label">Fridgenie Recipe</div>
-          <div class="demo-title">Garlic Butter Chicken Thighs</div>
-          <div class="demo-text">
-            <strong>Ingredients:</strong> Chicken thighs, garlic, butter, thyme, lemon<br>
-            <strong>Step 1:</strong> Pat chicken dry, season with salt and pepper<br>
-            <strong>Step 2:</strong> Sear skin-side down in hot pan for 6 minutes...
-          </div>
-          <span class="demo-tag demo-tag-red">94% pantry match</span>
-          <span class="demo-tag demo-tag-gold">25 min</span>
-        </div>
-        <div class="demo-card">
-          <div class="demo-label">Your Notes</div>
-          <div class="demo-text">Added extra garlic (6 cloves instead of 4). Cooked 2 min longer for crispier skin. ★★★★★</div>
-        </div>
-      </div>
-      <div class="showcase-content">
-        <h3>Fridgenie Recipe Engine</h3>
-        <p>AI generates complete recipes tailored to your exact pantry, skill level, and taste preferences. Not generic — truly personalized.</p>
-        <ul class="showcase-features">
-          <li>Adapts to your cooking skill (beginner to chef)</li>
-          <li>14-day no-repeat system for variety</li>
-          <li>Annotate recipes with your own notes and ratings</li>
-          <li>Ingredient substitution suggestions</li>
-          <li>Available in English, Korean, and Chinese</li>
-        </ul>
-      </div>
-    </div>
-    <div class="showcase-grid reveal" style="direction:rtl">
-      <div class="showcase-visual" style="direction:ltr">
-        <div class="demo-card">
-          <div class="demo-label">Clean Recipe — from AllRecipes.com</div>
-          <div class="demo-title">Classic Beef Bulgogi</div>
-          <div class="demo-text">
-            <strong>Prep:</strong> 20 min &nbsp; <strong>Cook:</strong> 15 min &nbsp; <strong>Serves:</strong> 4<br><br>
-            <strong>Ingredients:</strong><br>
-            &bull; 1.5 lb beef sirloin, thinly sliced<br>
-            &bull; 4 tbsp soy sauce<br>
-            &bull; 2 tbsp sesame oil...<br><br>
-            <strong>Step 1:</strong> Combine marinade ingredients in a bowl...
-          </div>
-          <span class="demo-tag demo-tag-red">4.8 stars &middot; 2.3K reviews</span>
-        </div>
-        <div class="demo-card">
-          <div class="demo-label">Community Tips</div>
-          <div class="demo-text">"Marinate overnight for best results" &middot; "Don't overcook — 2 min per side max"</div>
-        </div>
-      </div>
-      <div class="showcase-content" style="direction:ltr">
-        <h3>Clean Recipe Extraction</h3>
-        <p>Found a recipe online buried under ads and popups? Tap "Clean Version" and Fridgenie extracts just the recipe — clean, formatted, and enhanced.</p>
-        <ul class="showcase-features">
-          <li>Extracts from any recipe URL — no ads, no clutter</li>
-          <li>Organized ingredients with measurements</li>
-          <li>Numbered step-by-step instructions</li>
-          <li>Community tips from real reviews</li>
-          <li>Cached forever — loads instantly next time</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- How It Works -->
-<section class="how-it-works" id="how-it-works">
-  <div class="container text-center">
-    <p class="section-label reveal">How It Works</p>
-    <h2 class="section-title reveal">3 Simple Steps</h2>
-    <p class="section-sub reveal">From groceries to gourmet in minutes.</p>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-num">1</div>
-        <h3>Stock Your Pantry</h3>
-        <p>Use voice, receipt scanning, or tap to add. AI categorizes everything automatically.</p>
+  <section class="feature">
+    <div class="wrap reveal">
+      <div class="feat-text">
+        <h2>AI Recipe Discovery</h2>
+        <p>Tell Fridgenie what you are in the mood for. It searches your pantry and suggests recipes you can actually make right now, with what you have.</p>
+        <a href="#" class="feat-link">Learn more ></a>
       </div>
-      <div class="step reveal reveal-delay-2">
-        <div class="step-num">2</div>
-        <h3>Discover Recipes</h3>
-        <p>Get AI-powered recipe suggestions matched to what you actually have. Filter by cuisine and diet.</p>
-      </div>
-      <div class="step reveal reveal-delay-4">
-        <div class="step-num">3</div>
-        <h3>Cook &amp; Save</h3>
-        <p>Follow step-by-step recipes, track what you use, and watch your food waste drop to zero.</p>
-      </div>
+      <div class="feat-img"><span>Screenshot coming soon</span></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Testimonials -->
-<section class="testimonials">
-  <div class="container text-center">
-    <p class="section-label reveal">Testimonials</p>
-    <h2 class="section-title reveal">Loved by Home Cooks</h2>
-    <p class="section-sub reveal">Real feedback from our beta testers.</p>
-    <div class="testimonials-grid">
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"The voice input is incredible. I just talk while unpacking groceries and everything gets tracked."</blockquote>
-        <div class="testimonial-author"><div class="author-name">Ari L.</div><div class="author-role">Designer</div></div>
+  <section class="feature">
+    <div class="wrap reveal">
+      <div class="feat-text">
+        <h2>Clean Recipes, No Clutter</h2>
+        <p>Paste any recipe URL and get a clean, distraction-free version. No ads, no life stories. Just ingredients and steps, beautifully formatted.</p>
+        <a href="#" class="feat-link">Learn more ></a>
       </div>
-      <div class="testimonial-card reveal reveal-delay-1">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Clean Recipe changed how I cook. No more scrolling through life stories to find a recipe."</blockquote>
-        <div class="testimonial-author"><div class="author-name">Elissa Y.</div><div class="author-role">Designer &amp; Foodie</div></div>
-      </div>
-      <div class="testimonial-card reveal reveal-delay-2">
-        <div class="stars">★★★★★</div>
-        <blockquote>"The recipe suggestions are actually good — not random. It knows my skill level and what I like."</blockquote>
-        <div class="testimonial-author"><div class="author-name">Brian K.</div><div class="author-role">Dentist</div></div>
-      </div>
+      <div class="feat-img"><span>Screenshot coming soon</span></div>
     </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq" id="faq">
-  <div class="container text-center">
-    <p class="section-label reveal">FAQ</p>
-    <h2 class="section-title reveal">Common Questions</h2>
-    <p class="section-sub reveal">Everything you need to know.</p>
-  </div>
-  <div class="faq-list container">
-    <div class="faq-item reveal"><button class="faq-question">Is Fridgenie free?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Fridgenie is completely free during our beta period! All features including AI recipes, voice input, receipt scanning, and Clean Recipe are included.</div></div></div>
-    <div class="faq-item reveal reveal-delay-1"><button class="faq-question">What devices are supported?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Currently iOS (iPhone). Android is on our roadmap. Sign up for email notifications to be first to know.</div></div></div>
-    <div class="faq-item reveal reveal-delay-2"><button class="faq-question">What languages are supported?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">English, Korean (한국어), and Chinese (中文). The AI understands all three for voice input, recipe generation, and ingredient recognition.</div></div></div>
-    <div class="faq-item reveal reveal-delay-3"><button class="faq-question">How does the AI recipe feature work?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Fridgenie analyzes your pantry, cooking skill level, taste preferences, and recent history to suggest recipes you can actually make. It shows match percentages, substitution options, and adapts to 8 different cuisines. The 14-day no-repeat system ensures variety.</div></div></div>
-    <div class="faq-item reveal reveal-delay-4"><button class="faq-question">Can my family use the same kitchen?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Yes! Create a household and invite family members. Everyone sees the same pantry, shopping list, and recipe history in real-time.</div></div></div>
-    <div class="faq-item reveal reveal-delay-5"><button class="faq-question">Is my data private?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Your data is stored securely on encrypted servers and never shared with third parties. Voice recordings are processed and immediately deleted. See our <a href="/privacy" style="color:var(--primary);text-decoration:underline">Privacy Policy</a>.</div></div></div>
-  </div>
-</section>
+  </section>
+</div>
 
 <!-- CTA -->
-<section class="cta-section" id="beta">
-  <div class="container">
-    <h2 class="reveal">Transform your kitchen today</h2>
-    <p class="cta-sub reveal reveal-delay-1">Free on TestFlight — no waitlist, instant access.</p>
-    <div class="reveal reveal-delay-2" style="margin-bottom:24px">
-      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn" style="background:#fff;color:var(--primary-dark);font-size:1.02rem;padding:16px 40px;box-shadow:0 6px 20px rgba(0,0,0,.12)" target="_blank">Download on TestFlight</a>
-    </div>
-    <p class="cta-note reveal reveal-delay-3" style="margin-bottom:20px">iOS only · Requires TestFlight app · Free during beta</p>
-    <div class="reveal reveal-delay-4" style="border-top:1px solid rgba(255,255,255,.12);padding-top:24px;max-width:440px;margin:0 auto">
-      <p style="font-size:.85rem;opacity:.75;margin-bottom:12px">No iPhone? Get notified for Android launch:</p>
-      <form class="cta-form" onsubmit="return false">
-        <input type="email" id="betaEmail" placeholder="your@email.com" required>
-        <button type="button" onclick="submitBeta()">Notify Me</button>
-      </form>
-    </div>
-    <div class="trust-badges reveal reveal-delay-5">
-      <span class="trust-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> No spam, ever</span>
-      <span class="trust-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg> iOS TestFlight</span>
-      <span class="trust-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Free during beta</span>
+<section class="cta" id="faq">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <h2>Your kitchen, simplified.</h2>
+      <p>Join the free beta and let AI handle the mental load of cooking.</p>
+      <div class="cta-actions">
+        <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill" target="_blank">Download on TestFlight</a>
+        <div class="email-group">
+          <input type="email" id="ctaEmail" placeholder="Email for Android beta">
+          <button onclick="submitBeta('ctaEmail')">Notify me</button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Footer -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-top"><img src="logo.png" alt="" class="footer-logo" style="border-radius:50%"><span class="footer-brand">Fridgenie</span></div>
-    <div class="footer-links">
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Service</a>
-      <a href="mailto:fridgenie.app@gmail.com">Contact</a>
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Fridgenie</div>
+        <p class="footer-tagline">AI-powered pantry tracking and recipe discovery. Cook smarter, waste less.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:fridgenie.app@gmail.com">fridgenie.app@gmail.com</a>
+      </div>
     </div>
-    <p style="margin:12px 0">Made with care in Phoenix, AZ</p>
-    <p class="footer-copy">&copy; 2026 Fridgenie. All rights reserved.</p>
+    <div class="footer-copy">2025 Fridgenie. All rights reserved.</div>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// Reveal on scroll
-const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('visible');io.unobserve(el.target)}})},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
 // Navbar scroll
-window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',scrollY>40)},{passive:true});
+const nb=document.querySelector('nav');
+window.addEventListener('scroll',()=>nb.classList.toggle('scrolled',window.scrollY>40));
 
-// Mobile menu
-const hb=document.getElementById('hamburgerBtn'),mm=document.getElementById('mobileMenu'),cm=document.getElementById('closeMenu');
-hb.addEventListener('click',()=>{mm.classList.add('open');hb.style.display='none'});
-cm.addEventListener('click',()=>{mm.classList.remove('open');hb.style.display='flex'});
-document.querySelectorAll('.mobile-link').forEach(a=>a.addEventListener('click',()=>{mm.classList.remove('open');hb.style.display='flex'}));
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// FAQ accordion
-document.querySelectorAll('.faq-question').forEach(btn=>{btn.addEventListener('click',()=>{const item=btn.parentElement,ans=item.querySelector('.faq-answer'),open=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-answer').style.maxHeight=null});if(!open){item.classList.add('open');ans.style.maxHeight=ans.scrollHeight+'px'}})});
+// Toast
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
-// Supabase beta signup
+// Beta signup
 const SUPA_URL='https://rhhaojpsqfbapltcvsbz.supabase.co',SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoaGFvanBzcWZiYXBsdGN2c2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDk1MjksImV4cCI6MjA4NTYyNTUyOX0.pubBH-c62Omwz1U4gXvdFYU0DR0jd2eAJ2biDxvAqMU';
-async function submitBeta(){const e=document.getElementById('betaEmail').value.trim();if(!e)return;try{const r=await fetch(SUPA_URL+'/rest/v1/beta_signups',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,Prefer:'return=minimal'},body:JSON.stringify({email:e})});if(r.ok||r.status===201){showToast("You're on the list!");document.getElementById('betaEmail').value=''}else if(r.status===409)showToast("Already on the list!");else showToast("Try again or email fridgenie.app@gmail.com")}catch(x){showToast("Network error — please try again")}}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000)}
-
-// Scattered food icons (subtle background pattern)
-(function(){
-  const container=document.getElementById('foodIcons');
-  const icons=[
-    // Carrot
-    '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M2 22L12 12M7 17l-2 2M11 13l-2 2M15 2c-3 0-5 2-5 5l8 8c3 0 5-2 5-5L15 2z" fill="none" stroke="#B63F39" stroke-width="1.5" stroke-linecap="round"/></svg>',
-    // Pizza slice
-    '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2C7 2 3 6 2 11l10 11 10-11c-1-5-5-9-10-9z" fill="none" stroke="#B63F39" stroke-width="1.5"/><circle cx="10" cy="9" r="1" fill="#B63F39"/><circle cx="14" cy="11" r="1" fill="#B63F39"/></svg>',
-    // Banana
-    '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 20C4 14 8 6 16 4c0 0-4 2-6 6s-2 8-2 8" fill="none" stroke="#B63F39" stroke-width="1.5" stroke-linecap="round"/></svg>',
-    // Cheese
-    '<svg viewBox="0 0 24 24" width="17" height="17"><path d="M2 18L12 4l10 14H2z" fill="none" stroke="#B63F39" stroke-width="1.5" stroke-linejoin="round"/><circle cx="9" cy="14" r="1.5" fill="none" stroke="#B63F39" stroke-width="1"/><circle cx="14" cy="16" r="1" fill="none" stroke="#B63F39" stroke-width="1"/></svg>',
-    // Fish
-    '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 12S9 6 16 6c0 0-2 3-2 6s2 6 2 6c-7 0-10-6-10-6z" fill="none" stroke="#B63F39" stroke-width="1.5"/><path d="M2 12l4-3v6l-4-3z" fill="none" stroke="#B63F39" stroke-width="1.5"/><circle cx="15" cy="10" r=".8" fill="#B63F39"/></svg>',
-    // Leaf/salad
-    '<svg viewBox="0 0 24 24" width="15" height="15"><path d="M6 21c4-4 6-10 6-16 0 6 2 12 6 16" fill="none" stroke="#B63F39" stroke-width="1.5" stroke-linecap="round"/><path d="M12 5c-4 1-7 5-8 10M12 5c4 1 7 5 8 10" fill="none" stroke="#B63F39" stroke-width="1"/></svg>',
-    // Sparkle star (FAB element)
-    '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4l-6.4 4.8L8 14 2 9.2h7.6z" fill="none" stroke="#B63F39" stroke-width="1.5" stroke-linejoin="round"/></svg>'
-  ];
-  const positions=[
-    {x:8,y:12},{x:85,y:8},{x:25,y:75},{x:72,y:28},{x:50,y:55},
-    {x:15,y:40},{x:90,y:65},{x:60,y:85},{x:38,y:18},{x:78,y:48},
-    {x:5,y:88},{x:95,y:35},{x:45,y:42},{x:68,y:72}
-  ];
-  positions.forEach((pos,i)=>{
-    const el=document.createElement('div');
-    el.className='food-icon';
-    el.innerHTML=icons[i%icons.length];
-    el.style.left=pos.x+'%';
-    el.style.top=pos.y+'%';
-    el.style.transform='rotate('+(Math.random()*60-30)+'deg)';
-    el.style.opacity=(.04+Math.random()*.03).toFixed(3);
-    container.appendChild(el);
-  });
-})();
+async function submitBeta(id){
+  const inp=document.getElementById(id),e=inp.value.trim();
+  if(!e)return;
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/beta_signups',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,Prefer:'return=minimal'},body:JSON.stringify({email:e})});
+    if(r.ok||r.status===201){showToast("You're on the list!");inp.value=''}
+    else if(r.status===409)showToast("Already on the list!");
+    else showToast("Try again or email fridgenie.app@gmail.com")
+  }catch(x){showToast("Network error -- please try again")}
+}
 </script>
 </body>
 </html>
