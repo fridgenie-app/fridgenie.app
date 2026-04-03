@@ -9,6 +9,7 @@
 <meta property="og:description" content="Smart pantry tracking, AI-powered recipes, voice input, receipt scanning. Free beta on iOS.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://fridgenie.app">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="icon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +47,7 @@ a{color:inherit;text-decoration:none}
 .navbar.scrolled{background:rgba(244,239,231,.92);backdrop-filter:blur(14px);box-shadow:0 2px 20px rgba(182,63,57,.06);padding:10px 0}
 .navbar .container{display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-weight:800;font-size:1.2rem;color:var(--primary)}
-.nav-logo img{width:34px;height:34px;border-radius:10px}
+.nav-logo svg{width:34px;height:34px;flex-shrink:0}
 .nav-links{display:flex;align-items:center;gap:28px;list-style:none}
 .nav-links a{font-weight:600;font-size:.9rem;color:var(--text);transition:color .2s}
 .nav-links a:hover{color:var(--primary)}
@@ -63,8 +64,11 @@ a{color:inherit;text-decoration:none}
 /* Hero */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
 .hero-content{position:relative;z-index:2;max-width:680px}
-.hero-icon{width:110px;height:110px;border-radius:28px;margin:0 auto 28px;animation:float 4s ease-in-out infinite;box-shadow:0 8px 40px rgba(182,63,57,.15)}
-.hero h1{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.8rem,7vw,4rem);color:var(--primary);margin-bottom:10px;letter-spacing:-.02em}
+.hero-brand{margin:0 auto 32px;text-align:center}
+.hero-brand svg{width:80px;height:80px;margin-bottom:16px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(182,63,57,.2))}
+.hero-brand-text{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(3rem,8vw,4.5rem);color:var(--primary);letter-spacing:-2px;line-height:1}
+.hero-brand-dot{display:inline-block;width:10px;height:10px;background:var(--gold);border-radius:50%;margin-left:2px;vertical-align:super;font-size:0}
+.hero h1,.hero .hero-brand-text{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.8rem,7vw,4rem);color:var(--primary);margin-bottom:10px;letter-spacing:-.02em}
 .hero .tagline{font-family:'Shippori Mincho',serif;font-size:clamp(1.1rem,2.5vw,1.3rem);color:var(--primary-dark);font-weight:600;margin-bottom:8px}
 .hero .tagline-sub{font-size:clamp(.92rem,2vw,1.05rem);color:var(--text-light);max-width:500px;margin:0 auto 32px;line-height:1.75}
 .hero-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
@@ -166,7 +170,7 @@ a{color:inherit;text-decoration:none}
 /* Footer */
 .footer{padding:48px 0 32px;background:var(--primary-dark);color:rgba(255,255,255,.7);text-align:center;font-size:.85rem}
 .footer-top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px}
-.footer-logo{width:28px;height:28px;border-radius:7px}
+.footer-logo{width:28px;height:28px}
 .footer-brand{font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:800;color:#fff}
 .footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
 .footer-links a:hover{color:#fff}
@@ -183,7 +187,7 @@ a{color:inherit;text-decoration:none}
 <!-- Navbar -->
 <nav class="navbar" id="navbar">
   <div class="container">
-    <a href="#" class="nav-logo"><img src="icon.png" alt="Fridgenie"><span>Fridgenie</span></a>
+    <a href="#" class="nav-logo"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="#B63F39"/><path d="M30 10 Q33 27, 50 30 Q33 33, 30 50 Q27 33, 10 30 Q27 27, 30 10Z" stroke="#fff" stroke-width="2.2" fill="none" stroke-linejoin="round"/></svg><span>Fridgenie</span></a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
       <li><a href="#ai-showcase">AI Power</a></li>
@@ -207,8 +211,10 @@ a{color:inherit;text-decoration:none}
 <section class="hero">
   <div class="food-icons" id="foodIcons"></div>
   <div class="hero-content">
-    <img src="icon.png" alt="Fridgenie" class="hero-icon reveal">
-    <h1 class="reveal reveal-delay-1">Fridgenie</h1>
+    <div class="hero-brand reveal">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="38" fill="#B63F39"/><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/><path d="M40 12 Q43.5 36, 68 40 Q43.5 44, 40 68 Q36.5 44, 12 40 Q36.5 36, 40 12Z" stroke="#fff" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="40" cy="40" r="3" fill="rgba(255,255,255,0.3)"/></svg>
+    </div>
+    <div class="reveal reveal-delay-1"><span class="hero-brand-text">Fridgenie</span><span class="hero-brand-dot">.</span></div>
     <p class="tagline reveal reveal-delay-2">Your AI-powered kitchen companion</p>
     <p class="tagline-sub reveal reveal-delay-3">Smart pantry tracking, chef-level recipes, voice input, and receipt scanning — all powered by AI. Say goodbye to food waste.</p>
     <div class="hero-buttons reveal reveal-delay-4">
@@ -449,7 +455,7 @@ a{color:inherit;text-decoration:none}
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
-    <div class="footer-top"><img src="icon.png" alt="" class="footer-logo"><span class="footer-brand">Fridgenie</span></div>
+    <div class="footer-top"><svg class="footer-logo" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="rgba(255,255,255,0.15)"/><path d="M30 10 Q33 27, 50 30 Q33 33, 30 50 Q27 33, 10 30 Q27 27, 30 10Z" stroke="rgba(255,255,255,0.7)" stroke-width="2" fill="none" stroke-linejoin="round"/></svg><span class="footer-brand">Fridgenie</span></div>
     <div class="footer-links">
       <a href="/privacy">Privacy Policy</a>
       <a href="/terms">Terms of Service</a>
