@@ -231,7 +231,7 @@ footer{border-top:1px solid var(--border);padding:56px 0 32px;margin-top:40px}
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
-        <a href="mailto:fridgenie.app@gmail.com">fridgenie.app@gmail.com</a>
+        <a href="mailto:hello@fridgenie.app">hello@fridgenie.app</a>
       </div>
     </div>
     <div class="footer-copy">2026 Fridgenie. All rights reserved.</div>
@@ -263,7 +263,7 @@ async function submitBeta(id){
     const r=await fetch(SUPA_URL+'/rest/v1/beta_signups',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,Prefer:'return=minimal'},body:JSON.stringify({email:e})});
     if(r.ok||r.status===201){showToast("You're on the list!");inp.value=''}
     else if(r.status===409)showToast("Already on the list!");
-    else showToast("Try again or email fridgenie.app@gmail.com")
+    else showToast("Try again or email hello@fridgenie.app")
   }catch(x){showToast("Network error -- please try again")}
 }
 </script>
