@@ -26,50 +26,52 @@
   --text-light:#8A847C;
   --border:#E8E2D8;
   --white:#FFFFFF;
-  --radius-phone:32px;
+  --radius-phone:28px;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:600;line-height:1.18}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:600;line-height:1.15}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+.wrap{max-width:720px;margin:0 auto;padding:0 28px}
 
 /* ── Navbar ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,248,244,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.04)}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,248,244,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
 .nav-brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1.05rem;color:var(--text)}
 .nav-brand img{width:28px;height:28px;border-radius:7px}
-.btn-pill{display:inline-flex;align-items:center;background:var(--red);color:#fff;font-size:.8rem;font-weight:600;padding:8px 20px;border-radius:100px;transition:background .2s;letter-spacing:.01em}
-.btn-pill:hover{background:var(--red-dark)}
+.btn-get-beta{display:inline-flex;align-items:center;justify-content:center;background:var(--text);color:#fff;font-size:.82rem;font-weight:600;padding:12px 28px;border-radius:100px;transition:opacity .2s;letter-spacing:.01em}
+.btn-get-beta:hover{opacity:.85}
 
 /* ── Hero ── */
-.hero{padding:130px 0 72px;text-align:center}
-.hero h1{font-size:clamp(2.4rem,7vw,3.4rem);color:var(--text);margin-bottom:16px;letter-spacing:-.02em}
-.hero-sub{font-size:1rem;color:var(--text-mid);max-width:380px;margin:0 auto 30px;line-height:1.7}
-.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:.92rem;font-weight:600;padding:14px 32px;border-radius:100px;transition:background .2s}
-.hero-cta:hover{background:var(--red-dark)}
-.hero-note{margin-top:14px;font-size:.76rem;color:var(--text-light)}
-.hero-note a{color:var(--red);text-decoration:underline}
+.hero{padding:140px 0 0;text-align:center}
+.hero h1{font-size:clamp(2.2rem,7vw,3.2rem);color:var(--text);margin-bottom:28px;letter-spacing:-.02em}
+.hero-body{font-size:1rem;color:var(--text-mid);max-width:480px;margin:0 auto 40px;line-height:1.8}
+.hero-cta-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:0}
+.hero-cta{display:inline-flex;align-items:center;justify-content:center;background:var(--text);color:#fff;font-size:.95rem;font-weight:600;padding:18px 52px;border-radius:100px;transition:opacity .2s;letter-spacing:.01em}
+.hero-cta:hover{opacity:.85}
+.hero-note{font-size:.82rem;color:var(--text-light);margin-top:2px}
+
+/* ── Decorative leaf ── */
+.leaf-icon{margin:48px auto 0;display:block;opacity:.18}
 
 /* ── Feature Sections ── */
-.feat-section{padding:72px 0}
-.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.feat-grid.reversed .feat-visual{order:-1}
-.feat-label{font-size:.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);margin-bottom:10px}
-.feat-text h2{font-size:clamp(1.55rem,3.2vw,2.1rem);margin-bottom:12px;color:var(--text);letter-spacing:-.01em}
-.feat-text p{font-size:.92rem;color:var(--text-mid);line-height:1.75;max-width:400px}
-.feat-visual{display:flex;align-items:center;justify-content:center}
-.cream-section{background:var(--cream)}
+.feat-section{padding:80px 0 0}
+.feat-section:last-of-type{padding-bottom:40px}
+.feat-head{margin-bottom:48px}
+.feat-head h2{font-size:clamp(1.8rem,5vw,2.5rem);color:var(--text);margin-bottom:14px;letter-spacing:-.01em}
+.feat-head p{font-size:.95rem;color:var(--text-mid);line-height:1.8;max-width:520px}
+.feat-link{display:inline-block;font-size:.88rem;color:var(--text-mid);font-weight:500;margin-top:16px;transition:color .2s}
+.feat-link:hover{color:var(--red)}
 
-/* ── Phone Mockup ── */
-.phone{width:220px;height:448px;background:var(--white);border-radius:var(--radius-phone);position:relative;box-shadow:0 2px 4px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);overflow:hidden}
-.phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:100px;height:28px;background:var(--white);border-radius:0 0 16px 16px;z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+/* ── Phone Mockups ── */
+.phone{width:220px;height:440px;background:var(--white);border-radius:var(--radius-phone);position:relative;box-shadow:0 2px 8px rgba(0,0,0,.05),0 16px 48px rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.06);overflow:hidden;flex-shrink:0}
+.phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:96px;height:26px;background:var(--white);border-radius:0 0 14px 14px;z-index:2}
 .phone-screen{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:var(--radius-phone);overflow:hidden;display:flex;flex-direction:column}
 .phone-status{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 20px 4px;font-size:.65rem;font-weight:600;color:var(--text);flex-shrink:0}
 .phone-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.phone-home-bar{width:120px;height:4px;background:var(--text);border-radius:2px;margin:6px auto 8px;opacity:.2}
+.phone-home-bar{width:110px;height:4px;background:var(--text);border-radius:2px;margin:6px auto 8px;opacity:.18}
 
-/* Phone screen content styles */
+/* Phone content styles */
 .ps-header{padding:8px 16px 6px;font-size:.82rem;font-weight:700;color:var(--text)}
 .ps-search{margin:0 12px 8px;background:#F2F0EC;border-radius:8px;padding:6px 10px;font-size:.62rem;color:var(--text-light);display:flex;align-items:center;gap:4px}
 .ps-search::before{content:'';width:10px;height:10px;border:1.5px solid var(--text-light);border-radius:50%;flex-shrink:0}
@@ -83,6 +85,8 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:5
 .ps-item-name{font-size:.6rem;font-weight:600;color:var(--text)}
 .ps-item-meta{font-size:.5rem;color:var(--text-light)}
 .ps-item-qty{font-size:.52rem;font-weight:600;color:var(--text-mid);background:var(--cream);padding:2px 6px;border-radius:6px}
+.ps-badge{margin:0 12px 6px;background:var(--cream);border-radius:8px;padding:5px 10px;font-size:.56rem;color:var(--text-mid);font-weight:500;display:flex;align-items:center;gap:4px}
+.ps-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--red)}
 
 /* Voice phone */
 .ps-voice-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
@@ -110,61 +114,71 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:5
 .ps-recipe-desc{font-size:.48rem;color:var(--text-light);line-height:1.4}
 .ps-recipe-time{font-size:.46rem;color:var(--red);font-weight:600}
 
-/* Phone pair */
-.phone-pair{display:flex;gap:16px;justify-content:center}
-.phone-pair .phone{width:180px;height:368px}
-.phone-pair .phone::before{width:80px;height:24px;border-radius:0 0 12px 12px}
-.phone-pair .phone-status{padding:0 14px 4px;font-size:.58rem}
+/* Phone layouts */
+.phones-row{display:flex;gap:20px;justify-content:center;align-items:flex-start;margin-top:40px}
+.phones-row .phone{width:200px;height:410px}
+
+/* Voice & Receipt 3-step flow */
+.flow-steps{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:36px;margin-bottom:24px}
+.flow-step{text-align:center;font-size:.72rem;color:var(--text-mid);line-height:1.4}
+.flow-step strong{display:block;font-size:.76rem;color:var(--text);font-weight:600}
+.flow-arrow{color:var(--text-light);font-size:1.1rem;margin:0 4px}
+.phones-triple{display:flex;gap:16px;justify-content:center;align-items:flex-start;position:relative}
+.phones-triple .phone{width:180px;height:370px}
+.phones-triple .phone:nth-child(2){margin-top:20px}
+.phones-triple .phone:nth-child(3){margin-top:40px;width:200px;height:400px}
 
 /* ── Mid CTA ── */
-.mid-cta{padding:88px 0;text-align:center;background:var(--cream)}
-.mid-cta h2{font-size:clamp(1.7rem,4.5vw,2.6rem);margin-bottom:14px;color:var(--text);letter-spacing:-.02em}
-.mid-cta p{font-size:.95rem;color:var(--text-mid);max-width:380px;margin:0 auto 28px;line-height:1.7}
+.mid-cta{margin:80px 0 0;padding:64px 0;text-align:center;background:var(--cream);border-radius:24px;position:relative;overflow:hidden}
+.mid-cta h2{font-size:clamp(1.6rem,4.5vw,2.4rem);margin-bottom:16px;color:var(--text);letter-spacing:-.02em;line-height:1.2}
+.mid-cta p{font-size:.95rem;color:var(--text-mid);max-width:420px;margin:0 auto;line-height:1.7}
 
 /* ── Final CTA ── */
-.final-cta{padding:88px 0;text-align:center}
-.final-cta h2{font-size:clamp(1.7rem,4.5vw,2.6rem);margin-bottom:14px;color:var(--text);letter-spacing:-.02em}
-.final-cta p{font-size:.95rem;color:var(--text-mid);max-width:400px;margin:0 auto 28px;line-height:1.7}
-.appstore-btn{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;padding:14px 28px;border-radius:12px;font-size:.88rem;font-weight:600;transition:opacity .2s}
+.final-cta{padding:80px 0;text-align:center}
+.final-cta-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2rem,5vw,2.8rem);font-weight:600;color:var(--text);letter-spacing:-.02em;line-height:1.15;margin-bottom:6px}
+.final-cta-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin:20px 0;font-weight:700;font-size:1.2rem;color:var(--text)}
+.final-cta-logo img{width:36px;height:36px;border-radius:9px}
+.appstore-btn{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;padding:14px 28px;border-radius:12px;font-size:.88rem;font-weight:600;transition:opacity .2s;margin-top:16px}
 .appstore-btn:hover{opacity:.85}
 .appstore-btn svg{flex-shrink:0}
 
 /* ── Footer ── */
 footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--bg)}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px}
-.footer-brand-col .footer-brand{font-weight:700;font-size:1rem;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.footer-brand-col .footer-brand img{width:22px;height:22px;border-radius:6px}
-.footer-tagline{font-size:.8rem;color:var(--text-light);line-height:1.6;max-width:230px}
+.footer-top{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:8px}
+.footer-top img{width:24px;height:24px;border-radius:6px}
+.footer-tagline{font-size:.82rem;color:var(--text-light);line-height:1.6;max-width:380px;margin-bottom:36px}
+.footer-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:36px}
 .footer-col h4{font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px}
 .footer-col a{display:block;font-size:.84rem;color:var(--text-mid);margin-bottom:10px;transition:color .2s}
 .footer-col a:hover{color:var(--red)}
-.footer-copy{font-size:.72rem;color:var(--text-light);text-align:center;padding-top:20px;border-top:1px solid var(--border)}
+.footer-copy{font-size:.72rem;color:var(--text-light);padding-top:20px;border-top:1px solid var(--border)}
 
-/* ── Reveal ── */
+/* ── Reveal animation ── */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* ── Responsive ── */
 @media(max-width:768px){
-  .hero{padding:110px 0 56px}
+  .hero{padding:120px 0 0}
   .hero h1{font-size:2.1rem}
-  .feat-section{padding:48px 0}
-  .feat-grid{grid-template-columns:1fr;gap:36px;text-align:center}
-  .feat-text{display:flex;flex-direction:column;align-items:center}
-  .feat-text p{max-width:360px}
-  .feat-grid.reversed .feat-visual{order:0}
-  .phone{width:200px;height:408px}
-  .phone-pair .phone{width:160px;height:328px}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
-  .mid-cta{padding:60px 0}
-  .final-cta{padding:60px 0}
+  .feat-section{padding:60px 0 0}
+  .phones-row .phone{width:170px;height:350px}
+  .phones-triple .phone{width:150px;height:310px}
+  .phones-triple .phone:nth-child(3){width:170px;height:340px}
+  .mid-cta{margin:60px 0 0;padding:48px 0;border-radius:0}
+  .final-cta{padding:56px 0}
+  .flow-steps{flex-direction:column;gap:4px}
+  .flow-arrow{transform:rotate(90deg)}
+  .footer-cols{grid-template-columns:1fr}
 }
 @media(max-width:480px){
-  .hero{padding:96px 0 44px}
-  .hero h1{font-size:1.9rem}
-  .footer-grid{grid-template-columns:1fr}
-  .phone-pair{gap:10px}
-  .phone-pair .phone{width:140px;height:288px}
+  .hero{padding:100px 0 0}
+  .hero h1{font-size:1.8rem}
+  .phones-row{flex-direction:column;align-items:center;gap:16px}
+  .phones-row .phone{width:200px;height:410px}
+  .phones-triple{flex-direction:column;align-items:center;gap:16px}
+  .phones-triple .phone{width:200px!important;height:410px!important;margin-top:0!important}
+  .wrap{padding:0 20px}
 }
 </style>
 </head>
@@ -174,7 +188,7 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
 <nav>
   <div class="wrap">
     <a href="/" class="nav-brand"><img src="logo.png" alt="Fridgenie">Fridgenie</a>
-    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill" target="_blank">Get Beta</a>
+    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-get-beta" target="_blank">Get Beta</a>
   </div>
 </nav>
 
@@ -183,67 +197,108 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
   <div class="wrap">
     <div class="reveal">
       <h1>Your AI Kitchen Companion.</h1>
-      <p class="hero-sub">Track what you have, discover what to cook, and never waste food again.</p>
-      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="hero-cta" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Download on TestFlight
-      </a>
-      <p class="hero-note">Free beta available on iOS via <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank">TestFlight</a>.</p>
+      <p class="hero-body">No more wasted groceries.<br><br>Track what you have, discover what to cook, and never waste food again. Powered by AI that understands your pantry.</p>
+      <div class="hero-cta-wrap">
+        <a href="https://testflight.apple.com/join/dgMH2Qkp" class="hero-cta" target="_blank">Get Beta</a>
+        <span class="hero-note">Free on iOS via TestFlight</span>
+      </div>
+      <!-- Decorative leaf -->
+      <svg class="leaf-icon" width="64" height="72" viewBox="0 0 64 72" fill="none">
+        <path d="M32 4C18 14 6 30 8 52c1 8 6 14 14 16 4 1 8 0 10-2V52c0-14 6-28 16-38C44 10 38 6 32 4z" fill="var(--text)" opacity=".6"/>
+        <path d="M32 4c14 10 26 26 24 48-1 8-6 14-14 16-4 1-8 0-10-2V52c0-14-6-28-16-38C20 10 26 6 32 4z" fill="var(--text)" opacity=".35"/>
+      </svg>
     </div>
   </div>
 </section>
 
-<!-- Smart Pantry -->
+<!-- Section 1: Smart Pantry -->
 <section class="feat-section reveal">
   <div class="wrap">
-    <div class="feat-grid">
-      <div class="feat-text">
-        <div class="feat-label">Smart Pantry</div>
-        <h2>Everything in your kitchen, organized.</h2>
-        <p>Add items with a tap. Track expiration dates, quantities, and categories automatically. Your fridge and pantry, always up to date.</p>
-      </div>
-      <div class="feat-visual">
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-status"><span>9:41</span><span>●●●</span></div>
-            <div class="phone-body">
-              <div class="ps-header">My Pantry</div>
-              <div class="ps-search">Search items…</div>
-              <div class="ps-category">
-                <span class="ps-cat-pill active">All</span>
-                <span class="ps-cat-pill">Fridge</span>
-                <span class="ps-cat-pill">Freezer</span>
-                <span class="ps-cat-pill">Pantry</span>
-              </div>
-              <div class="ps-items">
-                <div class="ps-item">
-                  <span class="ps-item-icon">🥛</span>
-                  <div class="ps-item-info"><div class="ps-item-name">Whole Milk</div><div class="ps-item-meta">Expires May 12</div></div>
-                  <span class="ps-item-qty">1 gal</span>
-                </div>
-                <div class="ps-item">
-                  <span class="ps-item-icon">🥚</span>
-                  <div class="ps-item-info"><div class="ps-item-name">Eggs</div><div class="ps-item-meta">Expires May 18</div></div>
-                  <span class="ps-item-qty">12 ct</span>
-                </div>
-                <div class="ps-item">
-                  <span class="ps-item-icon">🧀</span>
-                  <div class="ps-item-info"><div class="ps-item-name">Cheddar Cheese</div><div class="ps-item-meta">Expires May 20</div></div>
-                  <span class="ps-item-qty">8 oz</span>
-                </div>
-                <div class="ps-item">
-                  <span class="ps-item-icon">🥬</span>
-                  <div class="ps-item-info"><div class="ps-item-name">Spinach</div><div class="ps-item-meta">Expires May 11</div></div>
-                  <span class="ps-item-qty">6 oz</span>
-                </div>
-                <div class="ps-item">
-                  <span class="ps-item-icon">🍗</span>
-                  <div class="ps-item-info"><div class="ps-item-name">Chicken Breast</div><div class="ps-item-meta">Expires May 13</div></div>
-                  <span class="ps-item-qty">2 lb</span>
-                </div>
-              </div>
-              <div class="phone-home-bar"></div>
+    <div class="feat-head">
+      <h2>Smart Pantry</h2>
+      <p>Add items with a tap. Track expiration dates, quantities, and categories automatically. Your fridge and pantry, always organized and up to date.</p>
+      <a href="#" class="feat-link">Learn More &gt;</a>
+    </div>
+    <div class="phones-row">
+      <!-- Phone 1: Pantry list -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">My Pantry</div>
+            <div class="ps-search">Search items…</div>
+            <div class="ps-category">
+              <span class="ps-cat-pill active">All</span>
+              <span class="ps-cat-pill">Fridge</span>
+              <span class="ps-cat-pill">Freezer</span>
+              <span class="ps-cat-pill">Pantry</span>
             </div>
+            <div class="ps-items">
+              <div class="ps-item">
+                <span class="ps-item-icon">🥛</span>
+                <div class="ps-item-info"><div class="ps-item-name">Whole Milk</div><div class="ps-item-meta">Expires May 12</div></div>
+                <span class="ps-item-qty">1 gal</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🥚</span>
+                <div class="ps-item-info"><div class="ps-item-name">Eggs</div><div class="ps-item-meta">Expires May 18</div></div>
+                <span class="ps-item-qty">12 ct</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🧀</span>
+                <div class="ps-item-info"><div class="ps-item-name">Cheddar Cheese</div><div class="ps-item-meta">Expires May 20</div></div>
+                <span class="ps-item-qty">8 oz</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🥬</span>
+                <div class="ps-item-info"><div class="ps-item-name">Spinach</div><div class="ps-item-meta">Expires May 11</div></div>
+                <span class="ps-item-qty">6 oz</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🍗</span>
+                <div class="ps-item-info"><div class="ps-item-name">Chicken Breast</div><div class="ps-item-meta">Expires May 13</div></div>
+                <span class="ps-item-qty">2 lb</span>
+              </div>
+            </div>
+            <div class="phone-home-bar"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone 2: Item detail / add -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">My Pantry</div>
+            <div class="ps-badge"><span class="ps-badge-dot"></span> 2 items expiring soon</div>
+            <div class="ps-items">
+              <div class="ps-item" style="border-left:3px solid var(--red)">
+                <span class="ps-item-icon">🥬</span>
+                <div class="ps-item-info"><div class="ps-item-name">Spinach</div><div class="ps-item-meta" style="color:var(--red)">Expires tomorrow</div></div>
+                <span class="ps-item-qty">6 oz</span>
+              </div>
+              <div class="ps-item" style="border-left:3px solid #E8A838">
+                <span class="ps-item-icon">🥛</span>
+                <div class="ps-item-info"><div class="ps-item-name">Whole Milk</div><div class="ps-item-meta" style="color:#E8A838">Expires in 2 days</div></div>
+                <span class="ps-item-qty">1 gal</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🍗</span>
+                <div class="ps-item-info"><div class="ps-item-name">Chicken Breast</div><div class="ps-item-meta">Expires May 13</div></div>
+                <span class="ps-item-qty">2 lb</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🥚</span>
+                <div class="ps-item-info"><div class="ps-item-name">Eggs</div><div class="ps-item-meta">Expires May 18</div></div>
+                <span class="ps-item-qty">12 ct</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-item-icon">🧀</span>
+                <div class="ps-item-info"><div class="ps-item-name">Cheddar Cheese</div><div class="ps-item-meta">Expires May 20</div></div>
+                <span class="ps-item-qty">8 oz</span>
+              </div>
+            </div>
+            <div class="phone-home-bar"></div>
           </div>
         </div>
       </div>
@@ -251,52 +306,73 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
   </div>
 </section>
 
-<!-- Voice & Receipt Input -->
-<section class="feat-section cream-section reveal">
+<!-- Section 2: Voice & Receipt Input -->
+<section class="feat-section reveal">
   <div class="wrap">
-    <div class="feat-grid reversed">
-      <div class="feat-text">
-        <div class="feat-label">Voice & Receipt Input</div>
-        <h2>Say it or snap it.</h2>
-        <p>Say what you bought or snap a receipt photo. Fridgenie parses everything and adds items to your pantry instantly. No manual entry needed.</p>
-      </div>
-      <div class="feat-visual">
-        <div class="phone-pair">
-          <div class="phone">
-            <div class="phone-screen">
-              <div class="phone-status"><span>9:41</span><span>●●●</span></div>
-              <div class="phone-body">
-                <div class="ps-header">Voice Input</div>
-                <div class="ps-voice-area">
-                  <div class="ps-voice-label">Listening…</div>
-                  <div class="ps-voice-ring">
-                    <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
-                  </div>
-                  <div class="ps-voice-text">"I bought milk, eggs, and bread from Trader Joe's"</div>
-                </div>
-                <div class="phone-home-bar"></div>
+    <div class="feat-head">
+      <h2>Voice &amp; Receipt Input</h2>
+      <p>Say what you brought or snap a receipt photo. Fridgenie parses everything and adds items to your pantry instantly. No manual entry needed.</p>
+      <a href="#" class="feat-link">Learn More &gt;</a>
+    </div>
+    <!-- 3-step flow -->
+    <div class="flow-steps">
+      <div class="flow-step"><strong>Scan your receipt</strong></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><strong>AI scanning in progress</strong></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><strong>17 items added</strong></div>
+    </div>
+    <div class="phones-triple">
+      <!-- Phone 1: Receipt capture -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">Scan Receipt</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px">
+              <div style="width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,#f0ece4,#e8e2d8);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--border)">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-light)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="3"/><path d="M3 16l4-4 4 4 4-4 4 4"/></svg>
+                <span style="font-size:.56rem;color:var(--text-light);font-weight:500">Point camera at receipt</span>
               </div>
             </div>
+            <div class="phone-home-bar"></div>
           </div>
-          <div class="phone">
-            <div class="phone-screen">
-              <div class="phone-status"><span>9:41</span><span>●●●</span></div>
-              <div class="phone-body">
-                <div class="ps-header">Receipt Scan</div>
-                <div class="ps-receipt-area">
-                  <div class="ps-receipt-card">
-                    <div class="ps-receipt-title">Whole Foods Receipt</div>
-                    <div class="ps-receipt-line"><span>Organic Milk</span><span>$5.49</span></div>
-                    <div class="ps-receipt-line"><span>Sourdough Bread</span><span>$4.99</span></div>
-                    <div class="ps-receipt-line"><span>Avocados (3)</span><span>$3.99</span></div>
-                    <div class="ps-receipt-line"><span>Greek Yogurt</span><span>$6.29</span></div>
-                    <div class="ps-receipt-line"><span>Baby Spinach</span><span>$3.49</span></div>
-                  </div>
-                  <div class="ps-receipt-btn">Add 5 Items to Pantry</div>
-                </div>
-                <div class="phone-home-bar"></div>
+        </div>
+      </div>
+      <!-- Phone 2: AI scanning -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">Scanning…</div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px">
+              <div style="width:56px;height:56px;border-radius:50%;border:3px solid var(--cream);border-top-color:var(--red);animation:spin 1s linear infinite"></div>
+              <span style="font-size:.62rem;color:var(--text-mid);font-weight:500">AI is reading your receipt…</span>
+              <div style="width:80%;height:4px;background:var(--cream);border-radius:2px;overflow:hidden">
+                <div style="width:65%;height:100%;background:var(--red);border-radius:2px"></div>
               </div>
             </div>
+            <div class="phone-home-bar"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone 3: Items added -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">Receipt Scanned</div>
+            <div style="padding:4px 12px">
+              <div style="background:#E8F5E9;border-radius:8px;padding:6px 10px;font-size:.56rem;color:#2E7D32;font-weight:600;text-align:center;margin-bottom:6px">✓ 17 items added to pantry</div>
+            </div>
+            <div class="ps-items">
+              <div class="ps-item"><span class="ps-item-icon">🥛</span><div class="ps-item-info"><div class="ps-item-name">Organic Milk</div><div class="ps-item-meta">Added just now</div></div><span class="ps-item-qty">1 gal</span></div>
+              <div class="ps-item"><span class="ps-item-icon">🍞</span><div class="ps-item-info"><div class="ps-item-name">Sourdough Bread</div><div class="ps-item-meta">Added just now</div></div><span class="ps-item-qty">1</span></div>
+              <div class="ps-item"><span class="ps-item-icon">🥑</span><div class="ps-item-info"><div class="ps-item-name">Avocados</div><div class="ps-item-meta">Added just now</div></div><span class="ps-item-qty">3</span></div>
+              <div class="ps-item"><span class="ps-item-icon">🥣</span><div class="ps-item-info"><div class="ps-item-name">Greek Yogurt</div><div class="ps-item-meta">Added just now</div></div><span class="ps-item-qty">32 oz</span></div>
+              <div class="ps-item"><span class="ps-item-icon">🥬</span><div class="ps-item-info"><div class="ps-item-name">Baby Spinach</div><div class="ps-item-meta">Added just now</div></div><span class="ps-item-qty">5 oz</span></div>
+            </div>
+            <div class="phone-home-bar"></div>
           </div>
         </div>
       </div>
@@ -304,51 +380,85 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
   </div>
 </section>
 
-<!-- AI Recipe Discovery -->
+<!-- Section 3: AI Recipe Discovery -->
 <section class="feat-section reveal">
   <div class="wrap">
-    <div class="feat-grid">
-      <div class="feat-text">
-        <div class="feat-label">AI Recipe Discovery</div>
-        <h2>Recipes from what you already have.</h2>
-        <p>Tell Fridgenie what you're in the mood for. It searches your pantry and suggests recipes you can actually make right now.</p>
-      </div>
-      <div class="feat-visual">
-        <div class="phone">
-          <div class="phone-screen">
-            <div class="phone-status"><span>9:41</span><span>●●●</span></div>
-            <div class="phone-body">
-              <div class="ps-header">Recipe Ideas</div>
-              <div class="ps-recipe-header">Based on your pantry</div>
-              <div class="ps-recipe-prompt">"Something quick with chicken and spinach"</div>
-              <div class="ps-recipe-cards">
-                <div class="ps-recipe-card">
-                  <span class="ps-recipe-emoji">🍝</span>
-                  <div class="ps-recipe-info">
-                    <div class="ps-recipe-name">Creamy Spinach Chicken Pasta</div>
-                    <div class="ps-recipe-desc">Sautéed chicken with spinach in garlic cream sauce</div>
-                    <div class="ps-recipe-time">25 min · 6 ingredients</div>
-                  </div>
-                </div>
-                <div class="ps-recipe-card">
-                  <span class="ps-recipe-emoji">🥗</span>
-                  <div class="ps-recipe-info">
-                    <div class="ps-recipe-name">Chicken Spinach Salad</div>
-                    <div class="ps-recipe-desc">Grilled chicken over baby spinach with lemon dressing</div>
-                    <div class="ps-recipe-time">15 min · 5 ingredients</div>
-                  </div>
-                </div>
-                <div class="ps-recipe-card">
-                  <span class="ps-recipe-emoji">🌯</span>
-                  <div class="ps-recipe-info">
-                    <div class="ps-recipe-name">Chicken Spinach Wrap</div>
-                    <div class="ps-recipe-desc">Quick wrap with chicken, spinach, and cheddar</div>
-                    <div class="ps-recipe-time">10 min · 4 ingredients</div>
-                  </div>
+    <div class="feat-head">
+      <h2>AI Recipe Discovery</h2>
+      <p>Tell Fridgenie what you are in the mood for. It searches your pantry and suggests recipes you can actually make right now, with what you have.</p>
+      <a href="#" class="feat-link">Learn More &gt;</a>
+    </div>
+    <div class="phones-row">
+      <!-- Phone 1: Recipe chat -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">Recipe Ideas</div>
+            <div class="ps-recipe-header">Based on your pantry</div>
+            <div class="ps-recipe-prompt">"Something quick with chicken and spinach"</div>
+            <div class="ps-recipe-cards">
+              <div class="ps-recipe-card">
+                <span class="ps-recipe-emoji">🍝</span>
+                <div class="ps-recipe-info">
+                  <div class="ps-recipe-name">Creamy Spinach Chicken Pasta</div>
+                  <div class="ps-recipe-desc">Sautéed chicken with spinach in garlic cream sauce</div>
+                  <div class="ps-recipe-time">25 min · 6 ingredients</div>
                 </div>
               </div>
-              <div class="phone-home-bar"></div>
+              <div class="ps-recipe-card">
+                <span class="ps-recipe-emoji">🥗</span>
+                <div class="ps-recipe-info">
+                  <div class="ps-recipe-name">Chicken Spinach Salad</div>
+                  <div class="ps-recipe-desc">Grilled chicken over baby spinach with lemon dressing</div>
+                  <div class="ps-recipe-time">15 min · 5 ingredients</div>
+                </div>
+              </div>
+              <div class="ps-recipe-card">
+                <span class="ps-recipe-emoji">🌯</span>
+                <div class="ps-recipe-info">
+                  <div class="ps-recipe-name">Chicken Spinach Wrap</div>
+                  <div class="ps-recipe-desc">Quick wrap with chicken, spinach, and cheddar</div>
+                  <div class="ps-recipe-time">10 min · 4 ingredients</div>
+                </div>
+              </div>
             </div>
+            <div class="phone-home-bar"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone 2: Recipe detail -->
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body">
+            <div class="ps-header">🍝 Creamy Spinach Pasta</div>
+            <div style="padding:4px 12px">
+              <div style="display:flex;gap:12px;font-size:.52rem;color:var(--text-light);margin-bottom:8px">
+                <span>⏱ 25 min</span><span>🍽 4 servings</span><span>🔥 Easy</span>
+              </div>
+            </div>
+            <div style="padding:0 12px;margin-bottom:6px">
+              <div style="font-size:.58rem;font-weight:700;color:var(--text);margin-bottom:4px">Ingredients</div>
+              <div style="font-size:.5rem;color:var(--text-mid);line-height:1.7">
+                <div style="display:flex;align-items:center;gap:4px"><span style="color:#2E7D32">✓</span> Chicken Breast — <em>in pantry</em></div>
+                <div style="display:flex;align-items:center;gap:4px"><span style="color:#2E7D32">✓</span> Spinach — <em>in pantry</em></div>
+                <div style="display:flex;align-items:center;gap:4px"><span style="color:#2E7D32">✓</span> Cheddar Cheese — <em>in pantry</em></div>
+                <div style="display:flex;align-items:center;gap:4px"><span style="color:#2E7D32">✓</span> Eggs — <em>in pantry</em></div>
+                <div style="display:flex;align-items:center;gap:4px"><span style="color:#E8A838">○</span> Pasta — <em>not in pantry</em></div>
+                <div style="display:flex;align-items:center;gap:4px"><span style="color:#E8A838">○</span> Heavy Cream — <em>not in pantry</em></div>
+              </div>
+            </div>
+            <div style="padding:0 12px;margin-bottom:8px">
+              <div style="font-size:.58rem;font-weight:700;color:var(--text);margin-bottom:4px">Steps</div>
+              <div style="font-size:.48rem;color:var(--text-mid);line-height:1.7">
+                <div>1. Cook pasta al dente</div>
+                <div>2. Sauté diced chicken</div>
+                <div>3. Add spinach and cream</div>
+                <div>4. Toss with pasta, serve</div>
+              </div>
+            </div>
+            <div class="phone-home-bar"></div>
           </div>
         </div>
       </div>
@@ -357,22 +467,21 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
 </section>
 
 <!-- Mid CTA -->
-<section class="mid-cta reveal">
+<section class="reveal">
   <div class="wrap">
-    <h2>Your Fridge Knows<br>Dinner Tonight.</h2>
-    <p>Stop wondering what to cook. Fridgenie connects your pantry to smart recipes, so dinner is always one tap away.</p>
-    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="hero-cta" target="_blank">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Try the Free Beta
-    </a>
+    <div class="mid-cta">
+      <h2>Your Fridge Knows<br>Dinner Tonight</h2>
+      <p>Join the free beta and let AI handle the mental load of cooking.</p>
+    </div>
   </div>
 </section>
 
-<!-- Final CTA -->
+<!-- Final CTA: Download / Logo / Today -->
 <section class="final-cta reveal">
   <div class="wrap">
-    <h2>Download Fridgenie Today.</h2>
-    <p>Join the free beta and let AI handle the mental load of cooking.</p>
+    <div class="final-cta-title">Download</div>
+    <div class="final-cta-logo"><img src="logo.png" alt="Fridgenie">Fridgenie</div>
+    <div class="final-cta-title">Today</div>
     <a href="https://testflight.apple.com/join/dgMH2Qkp" class="appstore-btn" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       Download on the App Store
@@ -383,15 +492,13 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
 <!-- Footer -->
 <footer>
   <div class="wrap">
-    <div class="footer-grid">
-      <div class="footer-brand-col">
-        <div class="footer-brand"><img src="logo.png" alt="Fridgenie">Fridgenie</div>
-        <p class="footer-tagline">AI-powered pantry tracking and recipe discovery. Cook smarter, waste less.</p>
-      </div>
+    <div class="footer-top"><img src="logo.png" alt="Fridgenie">Fridgenie</div>
+    <p class="footer-tagline">AI-powered pantry tracking and recipe discovery.<br>Cook smarter, waste less.</p>
+    <div class="footer-cols">
       <div class="footer-col">
         <h4>Product</h4>
         <a href="#features">Features</a>
-        <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank">TestFlight</a>
+        <a href="#">FAQ</a>
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
@@ -407,6 +514,7 @@ footer{border-top:1px solid var(--border);padding:48px 0 24px;background:var(--b
   </div>
 </footer>
 
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 <script>
 const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
