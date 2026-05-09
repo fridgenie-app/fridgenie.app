@@ -16,99 +16,113 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#B63F39;--primary-dark:#8A2E2A;--bg:#F4EFE7;--text:#2C2420;--text-light:#6B6B6B;--gold:#DEB887;--border:#E0DAD0}
+:root{
+  --primary:#C14038;
+  --primary-dark:#9E302A;
+  --bg:#FAF7F2;
+  --bg-cream:#F3EDE3;
+  --text:#1E1B18;
+  --text-secondary:#5C5550;
+  --text-light:#8A8580;
+  --border:#E5DFD6;
+  --white:#FFFFFF;
+}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:'Shippori Mincho',serif;line-height:1.2;font-weight:700}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Shippori Mincho',serif;line-height:1.15;font-weight:700}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+img{max-width:100%;display:block}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
 
-/* Navbar */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;transition:all .3s}
-nav.scrolled{background:rgba(244,239,231,.93);backdrop-filter:blur(12px);padding:12px 0;box-shadow:0 1px 12px rgba(0,0,0,.04)}
+/* ── Navbar ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;transition:all .3s}
+nav.scrolled{background:rgba(250,247,242,.95);backdrop-filter:blur(14px);padding:12px 0;box-shadow:0 1px 8px rgba(0,0,0,.04)}
 nav .wrap{display:flex;align-items:center;justify-content:space-between}
-.nav-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;color:var(--primary)}
-.nav-brand img{width:32px;height:32px;border-radius:50%}
-.nav-links{display:flex;align-items:center;gap:32px}
-.nav-links a{font-size:.88rem;font-weight:500;color:var(--text-light);transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-links a.btn-pill{color:#fff}
-.nav-links a.btn-pill:hover{color:#fff}
-.btn-pill{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;font-size:.85rem;font-weight:600;padding:10px 24px;border-radius:50px;transition:background .2s}
+.nav-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem;color:var(--primary)}
+.nav-brand img{width:30px;height:30px;border-radius:8px}
+.btn-pill{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;font-size:.82rem;font-weight:600;padding:10px 22px;border-radius:50px;transition:background .2s;border:none;cursor:pointer}
 .btn-pill:hover{background:var(--primary-dark)}
-.btn-apple{padding:14px 32px;font-size:.95rem}
 
-/* Hero */
-.hero{position:relative;padding:160px 0 100px;overflow:hidden;text-align:center}
-.hero-content{max-width:600px;margin:0 auto}
-.hero h1{font-size:clamp(2.4rem,5.5vw,3.6rem);color:var(--text);margin-bottom:20px}
-.hero p{font-size:1.1rem;color:var(--text-light);max-width:440px;margin:0 auto 36px;line-height:1.75}
-.hero-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px}
-.hero-actions .btn-pill{padding:14px 32px;font-size:.95rem}
-.email-group{display:flex;gap:0;max-width:300px}
-.email-group input{flex:1;min-width:0;border:1.5px solid var(--border);border-right:none;border-radius:50px 0 0 50px;padding:12px 18px;font-size:.88rem;font-family:inherit;background:#fff;outline:none;transition:border-color .2s}
-.email-group input:focus{border-color:var(--primary)}
-.email-group button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:0 50px 50px 0;font-size:.82rem;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .2s}
-.email-group button:hover{background:var(--primary-dark)}
-.hero-note{margin-top:14px;font-size:.78rem;color:var(--text-light)}
+/* ── Hero ── */
+.hero{padding:140px 0 80px;text-align:center}
+.hero-inner{max-width:560px;margin:0 auto}
+.hero h1{font-size:clamp(2.2rem,6vw,3.2rem);color:var(--text);margin-bottom:18px;letter-spacing:-.02em}
+.hero-sub{font-size:1.05rem;color:var(--text-secondary);max-width:400px;margin:0 auto 32px;line-height:1.7}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;background:var(--primary);color:#fff;font-size:1rem;font-weight:600;padding:16px 36px;border-radius:50px;transition:background .2s}
+.hero-cta:hover{background:var(--primary-dark)}
+.hero-note{margin-top:16px;font-size:.78rem;color:var(--text-light)}
+.hero-note a{color:var(--primary);text-decoration:underline}
 
-/* Hero food icons */
-.hero-icon{position:absolute;opacity:.04;pointer-events:none}
+/* ── Features ── */
+.features-section{padding:48px 0}
+.feature-block{padding:64px 0}
+.feature-block .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.feature-block.reverse .feat-visual{order:-1}
+.feat-content{max-width:420px}
+.feat-label{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+.feat-content h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:14px;color:var(--text)}
+.feat-content p{font-size:.95rem;color:var(--text-secondary);line-height:1.75}
+.feat-visual{position:relative;display:flex;align-items:center;justify-content:center}
+.phone-mockup{width:220px;height:440px;background:var(--bg-cream);border-radius:28px;border:2px solid var(--border);position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.06)}
+.phone-mockup::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:60px;height:6px;background:var(--border);border-radius:3px}
+.phone-mockup-inner{position:absolute;top:28px;left:8px;right:8px;bottom:8px;background:var(--white);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px}
+.phone-mockup-inner .mock-icon{font-size:2.4rem}
+.phone-mockup-inner .mock-label{font-size:.7rem;color:var(--text-light);font-weight:500;text-align:center}
+.phone-pair{display:flex;gap:16px;justify-content:center}
+.phone-pair .phone-mockup{width:180px;height:360px}
+.phone-pair .phone-mockup-inner{top:24px;left:6px;right:6px;bottom:6px;border-radius:16px}
 
-/* Feature sections */
-.feature{padding:80px 0}
-.feature .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-.feature:nth-child(even) .feat-img{order:-1}
-.feat-text h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin-bottom:16px;color:var(--text)}
-.feat-text p{font-size:1rem;color:var(--text-light);line-height:1.75;margin-bottom:20px;max-width:420px}
-.feat-link{font-size:.88rem;font-weight:600;color:var(--primary);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
-.feat-link:hover{gap:10px}
-.feat-img{background:#EDE8DF;border-radius:16px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
-.feat-img span{font-size:.85rem;color:var(--text-light)}
+/* Cream background feature variant */
+.feature-block.cream-bg{background:var(--bg-cream)}
 
-/* CTA */
-.cta{padding:80px 0 60px}
-.cta-box{border:1.5px solid var(--border);border-radius:24px;padding:64px 48px;text-align:center;max-width:680px;margin:0 auto}
-.cta-box h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin-bottom:12px}
-.cta-box p{color:var(--text-light);margin-bottom:32px;font-size:1rem}
-.cta-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px}
-.cta-actions .email-group{max-width:280px}
+/* ── Mid CTA ── */
+.mid-cta{padding:80px 0;text-align:center;background:var(--bg-cream)}
+.mid-cta h2{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:14px;color:var(--text)}
+.mid-cta p{font-size:1rem;color:var(--text-secondary);max-width:400px;margin:0 auto 32px}
+.mid-cta .hero-cta{font-size:.95rem;padding:14px 32px}
 
-/* Footer */
-footer{border-top:1px solid var(--border);padding:56px 0 32px;margin-top:40px}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
-.footer-brand{font-weight:800;font-size:1.05rem;color:var(--primary);margin-bottom:6px}
-.footer-tagline{font-size:.85rem;color:var(--text-light);line-height:1.6}
-.footer-col h4{font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px}
-.footer-col a{display:block;font-size:.88rem;color:var(--text-light);margin-bottom:10px;transition:color .2s}
+/* ── Final CTA ── */
+.final-cta{padding:80px 0;text-align:center}
+.final-cta h2{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:14px;color:var(--text)}
+.final-cta p{font-size:1rem;color:var(--text-secondary);max-width:440px;margin:0 auto 32px}
+.appstore-btn{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;padding:14px 30px;border-radius:12px;font-size:.9rem;font-weight:600;transition:opacity .2s}
+.appstore-btn:hover{opacity:.85}
+.appstore-btn svg{flex-shrink:0}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding:48px 0 28px;background:var(--bg)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px}
+.footer-brand-block .footer-brand{font-weight:800;font-size:1.05rem;color:var(--primary);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.footer-brand-block .footer-brand img{width:22px;height:22px;border-radius:6px}
+.footer-tagline{font-size:.82rem;color:var(--text-light);line-height:1.6;max-width:240px}
+.footer-col h4{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px}
+.footer-col a{display:block;font-size:.85rem;color:var(--text-secondary);margin-bottom:10px;transition:color .2s}
 .footer-col a:hover{color:var(--primary)}
-.footer-copy{font-size:.78rem;color:var(--text-light);text-align:center;padding-top:24px;border-top:1px solid var(--border)}
+.footer-copy{font-size:.75rem;color:var(--text-light);text-align:center;padding-top:20px;border-top:1px solid var(--border)}
 
-/* Reveal */
-.reveal{opacity:0;transition:opacity .6s ease}
-.reveal.visible{opacity:1}
+/* ── Reveal animation ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-/* Toast */
-.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:14px 28px;border-radius:50px;font-size:.88rem;font-weight:500;opacity:0;transition:all .35s;z-index:200;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* Mobile */
+/* ── Responsive ── */
 @media(max-width:768px){
-  .nav-links a:not(.btn-pill){display:none}
-  .hero{padding:120px 0 64px}
+  .hero{padding:120px 0 56px}
   .hero h1{font-size:2rem}
-  .hero-actions{flex-direction:column;align-items:flex-start}
-  .email-group{max-width:100%;width:100%}
-  .feature .wrap{grid-template-columns:1fr;gap:32px}
-  .feature:nth-child(even) .feat-img{order:0}
-  .feat-img{max-height:240px}
-  .cta-box{padding:40px 24px}
-  .cta-actions{flex-direction:column}
-  .cta-actions .email-group{max-width:100%;width:100%}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:28px}
+  .hero-sub{font-size:.95rem}
+  .feature-block .wrap{grid-template-columns:1fr;gap:32px;text-align:center}
+  .feat-content{margin:0 auto}
+  .feature-block.reverse .feat-visual{order:0}
+  .phone-mockup{width:180px;height:360px}
+  .phone-pair .phone-mockup{width:150px;height:300px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .mid-cta{padding:56px 0}
+  .final-cta{padding:56px 0}
 }
 @media(max-width:480px){
+  .hero{padding:100px 0 48px}
   .footer-grid{grid-template-columns:1fr}
+  .phone-pair{gap:10px}
+  .phone-pair .phone-mockup{width:130px;height:260px}
 }
 </style>
 </head>
@@ -118,96 +132,116 @@ footer{border-top:1px solid var(--border);padding:56px 0 32px;margin-top:40px}
 <nav>
   <div class="wrap">
     <a href="/" class="nav-brand"><img src="logo.png" alt="Fridgenie">Fridgenie</a>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill" target="_blank">Get Beta</a>
-    </div>
+    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill" target="_blank">Get Beta</a>
   </div>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
-  <!-- Subtle scattered food icons -->
-  <svg class="hero-icon" style="top:12%;left:8%;width:14px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2C11 2 10 3 10 5v7H8V5c0-2 1-3 2-3h4c1 0 2 1 2 3v7h-2V5c0-2-1-3-2-3zm-4 14l1 6h6l1-6H8z"/></svg>
-  <svg class="hero-icon" style="top:28%;right:12%;width:16px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2L2 19h20L12 2zm0 4l6.5 11h-13L12 6z"/></svg>
-  <svg class="hero-icon" style="top:55%;left:65%;width:13px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2c-3 0-8 2-8 7 0 3 2 5 4 6l-1 7h10l-1-7c2-1 4-3 4-6 0-5-5-7-8-7z"/></svg>
-  <svg class="hero-icon" style="top:18%;left:78%;width:12px" viewBox="0 0 24 24" fill="#B63F39"><path d="M2 4h20v14H2V4zm2 2v10h16V6H4zm3 2h10v6H7V8z"/></svg>
-  <svg class="hero-icon" style="top:70%;left:15%;width:15px" viewBox="0 0 24 24" fill="#B63F39"><path d="M4 18c0 2 4 4 8 4s8-2 8-4c0-6-4-16-8-16S4 12 4 18z"/></svg>
-  <svg class="hero-icon" style="top:42%;left:5%;width:12px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2L2 19h20L12 2zm0 4l6.5 11h-13L12 6z"/></svg>
-  <svg class="hero-icon" style="top:82%;right:22%;width:14px" viewBox="0 0 24 24" fill="#B63F39"><path d="M12 2c-3 0-8 2-8 7 0 3 2 5 4 6l-1 7h10l-1-7c2-1 4-3 4-6 0-5-5-7-8-7z"/></svg>
-  <svg class="hero-icon" style="top:8%;left:42%;width:13px" viewBox="0 0 24 24" fill="#B63F39"><path d="M2 4h20v14H2V4zm2 2v10h16V6H4zm3 2h10v6H7V8z"/></svg>
-  <svg class="hero-icon" style="top:60%;right:6%;width:14px" viewBox="0 0 24 24" fill="#B63F39"><path d="M4 18c0 2 4 4 8 4s8-2 8-4c0-6-4-16-8-16S4 12 4 18z"/></svg>
-
   <div class="wrap">
-    <div class="hero-content reveal">
-      <h1>Your AI kitchen companion.</h1>
-      <p>Track what you have, discover what to cook, and never waste food again. Powered by AI that understands your pantry.</p>
-      <div class="hero-actions">
-        <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill btn-apple" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>Download on TestFlight</a>
-      </div>
-      <p class="hero-note">Free on iOS via TestFlight.</p>
+    <div class="hero-inner reveal">
+      <h1>Your AI Kitchen Companion.</h1>
+      <p class="hero-sub">Track what you have, discover what to cook, and never waste food again.</p>
+      <a href="https://testflight.apple.com/join/dgMH2Qkp" class="hero-cta" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on TestFlight
+      </a>
+      <p class="hero-note">Free beta available on iOS via <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank">TestFlight</a>.</p>
     </div>
   </div>
 </section>
 
 <!-- Features -->
-<div id="features">
-  <section class="feature">
-    <div class="wrap reveal">
-      <div class="feat-text">
-        <h2>Smart Pantry</h2>
-        <p>Add items with a tap. Track expiration dates, quantities, and categories automatically. Your fridge and pantry, always organized and up to date.</p>
-        <a href="#" class="feat-link">Learn more ></a>
+<div id="features" class="features-section">
+
+  <!-- Smart Pantry -->
+  <section class="feature-block reveal">
+    <div class="wrap">
+      <div class="feat-content">
+        <div class="feat-label">Smart Pantry</div>
+        <h2>Everything in your kitchen, organized.</h2>
+        <p>Add items with a tap. Track expiration dates, quantities, and categories automatically. Your fridge and pantry, always up to date.</p>
       </div>
-      <div class="feat-img"><span>Screenshot coming soon</span></div>
+      <div class="feat-visual">
+        <div class="phone-mockup">
+          <div class="phone-mockup-inner">
+            <div class="mock-icon">🥬</div>
+            <div class="mock-label">Smart Pantry</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="feature">
-    <div class="wrap reveal">
-      <div class="feat-text">
-        <h2>Voice & Receipt Input</h2>
+  <!-- Voice & Receipt Input -->
+  <section class="feature-block cream-bg reverse reveal">
+    <div class="wrap">
+      <div class="feat-content">
+        <div class="feat-label">Voice & Receipt Input</div>
+        <h2>Say it or snap it.</h2>
         <p>Say what you bought or snap a receipt photo. Fridgenie parses everything and adds items to your pantry instantly. No manual entry needed.</p>
-        <a href="#" class="feat-link">Learn more ></a>
       </div>
-      <div class="feat-img"><span>Screenshot coming soon</span></div>
+      <div class="feat-visual">
+        <div class="phone-pair">
+          <div class="phone-mockup">
+            <div class="phone-mockup-inner">
+              <div class="mock-icon">🎙️</div>
+              <div class="mock-label">Voice Input</div>
+            </div>
+          </div>
+          <div class="phone-mockup">
+            <div class="phone-mockup-inner">
+              <div class="mock-icon">🧾</div>
+              <div class="mock-label">Receipt Scan</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="feature">
-    <div class="wrap reveal">
-      <div class="feat-text">
-        <h2>AI Recipe Discovery</h2>
-        <p>Tell Fridgenie what you are in the mood for. It searches your pantry and suggests recipes you can actually make right now, with what you have.</p>
-        <a href="#" class="feat-link">Learn more ></a>
+  <!-- AI Recipe Discovery -->
+  <section class="feature-block reveal">
+    <div class="wrap">
+      <div class="feat-content">
+        <div class="feat-label">AI Recipe Discovery</div>
+        <h2>Recipes from what you already have.</h2>
+        <p>Tell Fridgenie what you're in the mood for. It searches your pantry and suggests recipes you can actually make right now.</p>
       </div>
-      <div class="feat-img"><span>Screenshot coming soon</span></div>
+      <div class="feat-visual">
+        <div class="phone-mockup">
+          <div class="phone-mockup-inner">
+            <div class="mock-icon">🍳</div>
+            <div class="mock-label">AI Recipes</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="feature">
-    <div class="wrap reveal">
-      <div class="feat-text">
-        <h2>Clean Recipes, No Clutter</h2>
-        <p>Paste any recipe URL and get a clean, distraction-free version. No ads, no life stories. Just ingredients and steps, beautifully formatted.</p>
-        <a href="#" class="feat-link">Learn more ></a>
-      </div>
-      <div class="feat-img"><span>Screenshot coming soon</span></div>
-    </div>
-  </section>
 </div>
 
-<!-- CTA -->
-<section class="cta" id="faq">
+<!-- Mid CTA -->
+<section class="mid-cta reveal">
   <div class="wrap">
-    <div class="cta-box reveal">
-      <h2>Your kitchen, simplified.</h2>
-      <p>Join the free beta and let AI handle the mental load of cooking.</p>
-      <div class="cta-actions">
-        <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-pill btn-apple" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>Download on TestFlight</a>
-      </div>
-    </div>
+    <h2>Your Fridge Knows<br>Dinner Tonight.</h2>
+    <p>Stop wondering what to cook. Fridgenie connects your pantry to smart recipes, so dinner is always one tap away.</p>
+    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="hero-cta" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Try the Free Beta
+    </a>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta reveal">
+  <div class="wrap">
+    <h2>Download Fridgenie Today.</h2>
+    <p>Join the free beta and let AI handle the mental load of cooking.</p>
+    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="appstore-btn" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download on the App Store
+    </a>
   </div>
 </section>
 
@@ -215,14 +249,14 @@ footer{border-top:1px solid var(--border);padding:56px 0 32px;margin-top:40px}
 <footer>
   <div class="wrap">
     <div class="footer-grid">
-      <div>
-        <div class="footer-brand">Fridgenie</div>
+      <div class="footer-brand-block">
+        <div class="footer-brand"><img src="logo.png" alt="Fridgenie">Fridgenie</div>
         <p class="footer-tagline">AI-powered pantry tracking and recipe discovery. Cook smarter, waste less.</p>
       </div>
       <div class="footer-col">
         <h4>Product</h4>
         <a href="#features">Features</a>
-        <a href="#faq">FAQ</a>
+        <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank">TestFlight</a>
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
@@ -234,38 +268,22 @@ footer{border-top:1px solid var(--border);padding:56px 0 32px;margin-top:40px}
         <a href="mailto:hello@fridgenie.app">hello@fridgenie.app</a>
       </div>
     </div>
-    <div class="footer-copy">2026 Fridgenie. All rights reserved.</div>
+    <div class="footer-copy">&copy; 2026 Fridgenie. All rights reserved.</div>
   </div>
 </footer>
 
-<div class="toast" id="toast"></div>
-
 <script>
-// Navbar scroll
-const nb=document.querySelector('nav');
-window.addEventListener('scroll',()=>nb.classList.toggle('scrolled',window.scrollY>40));
+// Navbar scroll effect
+const nb = document.querySelector('nav');
+window.addEventListener('scroll', () => nb.classList.toggle('scrolled', window.scrollY > 40));
 
 // Scroll reveal
-const obs=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
-},{threshold:.15});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-// Toast
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
-
-// Beta signup
-const SUPA_URL='https://rhhaojpsqfbapltcvsbz.supabase.co',SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoaGFvanBzcWZiYXBsdGN2c2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDk1MjksImV4cCI6MjA4NTYyNTUyOX0.pubBH-c62Omwz1U4gXvdFYU0DR0jd2eAJ2biDxvAqMU';
-async function submitBeta(id){
-  const inp=document.getElementById(id),e=inp.value.trim();
-  if(!e)return;
-  try{
-    const r=await fetch(SUPA_URL+'/rest/v1/beta_signups',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,Prefer:'return=minimal'},body:JSON.stringify({email:e})});
-    if(r.ok||r.status===201){showToast("You're on the list!");inp.value=''}
-    else if(r.status===409)showToast("Already on the list!");
-    else showToast("Try again or email hello@fridgenie.app")
-  }catch(x){showToast("Network error -- please try again")}
-}
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
