@@ -13,23 +13,24 @@
 <link rel="icon" href="icon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --red:#b63f39;
   --red-accent:#c94b44;
+  --red-light:#e7a19b;
   --bg:#faf7f2;
   --cream:#f4efe7;
   --text:#2b1e1b;
   --text-mid:#5a4742;
   --text-light:#8c7b75;
   --border:#8c7b75;
-  --radius-phone:28px;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
 .wrap{max-width:640px;margin:0 auto;padding:0 28px}
 
 /* ── Navbar ── */
@@ -49,11 +50,13 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:5
 .hero-cta:hover{opacity:.85}
 .hero-note{font-size:.82rem;color:var(--text-light);letter-spacing:-.02em}
 
-/* ── Decorative leaf SVGs ── */
-.leaf-hero{position:absolute;right:-10px;top:140px;width:90px;height:95px;opacity:1}
-.leaf-pantry{width:75px;height:75px;margin:48px auto 0;display:block}
-.leaf-recipe{position:absolute;right:0;top:-40px;width:110px;height:127px}
-.leaf-cta{position:absolute;left:40px;bottom:-40px;width:115px;height:134px}
+/* ── Decorative elements ── */
+.leaf-hero{position:absolute;right:-10px;top:140px;width:90px;height:auto;opacity:1;pointer-events:none}
+.leaf-pantry{width:75px;height:auto;margin:48px auto 0;display:block}
+.vine-decor{position:absolute;pointer-events:none;z-index:0}
+.vine-top-right{right:-30px;top:80%;width:120px;transform:rotate(-15deg)}
+.vine-mid-left{left:-40px;top:52%;width:140px}
+.vine-bottom-right{right:-20px;top:72%;width:130px;transform:scaleX(-1)}
 
 /* ── Feature Sections ── */
 .feat-section{padding:80px 0 0;position:relative}
@@ -63,90 +66,48 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:5
 .feat-link{display:inline-block;font-size:.72rem;color:var(--red);font-weight:600;margin-top:12px;letter-spacing:-.02em}
 .feat-link:hover{opacity:.7}
 
-/* ── Phone Mockups ── */
-.phone{background:#fff;border-radius:var(--radius-phone);position:relative;box-shadow:0 2px 8px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);overflow:hidden;flex-shrink:0}
-.phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:90px;height:24px;background:#000;border-radius:0 0 16px 16px;z-index:2}
-.phone-screen{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:var(--radius-phone);overflow:hidden;display:flex;flex-direction:column}
-.phone-status{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 20px 4px;font-size:.6rem;font-weight:600;color:var(--text);flex-shrink:0}
-.phone-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.phone-home-bar{width:100px;height:4px;background:#000;border-radius:2px;margin:6px auto 8px;opacity:.15}
+/* ── Phone Mockups (real screenshots) ── */
+.phone-mockup{position:relative;flex-shrink:0}
+.phone-mockup .phone-screenshot{position:absolute;top:2.5%;left:4%;width:92%;height:95%;border-radius:28px;object-fit:cover;z-index:0}
+.phone-mockup .phone-frame{position:relative;width:100%;z-index:1;pointer-events:none}
 
-/* Phone content styles */
-.ps-header{padding:8px 14px 4px;font-size:.78rem;font-weight:700;color:var(--text)}
-.ps-search{margin:0 12px 6px;background:#F2F0EC;border-radius:8px;padding:6px 10px;font-size:.58rem;color:var(--text-light);display:flex;align-items:center;gap:4px}
-.ps-search::before{content:'';width:10px;height:10px;border:1.5px solid var(--text-light);border-radius:50%;flex-shrink:0}
-.ps-category{padding:2px 12px;display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap}
-.ps-cat-pill{font-size:.52rem;font-weight:600;padding:3px 7px;border-radius:10px;background:#EDEAE4;color:var(--text-mid)}
-.ps-cat-pill.active{background:var(--red);color:#fff}
-.ps-items{padding:4px 12px;flex:1;display:flex;flex-direction:column;gap:3px}
-.ps-item{display:flex;align-items:center;gap:7px;background:var(--bg);border-radius:10px;padding:6px 8px}
-.ps-item-icon{font-size:.8rem;flex-shrink:0}
-.ps-item-info{flex:1;min-width:0}
-.ps-item-name{font-size:.56rem;font-weight:600;color:var(--text)}
-.ps-item-meta{font-size:.46rem;color:var(--text-light)}
-.ps-item-qty{font-size:.48rem;font-weight:600;color:var(--text-mid);background:var(--cream);padding:2px 5px;border-radius:5px}
-.ps-badge{margin:0 12px 4px;background:var(--cream);border-radius:8px;padding:4px 8px;font-size:.52rem;color:var(--text-mid);font-weight:500;display:flex;align-items:center;gap:4px}
-.ps-badge-dot{width:4px;height:4px;border-radius:50%;background:var(--red)}
+/* Smart Pantry phones */
+.phones-pantry{display:flex;gap:16px;justify-content:center;align-items:flex-start;margin-top:32px;position:relative}
+.phones-pantry .phone-mockup:first-child{width:210px;z-index:1}
+.phones-pantry .phone-mockup:last-child{width:210px;z-index:2;margin-top:10px}
 
-/* Phone layouts for Smart Pantry */
-.phones-pair{display:flex;gap:16px;justify-content:center;align-items:flex-start;margin-top:32px;position:relative}
-.phones-pair .phone{width:200px;height:410px}
-.phones-pair .phone:first-child{z-index:1}
-.phones-pair .phone:last-child{z-index:2;margin-top:10px}
-
-/* Receipt flow */
-.flow-steps{display:flex;justify-content:center;align-items:flex-start;gap:8px;margin-top:28px;margin-bottom:20px}
+/* Voice & Receipt flow */
+.flow-steps{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:28px;margin-bottom:20px}
 .flow-step{text-align:center;min-width:70px}
 .flow-step-label{font-family:'Shippori Antique B1',serif;font-size:.62rem;color:var(--text-mid);line-height:1.3;letter-spacing:-.04em}
-.flow-arrow{color:var(--text-light);font-size:.9rem;margin-top:4px}
-.phones-triple{display:flex;gap:14px;justify-content:center;align-items:flex-start;position:relative}
-.phones-triple .phone{width:170px;height:350px}
-.phones-triple .phone:nth-child(2){margin-top:15px}
-.phones-triple .phone:nth-child(3){margin-top:35px;width:195px;height:395px}
+.flow-step-label.large{font-size:.72rem}
+.flow-arrow{width:28px;height:auto;flex-shrink:0}
 
-/* Voice phone */
-.ps-voice-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px}
-.ps-voice-ring{width:56px;height:56px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px rgba(182,63,57,.12),0 0 0 18px rgba(182,63,57,.05)}
-.ps-voice-ring svg{fill:#fff}
-.ps-voice-text{font-size:.55rem;color:var(--text-mid);text-align:center;line-height:1.4;max-width:130px}
-.ps-voice-label{font-size:.65rem;font-weight:600;color:var(--text)}
+/* Voice & Receipt phones */
+.phones-receipt{display:flex;gap:14px;justify-content:center;align-items:flex-start;position:relative;margin-top:16px}
+.phones-receipt .phone-mockup:nth-child(1){width:185px;transform:rotate(-10deg);z-index:1}
+.phones-receipt .phone-mockup:nth-child(2){width:185px;transform:rotate(10deg);z-index:2;margin-top:60px}
+.phones-receipt .phone-mockup:nth-child(3){width:175px;transform:rotate(-28deg);z-index:0;margin-top:180px;margin-left:-30px}
 
-/* Receipt phone */
-.ps-receipt-area{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px}
-.ps-receipt-card{width:100%;background:var(--bg);border-radius:10px;padding:8px;margin-bottom:4px}
-.ps-receipt-title{font-size:.55rem;font-weight:700;color:var(--text);margin-bottom:3px}
-.ps-receipt-line{display:flex;justify-content:space-between;font-size:.46rem;color:var(--text-mid);padding:2px 0;border-bottom:1px solid #e8e2d8}
-.ps-receipt-line:last-child{border-bottom:none}
-.ps-receipt-btn{margin-top:4px;background:var(--red);color:#fff;font-size:.5rem;font-weight:600;padding:4px 10px;border-radius:7px;text-align:center;width:100%}
-
-/* Recipe phone */
-.ps-recipe-prompt{margin:0 12px 6px;background:var(--cream);border-radius:10px;padding:7px 9px;font-size:.54rem;color:var(--text-mid);line-height:1.4}
-.ps-recipe-cards{padding:0 12px;display:flex;flex-direction:column;gap:5px}
-.ps-recipe-card{background:var(--bg);border-radius:10px;padding:7px 9px;display:flex;gap:7px;align-items:center}
-.ps-recipe-emoji{font-size:.95rem}
-.ps-recipe-info{flex:1}
-.ps-recipe-name{font-size:.55rem;font-weight:600;color:var(--text)}
-.ps-recipe-desc{font-size:.44rem;color:var(--text-light);line-height:1.3}
-.ps-recipe-time{font-size:.42rem;color:var(--red);font-weight:600}
-
-/* Recipe phone layouts */
+/* Recipe phones */
 .phones-recipe{display:flex;gap:14px;justify-content:center;align-items:flex-start;margin-top:32px;position:relative}
-.phones-recipe .phone:first-child{width:190px;height:390px}
-.phones-recipe .phone:last-child{width:210px;height:430px;margin-top:50px}
+.phones-recipe .phone-mockup:first-child{width:200px;transform:rotate(-4deg)}
+.phones-recipe .phone-mockup:last-child{width:210px;transform:rotate(5deg);margin-top:50px}
 
 /* ── Mid CTA Card ── */
-.mid-cta{margin:80px 0 0;padding:48px 28px;text-align:center;background:var(--cream);border-radius:32px;position:relative;overflow:hidden;border:1px solid #e7a19b}
-.mid-cta h2{font-family:'Shippori Mincho',serif;font-weight:500;font-size:clamp(1.6rem,4.5vw,2.2rem);color:var(--text-mid);letter-spacing:-.04em;line-height:1.15;margin-bottom:14px}
+.mid-cta{margin:80px 0 0;padding:48px 28px;text-align:center;background:var(--cream);border-radius:32px;position:relative;overflow:hidden;border:3px solid var(--red-light);box-shadow:0 4px 24px rgba(0,0,0,.1)}
+.mid-cta h2{font-family:'Shippori Antique B1',serif;font-weight:400;font-size:clamp(1.6rem,5vw,2.2rem);color:var(--text-mid);letter-spacing:-.04em;line-height:1.15;margin-bottom:14px}
+.mid-cta h2 strong{font-family:'Shippori Mincho',serif;font-weight:800}
 .mid-cta p{font-size:.88rem;color:var(--text-mid);max-width:380px;margin:0 auto;line-height:1.55;letter-spacing:-.04em}
 
 /* ── Download Section ── */
 .download-section{padding:70px 0 0;text-align:center}
 .download-title{font-family:'Shippori Antique B1',serif;font-weight:400;font-size:clamp(2rem,6vw,2.5rem);color:var(--text);letter-spacing:-.04em;line-height:1.02}
-.download-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin:16px 0;font-weight:700;font-size:1.1rem;color:var(--text)}
-.download-logo img{width:32px;height:32px;border-radius:8px}
-.appstore-badge{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;padding:14px 28px;border-radius:12px;font-size:.85rem;font-weight:600;transition:opacity .2s;margin-top:10px}
+.download-logo{display:flex;align-items:center;justify-content:center;margin:16px 0}
+.download-logo img{max-height:36px;width:auto}
+.appstore-badge{display:inline-block;margin-top:10px;transition:opacity .2s}
 .appstore-badge:hover{opacity:.85}
-.appstore-badge svg{flex-shrink:0}
+.appstore-badge img{height:50px;width:auto}
 
 /* ── Footer ── */
 footer{padding:48px 0 24px;background:var(--bg)}
@@ -167,29 +128,32 @@ footer{padding:48px 0 24px;background:var(--bg)}
 @media(max-width:768px){
   .hero{padding:90px 0 0}
   .feat-section{padding:64px 0 0}
-  .phones-pair .phone{width:170px;height:350px}
-  .phones-triple .phone{width:145px;height:300px}
-  .phones-triple .phone:nth-child(3){width:165px;height:340px}
-  .phones-recipe .phone:first-child{width:170px;height:350px}
-  .phones-recipe .phone:last-child{width:185px;height:380px;margin-top:40px}
+  .phones-pantry .phone-mockup{width:170px!important}
+  .phones-receipt .phone-mockup:nth-child(1){width:155px!important}
+  .phones-receipt .phone-mockup:nth-child(2){width:155px!important}
+  .phones-receipt .phone-mockup:nth-child(3){width:145px!important;margin-top:140px!important}
+  .phones-recipe .phone-mockup:first-child{width:170px!important}
+  .phones-recipe .phone-mockup:last-child{width:185px!important;margin-top:40px}
   .mid-cta{margin:60px 0 0;padding:40px 24px}
   .download-section{padding:50px 0 0}
-  .flow-steps{flex-direction:column;gap:4px;align-items:center}
-  .flow-arrow{transform:rotate(90deg)}
+  .flow-steps{flex-direction:row;gap:4px;align-items:center}
   .footer-cols{grid-template-columns:1fr}
+  .vine-decor{display:none}
 }
 @media(max-width:480px){
   .hero{padding:80px 0 0}
   .hero h1{font-size:1.7rem}
-  .phones-pair{flex-direction:column;align-items:center;gap:14px}
-  .phones-pair .phone{width:200px;height:410px}
-  .phones-pair .phone:last-child{margin-top:0}
-  .phones-triple{flex-direction:column;align-items:center;gap:14px}
-  .phones-triple .phone{width:200px!important;height:410px!important;margin-top:0!important}
+  .phones-pantry{flex-direction:column;align-items:center;gap:14px}
+  .phones-pantry .phone-mockup{width:200px!important}
+  .phones-pantry .phone-mockup:last-child{margin-top:0!important}
+  .phones-receipt{flex-direction:column;align-items:center;gap:14px}
+  .phones-receipt .phone-mockup{width:200px!important;transform:none!important;margin-top:0!important;margin-left:0!important}
   .phones-recipe{flex-direction:column;align-items:center;gap:14px}
-  .phones-recipe .phone:first-child,.phones-recipe .phone:last-child{width:200px;height:410px;margin-top:0}
+  .phones-recipe .phone-mockup{width:200px!important;transform:none!important;margin-top:0!important}
+  .flow-steps{flex-direction:column;gap:4px}
+  .flow-arrow{transform:rotate(90deg)}
   .wrap{padding:0 20px}
-  .leaf-hero,.leaf-recipe{display:none}
+  .leaf-hero{display:none}
 }
 </style>
 </head>
@@ -198,11 +162,8 @@ footer{padding:48px 0 24px;background:var(--bg)}
 <!-- Navbar -->
 <nav>
   <div class="wrap">
-    <!-- Fridgenie wordmark SVG -->
     <a href="/">
-      <svg class="nav-logo" viewBox="0 0 275 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="50" font-family="'Shippori Antique B1',serif" font-size="54" fill="#2b1e1b" letter-spacing="-2">fridgenie</text>
-      </svg>
+      <img class="nav-logo" src="assets/logo-header.png" alt="Fridgenie">
     </a>
     <a href="https://testflight.apple.com/join/dgMH2Qkp" class="btn-get-beta" target="_blank">Get Beta</a>
   </div>
@@ -211,11 +172,7 @@ footer{padding:48px 0 24px;background:var(--bg)}
 <!-- Hero -->
 <section class="hero">
   <div class="wrap">
-    <!-- Decorative leaf top-right -->
-    <svg class="leaf-hero" viewBox="0 0 360 380" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 360C20 360 40 200 160 120C280 40 340 20 340 20C340 20 320 180 200 260C80 340 20 360 20 360Z" fill="#c94b44" opacity=".15"/>
-      <path d="M340 20C340 20 200 80 160 200C120 320 20 360 20 360" stroke="#c94b44" stroke-width="1.5" fill="none" opacity=".2"/>
-    </svg>
+    <img class="leaf-hero" src="assets/leaf-hero.png" alt="">
     <div class="reveal">
       <h1>Your AI Kitchen<br>Companion.</h1>
       <p class="hero-body">No more wasted groceries.<span>Track what you have, discover what to cook, and never waste food again.
@@ -231,82 +188,30 @@ Powered by AI that understands your pantry.</span></p>
 <!-- Smart Pantry -->
 <section class="feat-section">
   <div class="wrap">
-    <!-- Decorative leaf -->
-    <svg class="leaf-pantry" viewBox="0 0 300 297" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M150 10C150 10 50 60 20 150C-10 240 30 280 30 280C30 280 80 260 130 200C180 140 200 60 150 10Z" fill="#c94b44" opacity=".13"/>
-      <ellipse cx="80" cy="220" rx="12" ry="15" fill="#c94b44" opacity=".13"/>
-    </svg>
+    <img class="leaf-pantry" src="assets/leaf-pantry.png" alt="">
     <div class="feat-head reveal">
       <h2>Smart Pantry</h2>
       <p>Add items with a tap. Track expiration dates, quantities, and categories automatically. Your fridge and pantry, always organized and up to date.</p>
       <a href="#" class="feat-link">Learn More &gt;</a>
     </div>
-    <div class="phones-pair reveal">
-      <!-- Phone 1: Pantry list -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">My Pantry</div>
-            <div class="ps-search">Search items...</div>
-            <div class="ps-category">
-              <span class="ps-cat-pill active">All</span>
-              <span class="ps-cat-pill">Fridge</span>
-              <span class="ps-cat-pill">Freezer</span>
-              <span class="ps-cat-pill">Pantry</span>
-            </div>
-            <div class="ps-badge"><span class="ps-badge-dot"></span> 3 items expiring soon</div>
-            <div class="ps-items">
-              <div class="ps-item"><span class="ps-item-icon">🥛</span><div class="ps-item-info"><div class="ps-item-name">Whole Milk</div><div class="ps-item-meta">Expires May 12</div></div><span class="ps-item-qty">1 gal</span></div>
-              <div class="ps-item"><span class="ps-item-icon">🥚</span><div class="ps-item-info"><div class="ps-item-name">Eggs</div><div class="ps-item-meta">Expires May 15</div></div><span class="ps-item-qty">12</span></div>
-              <div class="ps-item"><span class="ps-item-icon">🧀</span><div class="ps-item-info"><div class="ps-item-name">Cheddar Cheese</div><div class="ps-item-meta">Expires May 20</div></div><span class="ps-item-qty">8 oz</span></div>
-              <div class="ps-item"><span class="ps-item-icon">🍗</span><div class="ps-item-info"><div class="ps-item-name">Chicken Breast</div><div class="ps-item-meta">Expires May 11</div></div><span class="ps-item-qty">2 lbs</span></div>
-              <div class="ps-item"><span class="ps-item-icon">🥬</span><div class="ps-item-info"><div class="ps-item-name">Spinach</div><div class="ps-item-meta">Expires May 10</div></div><span class="ps-item-qty">6 oz</span></div>
-              <div class="ps-item"><span class="ps-item-icon">🍅</span><div class="ps-item-info"><div class="ps-item-name">Tomatoes</div><div class="ps-item-meta">Expires May 14</div></div><span class="ps-item-qty">4</span></div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+    <div class="phones-pantry reveal">
+      <!-- Phone 1: Pantry list (with Lucy label) -->
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/pantry-screen-1.png" alt="Pantry screen">
+        <img class="phone-frame" src="assets/iphone-frame.png" alt="">
       </div>
-      <!-- Phone 2: Item detail -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">Item Detail</div>
-            <div style="padding:12px;text-align:center">
-              <div style="font-size:2.5rem;margin-bottom:6px">🥛</div>
-              <div style="font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:2px">Whole Milk</div>
-              <div style="font-size:.5rem;color:var(--text-light);margin-bottom:12px">Added May 6</div>
-              <div style="display:flex;gap:6px;justify-content:center;margin-bottom:12px">
-                <div style="background:var(--bg);border-radius:8px;padding:6px 10px;text-align:center;flex:1">
-                  <div style="font-size:.42rem;color:var(--text-light)">Quantity</div>
-                  <div style="font-size:.58rem;font-weight:700;color:var(--text)">1 gallon</div>
-                </div>
-                <div style="background:var(--bg);border-radius:8px;padding:6px 10px;text-align:center;flex:1">
-                  <div style="font-size:.42rem;color:var(--text-light)">Expires</div>
-                  <div style="font-size:.58rem;font-weight:700;color:var(--red)">May 12</div>
-                </div>
-              </div>
-              <div style="background:var(--bg);border-radius:8px;padding:6px 10px;text-align:left;margin-bottom:6px">
-                <div style="font-size:.42rem;color:var(--text-light);margin-bottom:2px">Location</div>
-                <div style="font-size:.54rem;font-weight:600;color:var(--text)">Fridge — Top Shelf</div>
-              </div>
-              <div style="background:var(--bg);border-radius:8px;padding:6px 10px;text-align:left">
-                <div style="font-size:.42rem;color:var(--text-light);margin-bottom:2px">Category</div>
-                <div style="font-size:.54rem;font-weight:600;color:var(--text)">Dairy</div>
-              </div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+      <!-- Phone 2: Pantry detail -->
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/pantry-screen-2.png" alt="Pantry detail screen">
+        <img class="phone-frame" src="assets/iphone-frame.png" alt="">
       </div>
     </div>
   </div>
 </section>
 
 <!-- Voice & Receipt Input -->
-<section class="feat-section">
+<section class="feat-section" style="position:relative">
+  <img class="vine-decor vine-top-right" src="assets/vine-large.png" alt="">
   <div class="wrap">
     <div class="feat-head reveal">
       <h2>Voice &amp; Receipt Input</h2>
@@ -318,75 +223,30 @@ Powered by AI that understands your pantry.</span></p>
       <div class="flow-step">
         <div class="flow-step-label">Scan your<br>receipt</div>
       </div>
-      <span class="flow-arrow">→</span>
+      <img class="flow-arrow" src="assets/flow-arrow.png" alt="→">
       <div class="flow-step">
         <div class="flow-step-label">AI scanning<br>in progress</div>
       </div>
-      <span class="flow-arrow">→</span>
+      <img class="flow-arrow" src="assets/flow-arrow.png" alt="→">
       <div class="flow-step">
-        <div class="flow-step-label">17 items<br>added</div>
+        <div class="flow-step-label large">17 items<br>added</div>
       </div>
     </div>
-    <div class="phones-triple reveal">
-      <!-- Phone 1: Voice input -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">Add Items</div>
-            <div class="ps-voice-area">
-              <div class="ps-voice-label">Voice Input</div>
-              <div class="ps-voice-ring">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm0 18c-3.31 0-6-2.69-6-6h2a4 4 0 0 0 8 0h2c0 3.31-2.69 6-6 6zm1 2v2h-2v-2h2z"/></svg>
-              </div>
-              <div class="ps-voice-text">"I bought milk, eggs, bread, and chicken..."</div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+    <div class="phones-receipt reveal">
+      <!-- Phone 1: AI scanning in progress -->
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/ai-scanning.png" alt="AI scanning receipt">
+        <img class="phone-frame" src="assets/iphone-frame-2.png" alt="">
       </div>
-      <!-- Phone 2: Scanning receipt -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">Scan Receipt</div>
-            <div class="ps-receipt-area">
-              <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
-                <div style="width:80%;height:60%;background:linear-gradient(135deg,#f0ece4,#e8e2d8);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;position:relative;overflow:hidden">
-                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);animation:scanline 2s infinite linear;opacity:.6"></div>
-                  <div style="font-size:.5rem;color:var(--text-light);text-align:center;padding:8px">
-                    <div style="margin-bottom:3px;font-size:.42rem;text-align:left;opacity:.6">GROCERY MART</div>
-                    <div style="font-size:.38rem;text-align:left;opacity:.5">Milk.......$4.99<br>Eggs.......$3.49<br>Bread......$2.99<br>Chicken....$8.99</div>
-                  </div>
-                </div>
-                <div style="font-size:.5rem;color:var(--red);font-weight:500">Scanning...</div>
-              </div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+      <!-- Phone 2: Scanned items result -->
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/receipt-scan.png" alt="Receipt scan results">
+        <img class="phone-frame" src="assets/iphone-frame-2.png" alt="">
       </div>
-      <!-- Phone 3: Items added (larger) -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">Items Added</div>
-            <div style="padding:4px 12px">
-              <div style="background:rgba(182,63,57,.08);border-radius:8px;padding:5px 8px;font-size:.5rem;color:var(--red);font-weight:600;text-align:center;margin-bottom:6px">✓ 17 items added to pantry</div>
-            </div>
-            <div class="ps-items">
-              <div class="ps-item"><span class="ps-item-icon">🥛</span><div class="ps-item-info"><div class="ps-item-name">Whole Milk</div><div class="ps-item-meta">Fridge · 1 gal</div></div></div>
-              <div class="ps-item"><span class="ps-item-icon">🥚</span><div class="ps-item-info"><div class="ps-item-name">Eggs</div><div class="ps-item-meta">Fridge · 12 ct</div></div></div>
-              <div class="ps-item"><span class="ps-item-icon">🍞</span><div class="ps-item-info"><div class="ps-item-name">Whole Wheat Bread</div><div class="ps-item-meta">Pantry · 1 loaf</div></div></div>
-              <div class="ps-item"><span class="ps-item-icon">🍗</span><div class="ps-item-info"><div class="ps-item-name">Chicken Breast</div><div class="ps-item-meta">Fridge · 2 lbs</div></div></div>
-              <div class="ps-item"><span class="ps-item-icon">🧈</span><div class="ps-item-info"><div class="ps-item-name">Butter</div><div class="ps-item-meta">Fridge · 1 stick</div></div></div>
-              <div class="ps-item"><span class="ps-item-icon">🍎</span><div class="ps-item-info"><div class="ps-item-name">Apples</div><div class="ps-item-meta">Counter · 6 ct</div></div></div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+      <!-- Phone 3: Receipt background (behind) -->
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/receipt-bg.png" alt="Receipt">
+        <img class="phone-frame" src="assets/iphone-frame-2.png" alt="">
       </div>
     </div>
   </div>
@@ -394,12 +254,8 @@ Powered by AI that understands your pantry.</span></p>
 
 <!-- AI Recipe Discovery -->
 <section class="feat-section" style="position:relative">
+  <img class="vine-decor vine-bottom-right" src="assets/vine-bottom.png" alt="">
   <div class="wrap">
-    <!-- Decorative leaf -->
-    <svg class="leaf-recipe" viewBox="0 0 438 507" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M420 10C420 10 380 180 280 300C180 420 30 490 30 490C30 490 70 320 170 200C270 80 420 10 420 10Z" fill="#c94b44" opacity=".12"/>
-      <ellipse cx="350" cy="150" rx="16" ry="20" fill="#c94b44" opacity=".12"/>
-    </svg>
     <div class="feat-head reveal">
       <h2>AI Recipe Discovery</h2>
       <p>Tell Fridgenie what you are in the mood for. It searches you pantry and suggests recipes you can actually make right now, with what you have.</p>
@@ -407,56 +263,14 @@ Powered by AI that understands your pantry.</span></p>
     </div>
     <div class="phones-recipe reveal">
       <!-- Phone 1: Recipe browse -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">Recipes</div>
-            <div class="ps-recipe-prompt">What are you in the mood for? I'll find recipes using what's in your pantry.</div>
-            <div class="ps-recipe-cards">
-              <div class="ps-recipe-card"><span class="ps-recipe-emoji">🍝</span><div class="ps-recipe-info"><div class="ps-recipe-name">Creamy Pasta</div><div class="ps-recipe-desc">Pasta with cream sauce &amp; chicken</div><div class="ps-recipe-time">25 min</div></div></div>
-              <div class="ps-recipe-card"><span class="ps-recipe-emoji">🥗</span><div class="ps-recipe-info"><div class="ps-recipe-name">Garden Salad</div><div class="ps-recipe-desc">Fresh greens with tomato &amp; cheese</div><div class="ps-recipe-time">10 min</div></div></div>
-              <div class="ps-recipe-card"><span class="ps-recipe-emoji">🍳</span><div class="ps-recipe-info"><div class="ps-recipe-name">Veggie Omelette</div><div class="ps-recipe-desc">Eggs with spinach &amp; cheddar</div><div class="ps-recipe-time">15 min</div></div></div>
-              <div class="ps-recipe-card"><span class="ps-recipe-emoji">🥪</span><div class="ps-recipe-info"><div class="ps-recipe-name">Grilled Chicken Sandwich</div><div class="ps-recipe-desc">With cheddar on wheat bread</div><div class="ps-recipe-time">20 min</div></div></div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/recipes-1.png" alt="Recipe suggestions">
+        <img class="phone-frame" src="assets/iphone-frame-2.png" alt="">
       </div>
       <!-- Phone 2: Recipe detail -->
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-status"><span>9:41</span><span>···</span></div>
-          <div class="phone-body">
-            <div class="ps-header">Creamy Pasta</div>
-            <div style="padding:6px 12px">
-              <div style="height:80px;background:linear-gradient(135deg,#e8c87a,#d4a354);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
-                <span style="font-size:2rem">🍝</span>
-              </div>
-              <div style="display:flex;gap:6px;margin-bottom:8px">
-                <div style="background:var(--bg);border-radius:6px;padding:4px 7px;text-align:center;flex:1"><div style="font-size:.38rem;color:var(--text-light)">Time</div><div style="font-size:.5rem;font-weight:700">25 min</div></div>
-                <div style="background:var(--bg);border-radius:6px;padding:4px 7px;text-align:center;flex:1"><div style="font-size:.38rem;color:var(--text-light)">Serves</div><div style="font-size:.5rem;font-weight:700">4</div></div>
-                <div style="background:var(--bg);border-radius:6px;padding:4px 7px;text-align:center;flex:1"><div style="font-size:.38rem;color:var(--text-light)">Difficulty</div><div style="font-size:.5rem;font-weight:700">Easy</div></div>
-              </div>
-              <div style="font-size:.5rem;font-weight:700;color:var(--text);margin-bottom:3px">Ingredients</div>
-              <div style="font-size:.42rem;color:var(--text-mid);line-height:1.6;margin-bottom:8px">
-                · 8 oz pasta<br>
-                · 2 chicken breasts<br>
-                · 1 cup heavy cream<br>
-                · ½ cup parmesan<br>
-                · 2 cloves garlic
-              </div>
-              <div style="font-size:.5rem;font-weight:700;color:var(--text);margin-bottom:3px">Steps</div>
-              <div style="font-size:.42rem;color:var(--text-mid);line-height:1.6">
-                1. Cook pasta al dente<br>
-                2. Sear chicken, slice<br>
-                3. Sauté garlic in butter<br>
-                4. Add cream, simmer
-              </div>
-            </div>
-            <div class="phone-home-bar"></div>
-          </div>
-        </div>
+      <div class="phone-mockup">
+        <img class="phone-screenshot" src="assets/recipes-2.png" alt="Recipe detail">
+        <img class="phone-frame" src="assets/iphone-frame-2.png" alt="">
       </div>
     </div>
   </div>
@@ -465,13 +279,9 @@ Powered by AI that understands your pantry.</span></p>
 <!-- Mid CTA Card -->
 <section class="feat-section">
   <div class="wrap">
-    <div class="mid-cta reveal" style="position:relative">
-      <h2>Your Fridge Knows<br>Dinner Tonight</h2>
+    <div class="mid-cta reveal">
+      <h2>Your <strong>Fridge</strong> Knows<br>Dinner Tonight</h2>
       <p>Join the free beta and let AI handle the mental load of cooking.</p>
-      <!-- Decorative leaf -->
-      <svg class="leaf-cta" viewBox="0 0 460 535" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;right:-20px;bottom:-20px;width:100px;height:116px;opacity:1">
-        <path d="M440 20C440 20 400 200 300 320C200 440 40 520 40 520C40 520 80 340 180 220C280 100 440 20 440 20Z" fill="#c94b44" opacity=".18"/>
-      </svg>
     </div>
   </div>
 </section>
@@ -481,11 +291,10 @@ Powered by AI that understands your pantry.</span></p>
   <div class="wrap">
     <div class="reveal">
       <div class="download-title">Download</div>
-      <div class="download-logo"><img src="logo.png" alt="Fridgenie"> Fridgenie</div>
+      <div class="download-logo"><img src="assets/logo-download.png" alt="Fridgenie"></div>
       <div class="download-title">Today</div>
-      <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" class="appstore-badge" style="margin-top:20px">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Download on App Store
+      <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" class="appstore-badge">
+        <img src="assets/appstore-badge.png" alt="Download on the App Store">
       </a>
     </div>
   </div>
@@ -495,10 +304,7 @@ Powered by AI that understands your pantry.</span></p>
 <footer>
   <div class="wrap">
     <div class="footer-divider"></div>
-    <!-- Fridgenie wordmark -->
-    <svg class="footer-logo" viewBox="0 0 275 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <text x="0" y="50" font-family="'Shippori Antique B1',serif" font-size="54" fill="#2b1e1b" letter-spacing="-2">fridgenie</text>
-    </svg>
+    <img class="footer-logo" src="assets/logo-footer.png" alt="Fridgenie">
     <p class="footer-tagline">AI-powered pantry tracking and recipe discovery.<br>Cook smarter, waste less.</p>
     <div class="footer-cols">
       <div class="footer-col">
@@ -519,10 +325,6 @@ Powered by AI that understands your pantry.</span></p>
     <div class="footer-copy">2026 Fridgenie. All rights reserved.</div>
   </div>
 </footer>
-
-<style>
-@keyframes scanline{0%{top:0}100%{top:100%}}
-</style>
 
 <script>
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.15});
