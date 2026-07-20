@@ -152,9 +152,36 @@ footer{padding:48px 0 24px;background:var(--bg)}
   .wrap{padding:0 20px}
   .leaf-hero{display:none}
 }
+
+/* ── Auth error overlay ── */
+body.auth-error-active{overflow:hidden}
+.auth-error-overlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.auth-error-card{max-width:420px;width:100%;background:var(--cream);border-radius:32px;border:4px solid var(--red-light);box-shadow:0 4px 24px rgba(0,0,0,.1);padding:48px 32px;text-align:center}
+.auth-error-card .icon{font-size:52px;margin-bottom:20px;line-height:1}
+.auth-error-card h1{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.6rem;color:var(--text);margin-bottom:14px;letter-spacing:-.02em}
+.auth-error-card p{font-family:'Shippori Antique B1',serif;font-size:.95rem;color:var(--text-mid);letter-spacing:-.02em;line-height:1.6}
+.auth-error-card .open-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.95rem;font-weight:500;padding:16px 40px;border-radius:100px;margin:28px 0 16px;transition:opacity .2s;letter-spacing:-.02em;border:none;cursor:pointer;font-family:inherit}
+.auth-error-card .open-btn:hover{opacity:.85}
+.auth-error-card .fallback{font-size:.8rem;color:var(--text-light);line-height:1.55}
+.auth-error-card .fallback a{color:var(--red);text-decoration:underline}
 </style>
 </head>
 <body>
+
+<!-- Auth error overlay: shown only when Supabase redirects here with
+     #error=...&error_code=... (e.g. an expired or already-used signup
+     confirmation link). Hidden by default; script below reveals it. -->
+<div class="auth-error-overlay" id="auth-error-overlay" style="display:none">
+  <div class="auth-error-card">
+    <div class="icon">⏳</div>
+    <h1>Link expired</h1>
+    <p>This confirmation link has expired or was already used. Please open Fridgenie and request a new one.</p>
+    <button class="open-btn" id="auth-error-open-app">Open Fridgenie</button>
+    <p class="fallback">
+      Still having trouble? <a href="mailto:hello@fridgenie.app">Contact support</a>.
+    </p>
+  </div>
+</div>
 
 <!-- Navbar -->
 <nav>
@@ -306,6 +333,28 @@ Powered by AI that understands your pantry.</span></p>
 <script>
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.15});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Auth confirmation links normally redirect to /auth/confirmed, but older
+// emails (sent before that page existed) or an expired/reused token can land
+// the error hash here on the homepage instead. Detect it and show a friendly
+// card rather than leaving the raw #error=... fragment visible in the URL.
+(function () {
+  var hashParams = {};
+  window.location.hash.replace(/^#/, '').split('&').forEach(function (pair) {
+    if (!pair) return;
+    var idx = pair.indexOf('=');
+    var key = decodeURIComponent(idx === -1 ? pair : pair.slice(0, idx));
+    hashParams[key] = true;
+  });
+
+  if (hashParams.error || hashParams.error_code) {
+    document.body.classList.add('auth-error-active');
+    document.getElementById('auth-error-overlay').style.display = '';
+    document.getElementById('auth-error-open-app').addEventListener('click', function () {
+      window.location.href = 'com.fridgenie.app://callback';
+    });
+  }
+})();
 </script>
 </body>
 </html>

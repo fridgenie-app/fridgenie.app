@@ -30,37 +30,72 @@ p{font-family:'Shippori Antique B1',serif;font-size:.95rem;color:var(--text-mid)
 .open-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.95rem;font-weight:500;padding:16px 40px;border-radius:100px;margin:28px 0 16px;transition:opacity .2s;letter-spacing:-.02em;border:none;cursor:pointer;font-family:inherit}
 .open-btn:hover{opacity:.85}
 .fallback{font-size:.8rem;color:var(--text-light);line-height:1.55}
+.fallback a{color:var(--red);text-decoration:underline}
 </style>
 </head>
 <body>
-<div class="card">
+<div class="card" id="confirmed-card">
   <div class="icon">🌳</div>
   <h1>Email confirmed!</h1>
   <p>Your Fridgenie account is ready to go.</p>
   <button class="open-btn" id="open-app">Open Fridgenie</button>
-  <p class="fallback" id="fallback-text">
+  <p class="fallback">
     If the app doesn't open automatically, return to Fridgenie manually and
     sign in — your email is confirmed.
   </p>
 </div>
+<div class="card" id="error-card" style="display:none">
+  <div class="icon">⏳</div>
+  <h1>Link expired</h1>
+  <p>This confirmation link has expired or was already used. Please open Fridgenie and request a new one.</p>
+  <button class="open-btn" id="open-app-error">Open Fridgenie</button>
+  <p class="fallback">
+    Still having trouble? <a href="mailto:hello@fridgenie.app">Contact support</a>.
+  </p>
+</div>
 <script>
-  // Supabase's /auth/v1/verify redirect appends the session (PKCE `code` as a
-  // query param, or tokens as a URL fragment) to this page's URL. Pass that
-  // straight through to the app's custom-scheme deep link so
-  // supabase_flutter can pick up the same session it already established.
-  var deepLink = 'com.fridgenie.app://callback' + window.location.search + window.location.hash;
+  // Supabase's /auth/v1/verify redirect appends either a successful session
+  // (PKCE `code` as a query param, or tokens as a URL fragment) or an error
+  // (`#error=...&error_code=...&error_description=...`, e.g. an expired or
+  // already-used token) to this page's URL.
+  function parseHashParams(hash) {
+    var params = {};
+    hash.replace(/^#/, '').split('&').forEach(function (pair) {
+      if (!pair) return;
+      var idx = pair.indexOf('=');
+      var key = decodeURIComponent(idx === -1 ? pair : pair.slice(0, idx));
+      var val = idx === -1 ? '' : decodeURIComponent(pair.slice(idx + 1).replace(/\+/g, ' '));
+      params[key] = val;
+    });
+    return params;
+  }
 
-  document.getElementById('open-app').addEventListener('click', function () {
-    window.location.href = deepLink;
-  });
+  var hashParams = parseHashParams(window.location.hash);
+  var isError = !!hashParams.error || !!hashParams.error_code;
 
-  // Best-effort auto-open: a browser-initiated navigation to a custom scheme
-  // is not always honored (this is the exact failure this page exists to
-  // work around), so this is a bonus, not the primary path — the button and
-  // fallback text above always render regardless of whether this fires.
-  window.setTimeout(function () {
-    window.location.href = deepLink;
-  }, 400);
+  if (isError) {
+    document.getElementById('confirmed-card').style.display = 'none';
+    document.getElementById('error-card').style.display = '';
+    document.getElementById('open-app-error').addEventListener('click', function () {
+      window.location.href = 'com.fridgenie.app://callback';
+    });
+  } else {
+    // Pass the session straight through to the app's custom-scheme deep link
+    // so supabase_flutter can pick up the same session it already established.
+    var deepLink = 'com.fridgenie.app://callback' + window.location.search + window.location.hash;
+
+    document.getElementById('open-app').addEventListener('click', function () {
+      window.location.href = deepLink;
+    });
+
+    // Best-effort auto-open: a browser-initiated navigation to a custom scheme
+    // is not always honored (this is the exact failure this page exists to
+    // work around), so this is a bonus, not the primary path — the button and
+    // fallback text above always render regardless of whether this fires.
+    window.setTimeout(function () {
+      window.location.href = deepLink;
+    }, 400);
+  }
 </script>
 </body>
 </html>
