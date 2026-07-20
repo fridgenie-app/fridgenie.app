@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Recipe</title>
+<meta id="meta-description" name="description" content="Someone shared a recipe with you from Fridgenie, your AI kitchen companion.">
+<meta id="og-title" property="og:title" content="Fridgenie — A recipe was shared with you">
+<meta id="og-description" property="og:description" content="Someone shared a recipe with you from Fridgenie, your AI kitchen companion.">
+<meta property="og:type" content="website">
+<meta id="og-url" property="og:url" content="https://fridgenie.app/">
+<meta id="og-image" property="og:image" content="https://fridgenie.app/icon.png">
+<meta name="twitter:card" content="summary">
+<meta id="twitter-title" name="twitter:title" content="Fridgenie — A recipe was shared with you">
+<meta id="twitter-description" name="twitter:description" content="Someone shared a recipe with you from Fridgenie, your AI kitchen companion.">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#b63f39;
+  --red-accent:#c94b44;
+  --red-light:#e7a19b;
+  --bg:#faf7f2;
+  --cream:#f4efe7;
+  --text:#2b1e1b;
+  --text-mid:#5a4742;
+  --text-light:#8c7b75;
+  --border:#8c7b75;
+}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh;padding:24px}
+a{color:var(--red);text-decoration:none}
+a:hover{opacity:.8}
+.wrap{max-width:560px;margin:0 auto;padding:48px 0 72px}
+.nav-wordmark{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.2rem;letter-spacing:-.04em;color:var(--text);display:inline-block;margin-bottom:32px}
+
+/* ── Loading state ── */
+#state-loading{text-align:center;padding:60px 0;color:var(--text-light);font-size:.9rem}
+
+/* ── Recipe card ── */
+#state-recipe{display:none}
+.recipe-card{background:var(--cream);border-radius:28px;border:1px solid rgba(140,123,117,.25);padding:32px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.recipe-cuisine{font-size:.72rem;color:var(--red);font-weight:600;letter-spacing:.02em;text-transform:uppercase;margin-bottom:8px}
+.recipe-title{font-family:'Shippori Mincho',serif;font-weight:600;font-size:clamp(1.5rem,5vw,1.9rem);letter-spacing:-.03em;color:var(--text);margin-bottom:12px;line-height:1.25}
+.recipe-desc{font-size:.9rem;color:var(--text-mid);margin-bottom:20px;line-height:1.6}
+.recipe-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--text-mid);margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid rgba(140,123,117,.25)}
+.recipe-meta span strong{color:var(--text);font-weight:600}
+.recipe-section h2{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.05rem;letter-spacing:-.02em;color:var(--text);margin:20px 0 10px}
+.recipe-section ul,.recipe-section ol{padding-left:20px}
+.recipe-section li{font-size:.86rem;color:var(--text-mid);margin-bottom:7px;line-height:1.5}
+.recipe-section p.more{font-size:.8rem;color:var(--text-light);margin-top:4px}
+.open-app-btn{display:flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.92rem;font-weight:500;padding:16px 40px;border-radius:100px;margin:28px 0 12px;transition:opacity .2s;letter-spacing:-.02em;border:none;cursor:pointer;font-family:inherit;width:100%}
+.open-app-btn:hover{opacity:.85}
+.get-app-note{font-size:.78rem;color:var(--text-light);text-align:center;line-height:1.55}
+
+/* ── Not found state ── */
+#state-notfound{display:none;text-align:center}
+.nf-icon{font-size:48px;margin-bottom:16px;line-height:1}
+#state-notfound h1{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.5rem;color:var(--text);margin-bottom:12px;letter-spacing:-.02em}
+#state-notfound p{font-size:.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/" class="nav-wordmark">Fridgenie</a>
+
+  <div id="state-loading">Loading recipe…</div>
+
+  <div id="state-recipe">
+    <div class="recipe-card">
+      <div class="recipe-cuisine" id="r-cuisine"></div>
+      <h1 class="recipe-title" id="r-title"></h1>
+      <p class="recipe-desc" id="r-desc"></p>
+      <div class="recipe-meta" id="r-meta"></div>
+
+      <div class="recipe-section" id="r-ingredients-section">
+        <h2 id="r-ingredients-heading">Ingredients</h2>
+        <ul id="r-ingredients"></ul>
+      </div>
+
+      <div class="recipe-section" id="r-steps-section">
+        <h2 id="r-steps-heading">Steps</h2>
+        <ol id="r-steps"></ol>
+        <p class="more" id="r-steps-more" style="display:none"></p>
+      </div>
+
+      <button class="open-app-btn" id="open-app-btn">Open in Fridgenie</button>
+      <p class="get-app-note" id="get-app-note">
+        Don't have Fridgenie yet? <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" rel="noopener">Get the beta on TestFlight</a>.
+      </p>
+    </div>
+  </div>
+
+  <div id="state-notfound">
+    <div class="nf-icon">🌳</div>
+    <h1 id="nf-title">Recipe not found</h1>
+    <p id="nf-body">This recipe link may have expired or the recipe was removed. Check out Fridgenie to discover recipes from what's already in your kitchen.</p>
+    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="open-app-btn" style="display:inline-flex" target="_blank" rel="noopener" id="nf-cta">Get Fridgenie</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SUPABASE_URL = 'https://rhhaojpsqfbapltcvsbz.supabase.co';
+  var SUPABASE_PUBLISHABLE_KEY = 'sb_publishable__x55NQolA1av3A2J0SGYwQ_PZh1FvOH';
+  var DEEP_LINK_SCHEME = 'com.fridgenie.app://';
+
+  var COPY = {
+    en: {
+      loading: 'Loading recipe…', ingredients: 'Ingredients', steps: 'Steps',
+      openApp: 'Open in Fridgenie', getAppNote: 'Don’t have Fridgenie yet? ', getAppLink: 'Get the beta on TestFlight',
+      nfTitle: 'Recipe not found', nfBody: 'This recipe link may have expired or the recipe was removed. Check out Fridgenie to discover recipes from what’s already in your kitchen.',
+      nfCta: 'Get Fridgenie', prep: 'Prep', cook: 'Cook', min: function (n) { return n + ' min'; }, servings: function (n) { return n + ' servings'; },
+      moreSteps: function (n) { return '+ ' + n + ' more step' + (n === 1 ? '' : 's') + ' in the app'; },
+      ogDescription: 'A recipe from Fridgenie, your AI kitchen companion.',
+    },
+    ko: {
+      loading: '레시피 불러오는 중…', ingredients: '재료', steps: '조리 순서',
+      openApp: 'Fridgenie에서 열기', getAppNote: '아직 Fridgenie가 없으신가요? ', getAppLink: 'TestFlight에서 베타 받기',
+      nfTitle: '레시피를 찾을 수 없어요', nfBody: '링크가 만료되었거나 레시피가 삭제되었을 수 있어요. 냉장고 속 재료로 레시피를 찾아주는 Fridgenie를 만나보세요.',
+      nfCta: 'Fridgenie 받기', prep: '준비', cook: '조리', min: function (n) { return n + '분'; }, servings: function (n) { return n + '인분'; },
+      moreSteps: function (n) { return '앱에서 ' + n + '단계 더 보기'; },
+      ogDescription: 'AI 키친 컴패니언 Fridgenie에서 온 레시피예요.',
+    },
+    zh: {
+      loading: '正在加载食谱…', ingredients: '食材', steps: '烹饪步骤',
+      openApp: '在 Fridgenie 中打开', getAppNote: '还没有 Fridgenie？', getAppLink: '在 TestFlight 上获取测试版',
+      nfTitle: '未找到该食谱', nfBody: '此链接可能已过期，或食谱已被移除。来看看 Fridgenie——根据你冰箱里现有的食材推荐食谱。',
+      nfCta: '获取 Fridgenie', prep: '准备', cook: '烹饪', min: function (n) { return n + ' 分钟'; }, servings: function (n) { return n + ' 人份'; },
+      moreSteps: function (n) { return '在应用中查看还有 ' + n + ' 个步骤'; },
+      ogDescription: '来自 AI 厨房助手 Fridgenie 的食谱。',
+    },
+  };
+
+  function detectLang() {
+    var qp = new URLSearchParams(window.location.search).get('lang');
+    if (qp && COPY[qp]) return qp;
+    var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    if (nav.indexOf('ko') === 0) return 'ko';
+    if (nav.indexOf('zh') === 0) return 'zh';
+    return 'en';
+  }
+
+  function localized(obj, base, lang) {
+    if (lang === 'ko' && obj[base + '_ko']) return obj[base + '_ko'];
+    if (lang === 'zh' && obj[base + '_zh']) return obj[base + '_zh'];
+    return obj[base];
+  }
+
+  function setMeta(id, content) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute('content', content);
+  }
+
+  function el(tag, text) {
+    var e = document.createElement(tag);
+    if (text) e.textContent = text;
+    return e;
+  }
+
+  function show(id) {
+    ['state-loading', 'state-recipe', 'state-notfound'].forEach(function (s) {
+      document.getElementById(s).style.display = s === id ? 'block' : 'none';
+    });
+  }
+
+  function openApp() {
+    window.location.href = DEEP_LINK_SCHEME;
+  }
+
+  function renderNotFound(lang) {
+    var c = COPY[lang];
+    document.getElementById('nf-title').textContent = c.nfTitle;
+    document.getElementById('nf-body').textContent = c.nfBody;
+    document.getElementById('nf-cta').textContent = c.nfCta;
+    setMeta('og-title', 'Fridgenie');
+    setMeta('og-description', c.ogDescription);
+    setMeta('twitter-title', 'Fridgenie');
+    setMeta('twitter-description', c.ogDescription);
+    setMeta('meta-description', c.ogDescription);
+    document.title = 'Fridgenie';
+    show('state-notfound');
+  }
+
+  function renderRecipe(recipe, lang) {
+    var c = COPY[lang];
+    var title = localized(recipe, 'title', lang);
+    var desc = localized(recipe, 'description', lang);
+
+    document.title = title + ' — Fridgenie';
+    setMeta('meta-description', desc);
+    setMeta('og-title', title + ' — Fridgenie');
+    setMeta('og-description', desc);
+    setMeta('twitter-title', title + ' — Fridgenie');
+    setMeta('twitter-description', desc);
+    setMeta('og-url', window.location.href);
+
+    document.getElementById('r-cuisine').textContent = recipe.cuisine || '';
+    document.getElementById('r-title').textContent = title;
+    document.getElementById('r-desc').textContent = desc;
+
+    var metaEl = document.getElementById('r-meta');
+    var parts = [];
+    if (recipe.prep_time_min) parts.push('<span>' + c.prep + ': <strong>' + c.min(recipe.prep_time_min) + '</strong></span>');
+    parts.push('<span>' + c.cook + ': <strong>' + c.min(recipe.cook_time_min) + '</strong></span>');
+    parts.push('<span><strong>' + c.servings(recipe.servings) + '</strong></span>');
+    metaEl.innerHTML = parts.join('');
+
+    document.getElementById('r-ingredients-heading').textContent = c.ingredients;
+    var ingList = document.getElementById('r-ingredients');
+    (recipe.ingredients || []).forEach(function (ing) {
+      var name = localized(ing, 'name', lang) || ing.name;
+      var amount = [ing.quantity, ing.unit].filter(Boolean).join(' ');
+      ingList.appendChild(el('li', amount ? amount + ' ' + name : name));
+    });
+
+    document.getElementById('r-steps-heading').textContent = c.steps;
+    var stepList = document.getElementById('r-steps');
+    var allSteps = recipe.instructions || [];
+    var previewSteps = allSteps.slice(0, 3);
+    previewSteps.forEach(function (step) {
+      stepList.appendChild(el('li', localized(step, 'text', lang) || step.text));
+    });
+    if (allSteps.length > previewSteps.length) {
+      var moreEl = document.getElementById('r-steps-more');
+      moreEl.textContent = c.moreSteps(allSteps.length - previewSteps.length);
+      moreEl.style.display = '';
+    }
+
+    var btn = document.getElementById('open-app-btn');
+    btn.textContent = c.openApp;
+    btn.addEventListener('click', openApp);
+
+    document.getElementById('get-app-note').innerHTML =
+      c.getAppNote + '<a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" rel="noopener">' + c.getAppLink + '</a>.';
+
+    show('state-recipe');
+  }
+
+  function init() {
+    var lang = detectLang();
+    document.getElementById('state-loading').textContent = COPY[lang].loading;
+
+    var match = window.location.pathname.match(/^\/r\/([0-9a-f-]{8,})\/?$/i);
+    if (!match) {
+      renderNotFound(lang);
+      return;
+    }
+    var id = match[1];
+
+    fetch(SUPABASE_URL + '/functions/v1/get-shared-recipe?id=' + encodeURIComponent(id), {
+      headers: {
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: 'Bearer ' + SUPABASE_PUBLISHABLE_KEY,
+      },
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('not_found');
+        return res.json();
+      })
+      .then(function (body) {
+        if (!body || !body.recipe) throw new Error('not_found');
+        renderRecipe(body.recipe, lang);
+      })
+      .catch(function () {
+        renderNotFound(lang);
+      });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
