@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Email confirmed — Fridgenie</title>
+<link rel="icon" href="../../assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#b63f39;
+  --red-accent:#c94b44;
+  --red-light:#e7a19b;
+  --bg:#faf7f2;
+  --cream:#f4efe7;
+  --text:#2b1e1b;
+  --text-mid:#5a4742;
+  --text-light:#8c7b75;
+}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{max-width:420px;width:100%;background:var(--cream);border-radius:32px;border:4px solid var(--red-light);box-shadow:0 4px 24px rgba(0,0,0,.1);padding:48px 32px;text-align:center}
+.icon{font-size:52px;margin-bottom:20px;line-height:1}
+h1{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.6rem;color:var(--text);margin-bottom:14px;letter-spacing:-.02em}
+p{font-family:'Shippori Antique B1',serif;font-size:.95rem;color:var(--text-mid);letter-spacing:-.02em;line-height:1.6}
+.open-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.95rem;font-weight:500;padding:16px 40px;border-radius:100px;margin:28px 0 16px;transition:opacity .2s;letter-spacing:-.02em;border:none;cursor:pointer;font-family:inherit}
+.open-btn:hover{opacity:.85}
+.fallback{font-size:.8rem;color:var(--text-light);line-height:1.55}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">🌳</div>
+  <h1>Email confirmed!</h1>
+  <p>Your Fridgenie account is ready to go.</p>
+  <button class="open-btn" id="open-app">Open Fridgenie</button>
+  <p class="fallback" id="fallback-text">
+    If the app doesn't open automatically, return to Fridgenie manually and
+    sign in — your email is confirmed.
+  </p>
+</div>
+<script>
+  // Supabase's /auth/v1/verify redirect appends the session (PKCE `code` as a
+  // query param, or tokens as a URL fragment) to this page's URL. Pass that
+  // straight through to the app's custom-scheme deep link so
+  // supabase_flutter can pick up the same session it already established.
+  var deepLink = 'com.fridgenie.app://callback' + window.location.search + window.location.hash;
+
+  document.getElementById('open-app').addEventListener('click', function () {
+    window.location.href = deepLink;
+  });
+
+  // Best-effort auto-open: a browser-initiated navigation to a custom scheme
+  // is not always honored (this is the exact failure this page exists to
+  // work around), so this is a bonus, not the primary path — the button and
+  // fallback text above always render regardless of whether this fires.
+  window.setTimeout(function () {
+    window.location.href = deepLink;
+  }, 400);
+</script>
+</body>
+</html>
