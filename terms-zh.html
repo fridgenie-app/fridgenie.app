@@ -4,66 +4,114 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fridgenie — 服务条款</title>
+<meta name="description" content="Fridgenie 服务条款。">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #faf8f5; color: #2d2d2d; line-height: 1.7; padding: 20px; max-width: 720px; margin: 0 auto; }
-  h1 { font-size: 28px; margin: 24px 0 8px; color: #3a6b4c; }
-  h2 { font-size: 20px; margin: 28px 0 8px; color: #3a6b4c; }
-  p, li { font-size: 15px; margin-bottom: 10px; }
-  ul { padding-left: 24px; }
-  .updated { color: #888; font-size: 13px; margin-bottom: 24px; }
-  .logo { font-size: 40px; text-align: center; margin: 20px 0; }
-  a { color: #3a6b4c; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#b63f39;
+  --red-light:#e7a19b;
+  --bg:#faf7f2;
+  --cream:#f4efe7;
+  --text:#2b1e1b;
+  --text-mid:#5a4742;
+  --text-light:#8c7b75;
+  --border:#8c7b75;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:var(--red);text-decoration:none}
+a:hover{opacity:.8}
+.wrap{max-width:680px;margin:0 auto;padding:0 24px}
+nav{padding:24px 0}
+nav .wrap{display:flex;align-items:center;justify-content:space-between}
+.nav-wordmark{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.2rem;letter-spacing:-.04em;color:var(--text)}
+.lang-links{display:flex;gap:14px;font-size:.78rem;color:var(--text-light);letter-spacing:-.02em}
+.lang-links a.active{color:var(--red);font-weight:600}
+main{padding:16px 0 72px}
+h1{font-family:'Shippori Mincho',serif;font-weight:600;font-size:clamp(1.5rem,5vw,1.9rem);letter-spacing:-.02em;margin-bottom:8px;color:var(--text)}
+.updated{font-size:.78rem;color:var(--text-light);margin-bottom:28px;letter-spacing:-.02em}
+.intro{font-size:.92rem;color:var(--text-mid);margin-bottom:8px}
+h2{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.1rem;margin:32px 0 10px;color:var(--text)}
+h3{font-size:.92rem;font-weight:600;margin:18px 0 6px;color:var(--text)}
+p,li{font-size:.92rem;color:var(--text-mid);margin-bottom:10px}
+ul{padding-left:22px;margin-bottom:10px}
+strong{color:var(--text);font-weight:600}
+footer{padding:28px 0;border-top:1px solid rgba(140,123,117,.3)}
+.footer-copy{font-size:.7rem;color:var(--text-light);text-align:center;letter-spacing:-.02em}
 </style>
 </head>
 <body>
-<div class="logo">🥬</div>
-<h1>Fridgenie 服务条款</h1>
-<p class="updated">最后更新：2026年3月10日</p>
 
-<p>使用 Fridgenie（"本应用"）即表示您同意本条款。如果您不同意，请勿使用本应用。</p>
+<nav>
+  <div class="wrap">
+    <a href="/" class="nav-wordmark">Fridgenie</a>
+    <div class="lang-links">
+      <a href="/terms">EN</a>
+      <a href="/terms-ko">한국어</a>
+      <a href="/terms-zh" class="active">中文</a>
+    </div>
+  </div>
+</nav>
 
-<h2>1. Fridgenie 简介</h2>
-<p>Fridgenie 是一款厨房库存管理与食谱发现应用。它帮助您追踪厨房中的食材、根据现有食材查找食谱，以及管理购物清单。</p>
+<main>
+  <div class="wrap">
+    <h1>服务条款</h1>
+    <p class="updated">最后更新：2026 年 7 月 19 日</p>
 
-<h2>2. 您的账户</h2>
-<ul>
-  <li>您必须年满13周岁才能使用 Fridgenie</li>
-  <li>您有责任保管好自己的账户凭据</li>
-  <li>您可以随时在个人资料页面删除账户</li>
-</ul>
+    <p class="intro">使用 Fridgenie（以下简称"本应用"）即表示您同意本条款。如果您不同意本条款，请勿使用本应用。</p>
 
-<h2>3. AI 生成内容</h2>
-<p>食谱推荐由 AI 生成，仅供参考。我们不对以下内容作出保证：</p>
-<ul>
-  <li>推荐食谱的营养信息准确性</li>
-  <li>过敏原信息 — 如果您有过敏症，请务必自行核实食材</li>
-  <li>烹饪时间和温度 — 请根据自身经验判断</li>
-</ul>
+    <h2>1. Fridgenie 是什么</h2>
+    <p>Fridgenie 是一款厨房库存管理与食谱发现应用。它可以帮助您记录厨房里已有的食材，根据这些食材找到合适的食谱，并管理您的购物清单。</p>
 
-<h2>4. 家庭共享</h2>
-<p>当您与他人共享家庭时，他们可以查看和修改共享数据（食品库存、购物清单）。您有责任管理好家庭邀请码的分享对象。</p>
+    <h2>2. 您的账户</h2>
+    <ul>
+      <li>您必须年满 13 周岁才能使用 Fridgenie。</li>
+      <li>您需自行妥善保管账户凭据的安全。</li>
+      <li>您可以随时在"个人资料"页面删除账户。</li>
+    </ul>
 
-<h2>5. 可接受的使用方式</h2>
-<p>请勿将 Fridgenie 用于：</p>
-<ul>
-  <li>违反任何法律或法规</li>
-  <li>试图访问其他用户的数据</li>
-  <li>滥用 AI 功能或 API</li>
-  <li>对应用进行逆向工程</li>
-</ul>
+    <h2>3. AI 生成内容</h2>
+    <p>食谱推荐由 AI 生成，仅供参考灵感之用。对于以下内容，我们无法作出保证：</p>
+    <ul>
+      <li>推荐食谱的营养信息准确性</li>
+      <li>过敏原信息——如果您有食物过敏，请务必自行核实食材</li>
+      <li>烹饪时间与温度——请结合自身经验判断</li>
+    </ul>
 
-<h2>6. 可用性</h2>
-<p>我们努力保持 Fridgenie 的可用性，但无法保证100%的正常运行时间。我们可能随时更新、修改或停止某些功能。</p>
+    <h2>4. 家庭共享</h2>
+    <p>当您与他人共享家庭时，对方可以查看和修改共享数据，例如食材库存和购物清单。您需自行负责决定与谁共享家庭邀请码。</p>
 
-<h2>7. 责任限制</h2>
-<p>Fridgenie 按"原样"提供。对于因使用本应用而产生的任何损害，包括但不限于食品安全问题、过敏反应或数据丢失，我们不承担任何责任。</p>
+    <h2>5. 使用规范</h2>
+    <p>请勿将 Fridgenie 用于以下行为：</p>
+    <ul>
+      <li>违反任何法律法规</li>
+      <li>试图访问其他用户的数据</li>
+      <li>滥用 AI 功能或 API</li>
+      <li>对本应用进行逆向工程</li>
+    </ul>
 
-<h2>8. 条款变更</h2>
-<p>我们可能会更新本条款。变更后继续使用本应用即表示您接受新的条款。</p>
+    <h2>6. 服务可用性</h2>
+    <p>我们会尽力保持 Fridgenie 的稳定运行，但无法保证 100% 不间断可用。我们可能随时更新、调整或下线部分功能。</p>
 
-<h2>9. 联系我们</h2>
-<p>有疑问？请通过以下地址联系我们：<a href="mailto:hello@fridgenie.app">hello@fridgenie.app</a></p>
+    <h2>7. 责任限制</h2>
+    <p>Fridgenie 按"现状"提供。对于因使用本应用而产生的任何损害——包括但不限于食品安全问题、过敏反应或数据丢失，我们均不承担责任。</p>
+
+    <h2>8. 条款变更</h2>
+    <p>我们可能会不时更新本条款。变更后您若继续使用本应用，即视为您接受新条款。</p>
+
+    <h2>9. 联系我们</h2>
+    <p>如有任何疑问，请联系 <a href="mailto:hello@fridgenie.app">hello@fridgenie.app</a>。</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="footer-copy">2026 Fridgenie. All rights reserved.</p>
+  </div>
+</footer>
 
 </body>
 </html>
