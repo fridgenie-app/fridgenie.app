@@ -43,6 +43,7 @@ a:hover{opacity:.8}
 /* ── Recipe card ── */
 #state-recipe{display:none}
 .recipe-card{background:var(--cream);border-radius:28px;border:1px solid rgba(140,123,117,.25);padding:32px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.recipe-image{display:none;width:calc(100% + 64px);margin:-32px -32px 20px;border-radius:28px 28px 0 0;aspect-ratio:4/3;object-fit:cover}
 .recipe-cuisine{font-size:.72rem;color:var(--red);font-weight:600;letter-spacing:.02em;text-transform:uppercase;margin-bottom:8px}
 .recipe-title{font-family:'Shippori Mincho',serif;font-weight:600;font-size:clamp(1.5rem,5vw,1.9rem);letter-spacing:-.03em;color:var(--text);margin-bottom:12px;line-height:1.25}
 .recipe-desc{font-size:.9rem;color:var(--text-mid);margin-bottom:20px;line-height:1.6}
@@ -71,6 +72,7 @@ a:hover{opacity:.8}
 
   <div id="state-recipe">
     <div class="recipe-card">
+      <img class="recipe-image" id="r-image" alt="">
       <div class="recipe-cuisine" id="r-cuisine"></div>
       <h1 class="recipe-title" id="r-title"></h1>
       <p class="recipe-desc" id="r-desc"></p>
@@ -197,6 +199,14 @@ a:hover{opacity:.8}
     setMeta('twitter-title', title + ' — Fridgenie');
     setMeta('twitter-description', desc);
     setMeta('og-url', window.location.href);
+    if (recipe.image_url) {
+      setMeta('og-image', recipe.image_url);
+      var imgEl = document.getElementById('r-image');
+      imgEl.onerror = function () { imgEl.style.display = 'none'; };
+      imgEl.alt = title;
+      imgEl.src = recipe.image_url;
+      imgEl.style.display = 'block';
+    }
 
     document.getElementById('r-cuisine').textContent = recipe.cuisine || '';
     document.getElementById('r-title').textContent = title;
