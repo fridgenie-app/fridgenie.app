@@ -25,6 +25,7 @@ html{-webkit-text-size-adjust:100%}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
 .card{max-width:420px;width:100%;background:var(--cream);border-radius:32px;border:4px solid var(--red-light);box-shadow:0 4px 24px rgba(0,0,0,.1);padding:48px 32px;text-align:center}
 .icon{font-size:52px;margin-bottom:20px;line-height:1}
+.app-icon{width:88px;height:88px;border-radius:20px;margin:0 auto 20px;display:block;box-shadow:0 2px 12px rgba(0,0,0,.12)}
 h1{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.6rem;color:var(--text);margin-bottom:14px;letter-spacing:-.02em}
 p{font-family:'Shippori Antique B1',serif;font-size:.95rem;color:var(--text-mid);letter-spacing:-.02em;line-height:1.6}
 .open-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.95rem;font-weight:500;padding:16px 40px;border-radius:100px;margin:28px 0 16px;transition:opacity .2s;letter-spacing:-.02em;border:none;cursor:pointer;font-family:inherit}
@@ -35,7 +36,7 @@ p{font-family:'Shippori Antique B1',serif;font-size:.95rem;color:var(--text-mid)
 </head>
 <body>
 <div class="card" id="confirmed-card">
-  <div class="icon">🌳</div>
+  <img class="app-icon" src="../../assets/app-icon.png" alt="Fridgenie">
   <h1>Email confirmed!</h1>
   <p>Your Fridgenie account is ready to go.</p>
   <button class="open-btn" id="open-app">Open Fridgenie</button>
