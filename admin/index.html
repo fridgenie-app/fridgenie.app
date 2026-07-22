@@ -118,6 +118,86 @@
         </section>
       </div>
 
+      <!-- AI cost breakdowns -->
+      <div class="grid-2">
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>AI cost by function (30d)</h2>
+            <span class="panel-note" id="cbf-note"></span>
+          </div>
+          <div class="scroll">
+            <table class="tbl" id="cbf-tbl">
+              <thead><tr><th>Function</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="cbf-state" class="panel-state"></div>
+        </section>
+
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>AI cost by model (30d)</h2>
+            <span class="panel-note" id="cbm-note"></span>
+          </div>
+          <div class="scroll">
+            <table class="tbl" id="cbm-tbl">
+              <thead><tr><th>Model</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="cbm-state" class="panel-state"></div>
+        </section>
+      </div>
+
+      <!-- Signal cards: signup source · regeneration quality -->
+      <div class="grid-2">
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>Signups by source (30d)</h2>
+            <span class="panel-note" id="src-note"></span>
+          </div>
+          <div class="mini-tiles" id="src-tiles">
+            <div class="mini-tile"><span class="mini-label">Apple</span><span class="mini-val" data-k="apple">–</span></div>
+            <div class="mini-tile"><span class="mini-label">Google</span><span class="mini-val" data-k="google">–</span></div>
+            <div class="mini-tile"><span class="mini-label">Email</span><span class="mini-val" data-k="email">–</span></div>
+            <div class="mini-tile"><span class="mini-label">Private relay</span><span class="mini-val" data-k="private_relay">–</span></div>
+          </div>
+          <div id="src-state" class="panel-state"></div>
+        </section>
+
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>Recipe quality · regenerations (30d)</h2>
+            <span class="panel-note" id="regen-note"></span>
+          </div>
+          <div class="stat-row">
+            <div class="stat-big"><span class="stat-num" id="regen-rate">–</span><span class="stat-cap">regenerated &lt;60s</span></div>
+            <div class="stat-side">
+              <div><span class="mini-label">Generated</span> <b id="regen-gen">–</b></div>
+              <div><span class="mini-label">Regenerated</span> <b id="regen-cnt">–</b></div>
+              <div><span class="mini-label">Users affected</span> <b id="regen-users">–</b></div>
+            </div>
+          </div>
+          <p class="muted small regen-hint">A high rate means the first suggestion often misses — a prompt/model quality signal.</p>
+          <div id="regen-state" class="panel-state"></div>
+        </section>
+      </div>
+
+      <!-- Quota-reached events -->
+      <section class="card panel">
+        <div class="panel-head">
+          <h2>Users hitting daily limits (30d)</h2>
+          <span class="panel-note" id="quota-note"></span>
+        </div>
+        <div class="scroll">
+          <table class="tbl" id="quota-tbl">
+            <thead><tr><th>Feature</th><th class="num">Limit hits</th><th class="num">Unique users</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="quota-state" class="panel-state"></div>
+      </section>
+
       <!-- User list -->
       <section class="card panel">
         <div class="panel-head">
@@ -128,8 +208,8 @@
           <table class="tbl" id="users-tbl">
             <thead>
               <tr>
-                <th>Email</th><th>Signed up</th><th>Last active</th>
-                <th class="num">Items</th><th>Household</th><th>Tier</th><th>Actions</th>
+                <th>User</th><th>Method</th><th>Signed up</th><th>Last active</th>
+                <th class="num">Items</th><th class="num">AI cost 30d</th><th>Tier</th><th>Actions</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -138,11 +218,34 @@
         <div id="users-state" class="panel-state"></div>
       </section>
 
+      <!-- Recent admin activity -->
+      <section class="card panel">
+        <div class="panel-head"><h2>Recent admin activity</h2></div>
+        <div class="scroll">
+          <table class="tbl" id="activity-tbl">
+            <thead><tr><th>When</th><th>Action</th><th>Admin</th><th>Target</th><th>Details</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="activity-state" class="panel-state"></div>
+      </section>
+
       <footer class="foot muted small">
         Jujube admin · read-only analytics via <code>is_admin()</code> RLS + the
         <code>admin-console</code> edge function. Service-role key never reaches the browser.
       </footer>
     </main>
+  </div>
+
+  <!-- Modal (pantry / usage log) -->
+  <div id="modal" class="modal-overlay hidden">
+    <div class="modal-card card" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="modal-title">—</h3>
+        <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
   </div>
 
   <!-- Toast -->

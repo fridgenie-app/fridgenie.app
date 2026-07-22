@@ -38,6 +38,24 @@ function relTime(s) {
   if (d < 365) return `${Math.floor(d / 30)}mo ago`;
   return `${Math.floor(d / 365)}y ago`;
 }
+// Dollar formatter that keeps precision for the small per-user/per-call amounts.
+const fmtUSDsmall = (n) => {
+  const v = Number(n) || 0;
+  if (v === 0) return "$0";
+  if (v < 1) return `$${v.toFixed(4)}`;
+  return `$${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
+const daysSince = (s) => (s ? Math.max(0, Math.floor((Date.now() - new Date(s).getTime()) / 86400000)) : null);
+const PROVIDER_LABEL = { apple: "Apple", google: "Google", email: "Email", other: "—" };
+function providerBadge(p) {
+  const key = PROVIDER_LABEL[p] ? p : "other";
+  return `<span class="method method-${key}">${PROVIDER_LABEL[key]}</span>`;
+}
+// Inline percentage bar used by the cost-breakdown tables.
+function shareBar(frac) {
+  const pct = Math.max(0, Math.min(100, Math.round(frac * 100)));
+  return `<span class="sharebar"><span class="sharebar-fill" style="width:${pct}%"></span></span><span class="sharebar-pct">${pct}%</span>`;
+}
 
 // ── edge function client ────────────────────────────────────────────────────
 async function callFn(action, { method = "GET", body, params } = {}) {
@@ -177,6 +195,162 @@ async function loadTopUsers() {
   } catch (e) { sectionErr(state, e); }
 }
 
+// ── v2: cost breakdowns (function / model) ──────────────────────────────────
+async function loadCostBreakdown(action, ids) {
+  const state = $(`#${ids.state}`);
+  const tb = $(`#${ids.tbl} tbody`);
+  try {
+    const r = await callFn(action);
+    tb.innerHTML = "";
+    $(`#${ids.note}`).textContent = `${fmtUSDsmall(r.total_usd)} · 30d${r.unpriced ? " · ⚠ unpriced" : ""}`;
+    if (!r.rows.length) { state.textContent = "No AI spend in the last 30 days."; return; }
+    const max = r.total_usd || 1;
+    for (const row of r.rows) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="mono-lbl">${escapeHtml(row.label)}</td>
+        <td class="num">${fmtUSDsmall(row.cost_usd)}</td>
+        <td class="num">${fmtInt(row.calls)}</td>
+        <td class="share">${shareBar(row.cost_usd / max)}</td>`;
+      tb.appendChild(tr);
+    }
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+const loadCostByFunction = () => loadCostBreakdown("cost_by_function", { state: "cbf-state", tbl: "cbf-tbl", note: "cbf-note" });
+const loadCostByModel = () => loadCostBreakdown("cost_by_model", { state: "cbm-state", tbl: "cbm-tbl", note: "cbm-note" });
+
+// ── v2: quota-reached events ────────────────────────────────────────────────
+async function loadQuotaEvents() {
+  const state = $("#quota-state");
+  const tb = $("#quota-tbl tbody");
+  try {
+    const r = await callFn("quota_events");
+    tb.innerHTML = "";
+    $("#quota-note").textContent = `${fmtInt(r.total_events)} limit hits · 30d`;
+    if (!r.rows.length) { state.textContent = "No users hit their daily limit in the last 30 days. 🎉"; return; }
+    for (const row of r.rows) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="mono-lbl">${escapeHtml(row.fn)}</td>
+        <td class="num">${fmtInt(row.events)}</td>
+        <td class="num">${fmtInt(row.unique_users)}</td>`;
+      tb.appendChild(tr);
+    }
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── v2: recipe regeneration rate ────────────────────────────────────────────
+async function loadRegeneration() {
+  const state = $("#regen-state");
+  try {
+    const r = await callFn("regeneration_rate");
+    $("#regen-rate").textContent = `${r.rate_pct}%`;
+    $("#regen-gen").textContent = fmtInt(r.generated);
+    $("#regen-cnt").textContent = fmtInt(r.regenerated);
+    $("#regen-users").textContent = fmtInt(r.regen_users);
+    const rateEl = $("#regen-rate");
+    rateEl.classList.toggle("warn", r.rate_pct >= 20);
+    $("#regen-note").textContent = r.generated ? `${fmtInt(r.generated)} suggestions` : "";
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── v2: signup sources ──────────────────────────────────────────────────────
+async function loadSignupSources() {
+  const state = $("#src-state");
+  try {
+    const r = await callFn("signup_sources");
+    const set = (k, v) => { const el = $(`#src-tiles .mini-val[data-k="${k}"]`); if (el) el.textContent = fmtInt(v); };
+    set("apple", r.counts.apple);
+    set("google", r.counts.google);
+    set("email", r.counts.email);
+    set("private_relay", r.private_relay);
+    $("#src-note").textContent = `${fmtInt(r.total)} new · 30d`;
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── v2: recent admin activity ───────────────────────────────────────────────
+const ACTION_LABEL = {
+  set_subscription_tier: "Set tier",
+  soft_delete_user: "Soft-delete",
+  restore_user: "Restore",
+  reset_daily_quota: "Reset quota",
+};
+async function loadActivity() {
+  const state = $("#activity-state");
+  const tb = $("#activity-tbl tbody");
+  try {
+    const r = await callFn("activity_log");
+    tb.innerHTML = "";
+    if (!r.rows.length) { state.textContent = "No admin actions recorded yet."; return; }
+    for (const row of r.rows) {
+      const label = ACTION_LABEL[row.action] || row.action;
+      const details = row.details ? Object.entries(row.details).map(([k, v]) => `${k}=${v}`).join(", ") : "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td title="${row.created_at ?? ""}">${relTime(row.created_at)}</td>
+        <td><span class="pill neutral">${escapeHtml(label)}</span></td>
+        <td>${escapeHtml(row.admin_email)}</td>
+        <td>${escapeHtml(row.target_email)}</td>
+        <td class="muted small">${escapeHtml(details)}</td>`;
+      tb.appendChild(tr);
+    }
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── v2: modals (pantry / usage log) ─────────────────────────────────────────
+function openModal(title) {
+  $("#modal-title").textContent = title;
+  $("#modal-body").innerHTML = `<div class="spinner modal-spinner"></div>`;
+  $("#modal").classList.remove("hidden");
+}
+function closeModal() { $("#modal").classList.add("hidden"); }
+
+async function openPantry(u) {
+  openModal(`Pantry · ${u.display_name || u.email}`);
+  try {
+    const r = await callFn("user_pantry", { params: { user_id: u.id } });
+    if (!r.items.length) { $("#modal-body").innerHTML = `<p class="muted small">Empty pantry (no items).</p>`; return; }
+    const rows = r.items.map((it) => `<tr>
+      <td>${escapeHtml(it.name)}</td>
+      <td>${escapeHtml(it.category ?? "")}</td>
+      <td>${escapeHtml(it.status ?? "")}</td>
+      <td class="muted small">${escapeHtml(it.expiry_estimate ?? "")}</td></tr>`).join("");
+    $("#modal-body").innerHTML = `<p class="muted small modal-sub">${fmtInt(r.count)} items</p>
+      <div class="scroll"><table class="tbl"><thead><tr><th>Item</th><th>Where</th><th>Status</th><th>Expiry</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  } catch (e) { $("#modal-body").innerHTML = `<p class="panel-state err">Error: ${escapeHtml(e.message)}</p>`; }
+}
+
+async function openUsageLog(u) {
+  openModal(`Usage log · ${u.display_name || u.email}`);
+  try {
+    const r = await callFn("user_usage_log", { params: { user_id: u.id, days: "7" } });
+    if (!r.rows.length) { $("#modal-body").innerHTML = `<p class="muted small">No AI calls in the last 7 days.</p>`; return; }
+    const rows = r.rows.map((c) => `<tr class="${c.status !== "ok" ? "log-err" : ""}">
+      <td class="muted small" title="${c.created_at}">${new Date(c.created_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</td>
+      <td class="mono-lbl">${escapeHtml(c.fn ?? "")}</td>
+      <td class="muted small">${escapeHtml(c.model ?? "")}</td>
+      <td>${escapeHtml(c.status ?? "")}</td>
+      <td class="num">${fmtInt(c.total_tokens)}</td>
+      <td class="num">${fmtUSDsmall(c.cost_usd)}</td></tr>`).join("");
+    $("#modal-body").innerHTML = `<p class="muted small modal-sub">${fmtInt(r.count)} calls · ${fmtUSDsmall(r.total_usd)} · 7d</p>
+      <div class="scroll"><table class="tbl"><thead><tr><th>When</th><th>Function</th><th>Model</th><th>Status</th><th class="num">Tokens</th><th class="num">Cost</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  } catch (e) { $("#modal-body").innerHTML = `<p class="panel-state err">Error: ${escapeHtml(e.message)}</p>`; }
+}
+
+async function resetQuota(u, btn) {
+  if (!confirm(`Reset today's AI quota (all features) for ${u.email}?`)) return;
+  btn.disabled = true;
+  try {
+    const r = await callFn("reset_quota", { method: "POST", body: { user_id: u.id } });
+    const n = r.reset_features?.length ?? 0;
+    toast(n ? `Reset ${n} feature${n === 1 ? "" : "s"} for ${u.email}` : `Nothing to reset for ${u.email}`);
+    loadActivity();
+  } catch (e) { toast(`Failed: ${e.message}`, true); }
+  finally { btn.disabled = false; }
+}
+
 let USERS_CACHE = [];
 async function loadUsers() {
   const state = $("#users-state");
@@ -191,18 +365,25 @@ async function loadUsers() {
 function renderUsers(list) {
   const tb = $("#users-tbl tbody");
   tb.innerHTML = "";
-  if (!list.length) { tb.innerHTML = `<tr><td colspan="7" class="muted small">No matching users.</td></tr>`; return; }
+  if (!list.length) { tb.innerHTML = `<tr><td colspan="8" class="muted small">No matching users.</td></tr>`; return; }
   for (const u of list) {
     const tr = document.createElement("tr");
     if (u.is_deleted) tr.classList.add("deleted");
     const proPill = u.tier === "pro"
       ? `<span class="pill pro">pro</span>` : `<span class="pill free">free</span>`;
+    // Display name if set; else email; else the Apple private-relay ids get a tag.
+    const relay = u.private_relay ? ` <span class="tag-relay" title="Apple Private Relay address">relay</span>` : "";
+    const primary = u.display_name
+      ? `${escapeHtml(u.display_name)} <span class="muted small">· ${escapeHtml(u.email)}</span>`
+      : escapeHtml(u.email);
+    const dSignup = daysSince(u.created_at);
     tr.innerHTML = `
-      <td>${escapeHtml(u.email)}${u.display_name ? ` <span class="muted small">· ${escapeHtml(u.display_name)}</span>` : ""}</td>
-      <td>${fmtDate(u.created_at)}</td>
+      <td>${primary}${relay}</td>
+      <td>${providerBadge(u.provider)}</td>
+      <td title="${u.created_at ?? ""}">${fmtDate(u.created_at)}${dSignup != null ? ` <span class="muted small">· ${dSignup}d</span>` : ""}</td>
       <td title="${u.last_active_at ?? ""}">${relTime(u.last_active_at)}</td>
       <td class="num">${fmtInt(u.item_count)}</td>
-      <td><span class="mono">${u.household_id ? u.household_id.slice(0, 8) : "—"}</span></td>
+      <td class="num">${fmtUSDsmall(u.cost_30d_usd)}</td>
       <td>${proPill}</td>
       <td></td>`;
     const actions = document.createElement("div");
@@ -215,7 +396,19 @@ function renderUsers(list) {
     delBtn.className = "btn btn-ghost btn-mini";
     delBtn.textContent = u.is_deleted ? "Restore" : "Soft-delete";
     delBtn.onclick = () => setDeleted(u, !u.is_deleted, delBtn);
-    actions.append(proBtn, delBtn);
+    const pantryBtn = document.createElement("button");
+    pantryBtn.className = "btn btn-ghost btn-mini";
+    pantryBtn.textContent = "Pantry";
+    pantryBtn.onclick = () => openPantry(u);
+    const logBtn = document.createElement("button");
+    logBtn.className = "btn btn-ghost btn-mini";
+    logBtn.textContent = "Usage";
+    logBtn.onclick = () => openUsageLog(u);
+    const resetBtn = document.createElement("button");
+    resetBtn.className = "btn btn-ghost btn-mini";
+    resetBtn.textContent = "Reset quota";
+    resetBtn.onclick = () => resetQuota(u, resetBtn);
+    actions.append(proBtn, delBtn, pantryBtn, logBtn, resetBtn);
     tr.lastElementChild.appendChild(actions);
     tb.appendChild(tr);
   }
@@ -267,8 +460,15 @@ function escapeHtml(s) {
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+const V2_LOADERS = [
+  loadCostByFunction, loadCostByModel, loadQuotaEvents,
+  loadRegeneration, loadSignupSources, loadActivity,
+];
 async function loadDashboard() {
-  await Promise.allSettled([loadOverview(), loadSignups(), loadCost(), loadTopUsers(), loadUsers()]);
+  await Promise.allSettled([
+    loadOverview(), loadSignups(), loadCost(), loadTopUsers(), loadUsers(),
+    ...V2_LOADERS.map((fn) => fn()),
+  ]);
 }
 
 // ── auth flow ───────────────────────────────────────────────────────────────
@@ -288,13 +488,15 @@ async function gateAndShow(session) {
     await loadOverview();
     show("dash");
     // Load the rest after showing the shell.
-    Promise.allSettled([loadSignups(), loadCost(), loadTopUsers(), loadUsers()]);
+    Promise.allSettled([loadSignups(), loadCost(), loadTopUsers(), loadUsers(), ...V2_LOADERS.map((fn) => fn())]);
   } catch (e) {
     if (e.status === 403 || e.message === "not_authorized") { show("denied"); return; }
     // Backend not deployed / other error: still show the dashboard shell so the
     // admin sees per-section diagnostics instead of a dead page.
     show("dash");
-    ["#signups-state", "#cost-state", "#top-users-state", "#users-state"].forEach((s) => sectionErr($(s), e));
+    ["#signups-state", "#cost-state", "#top-users-state", "#users-state",
+     "#cbf-state", "#cbm-state", "#quota-state", "#regen-state", "#src-state", "#activity-state"]
+      .forEach((s) => sectionErr($(s), e));
     toast(`Backend error: ${e.message}`, true);
   }
 }
@@ -320,6 +522,11 @@ $("#signout-btn").addEventListener("click", async () => { await sb.auth.signOut(
 $("#denied-signout").addEventListener("click", async () => { await sb.auth.signOut(); show("signin"); });
 $("#refresh-btn").addEventListener("click", () => { toast("Refreshing…"); loadDashboard(); });
 $("#user-search").addEventListener("input", () => renderUsers(filterUsers()));
+
+// Modal close: button, backdrop click, Escape.
+$("#modal-close").addEventListener("click", closeModal);
+$("#modal").addEventListener("click", (ev) => { if (ev.target === $("#modal")) closeModal(); });
+document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeModal(); });
 
 // React to sign-in completing via the magic-link redirect. Only re-gate when we
 // are not already showing the dashboard, so a token refresh doesn't reload it.
