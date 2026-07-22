@@ -168,3 +168,57 @@ input[type=email]:focus, .search:focus { border-color: var(--red); box-shadow: 0
   font-size: .84rem; box-shadow: var(--shadow); z-index: 50; max-width: 90vw;
 }
 .toast.err { background: var(--red); }
+
+/* ── v2: sign-in method badges ──────────────────────────────────────────── */
+.method {
+  font-size: .66rem; font-weight: 600; padding: 2px 8px; border-radius: 100px;
+  border: 1px solid var(--border-strong); color: var(--text-mid); white-space: nowrap;
+}
+.method-apple  { background: #f0ece6; color: #2b1e1b; border-color: #d8cfc0; }
+.method-google { background: #eef3ee; color: var(--good); border-color: #c9ddca; }
+.method-email  { background: var(--cream); color: var(--text-mid); }
+.method-other  { background: transparent; color: var(--text-light); }
+.tag-relay {
+  font-size: .6rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--red); background: rgba(182,63,57,.09); border: 1px solid var(--red-light);
+  padding: 1px 6px; border-radius: 100px; vertical-align: middle;
+}
+.pill.neutral { background: var(--cream); color: var(--text-mid); border: 1px solid var(--border); }
+.mono-lbl { font-family: ui-monospace, Menlo, monospace; font-size: .78rem; color: var(--text-mid); }
+
+/* ── v2: cost share bars ────────────────────────────────────────────────── */
+td.share { min-width: 120px; }
+.sharebar {
+  display: inline-block; width: 72px; height: 7px; border-radius: 100px;
+  background: var(--cream); overflow: hidden; vertical-align: middle; margin-right: 7px;
+}
+.sharebar-fill { display: block; height: 100%; background: var(--red-light); border-radius: 100px; }
+.sharebar-pct { font-size: .72rem; color: var(--text-light); font-variant-numeric: tabular-nums; }
+
+/* ── v2: regeneration stat block ────────────────────────────────────────── */
+.stat-row { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.stat-big { display: flex; flex-direction: column; gap: 2px; }
+.stat-num { font-family: 'Shippori Mincho', serif; font-weight: 600; font-size: 2.4rem; line-height: 1; color: var(--good); }
+.stat-num.warn { color: var(--red); }
+.stat-cap { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-light); font-weight: 600; }
+.stat-side { display: flex; flex-direction: column; gap: 4px; font-size: .82rem; color: var(--text-mid); }
+.stat-side .mini-label { display: inline-block; min-width: 108px; }
+.regen-hint { margin-top: 12px; }
+
+/* ── v2: modal ──────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 60; background: rgba(43,30,27,.42);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  backdrop-filter: blur(2px);
+}
+.modal-card { width: 100%; max-width: 620px; max-height: 84vh; display: flex; flex-direction: column; padding: 22px 22px 20px; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.modal-head h3 { font-family: 'Shippori Mincho', serif; font-weight: 600; font-size: 1.1rem; color: var(--text); }
+.modal-close { background: none; border: none; font-size: 1.5rem; line-height: 1; color: var(--text-light); cursor: pointer; padding: 0 4px; }
+.modal-close:hover { color: var(--red); }
+.modal-body { overflow-y: auto; }
+.modal-sub { margin-bottom: 10px; }
+.modal-spinner { margin: 30px auto; }
+.tbl tr.log-err td { color: var(--red); }
+
+@media (max-width: 520px) { .stat-num { font-size: 2rem; } .row-actions { flex-wrap: wrap; } }

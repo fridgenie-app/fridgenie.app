@@ -12,8 +12,17 @@ The dashboard depends on three migrations from the **mobile** repo
 | Migration | State | Provides |
 |---|---|---|
 | `20260411000000_admin_bypass_policies.sql` | live | `is_admin()`, admin RLS bypass |
+| `20260714000000_ai_usage_limits.sql` | live | `ai_usage_daily` counters, `get_ai_quota()` (used by v2 `reset_quota`) |
 | `20260718130000_ai_usage_events.sql` | live | spend ledger (service-role only) |
 | `20260721050000_ai_model_pricing_and_admin.sql` | **NOT applied** — on branch `feat/admin-cost-backend` | pricing table, `ai_admin_overview()`, `ai_usage_cost_report()`, `admin_set_subscription_tier()`, `admin_set_user_deleted()`, `profiles.deleted_at`, audit log |
+
+> **v2 (admin dashboard v2) requires no new migration.** Every v2 action reuses
+> the tables/RPCs above. The only prerequisite that is not yet live is the same
+> `20260721050000` migration v1 already needed — apply it once (below) and both
+> v1 and v2 work. After it is applied, redeploy the Edge Function so the v2
+> actions (`cost_by_function`, `cost_by_model`, `quota_events`,
+> `regeneration_rate`, `signup_sources`, `user_pantry`, `user_usage_log`,
+> `activity_log`, `reset_quota`) are live.
 
 ### Apply the pricing/admin migration
 ```bash

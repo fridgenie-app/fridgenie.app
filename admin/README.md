@@ -15,13 +15,41 @@ Browser (publishable key + magic-link session)
 Edge Function `admin-console`  (verifies caller is admin, then uses the
    │                            server-side SERVICE ROLE — never in the browser)
    ├─ ai_admin_overview()            → KPI tiles + content counts (RPC)
-   ├─ ai_usage_cost_report(from,to)  → daily AI $ spend (RPC)
+   ├─ ai_usage_cost_report(from,to)  → daily AI $ spend, cost by function/model (RPC)
    ├─ profiles                       → signups per day, user list
-   ├─ ai_usage_events                → top users by tokens (service-role ledger)
-   ├─ auth.users                     → email lookup
+   ├─ ai_usage_events                → top users, per-user cost, quota hits, regen rate
+   ├─ ai_usage_daily + get_ai_quota  → reset a user's daily quota (support action)
+   ├─ ai_model_pricing               → price book for per-user / per-call cost
+   ├─ pantry_items                   → a user's current pantry (modal)
+   ├─ admin_activity_logs            → audit trail read + writes
+   ├─ auth.users                     → email + sign-in provider lookup
    ├─ admin_set_subscription_tier()  → grant/revoke pro (audited RPC)
    └─ admin_set_user_deleted()       → reversible soft-delete (audited RPC)
 ```
+
+### Actions (query param `?action=`)
+
+| Action | Method | Purpose |
+|---|---|---|
+| `overview` | GET | KPI tiles + content counts (doubles as the admin gate) |
+| `signups` | GET | New users per day, 30d |
+| `cost` | GET | Daily AI $ spend, 30d |
+| `top_users` | GET | Top 10 users by tokens, 30d |
+| `users` | GET | User list — name, sign-in method, private-relay tag, days since signup/active, 30d AI $ cost |
+| `cost_by_function` | GET | AI $ grouped by edge function, 30d |
+| `cost_by_model` | GET | AI $ grouped by provider/model, 30d (Sonnet↔Haiku migration signal) |
+| `quota_events` | GET | Daily-limit hits (`status='rate_limited'`) by feature: events + unique users |
+| `regeneration_rate` | GET | `recipe-suggest` calls regenerated within 60s (first-result quality signal) |
+| `signup_sources` | GET | New signups by Apple / Google / Email + private-relay count |
+| `user_pantry` | GET | `?user_id=` → that user's current pantry items |
+| `user_usage_log` | GET | `?user_id=&days=` → that user's AI calls with per-call cost |
+| `activity_log` | GET | Last 20 rows of `admin_activity_logs` |
+| `set_tier` | POST | Grant/revoke pro (audited RPC) |
+| `set_deleted` | POST | Soft-delete/restore (audited RPC) |
+| `reset_quota` | POST | `{user_id[, feature]}` → zero today's `ai_usage_daily` for the user's **local** day; audited |
+
+Every action re-checks `profiles.is_admin` on the caller before doing anything.
+The v2 actions add **no new migration** — they reuse the existing tables/RPCs.
 
 **Security posture**
 - The browser only ever holds the **publishable** key + the signed-in user's own
