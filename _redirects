@@ -1,0 +1,7 @@
+# Redirect rules for the Jujube rebrand (old domain -> new domain).
+# NOTE: GitHub Pages does NOT honor this file. It is provided for when the
+# old domain (fridgenie.app) is served via Netlify or Cloudflare Pages, which
+# DO honor _redirects. See REBRAND_NOTES.md for the GitHub Pages path.
+https://fridgenie.app/*   https://myjujube.app/:splat   301!
+http://fridgenie.app/*    https://myjujube.app/:splat   301!
+https://www.fridgenie.app/*  https://myjujube.app/:splat  301!

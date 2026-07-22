@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fridgenie — Recipe</title>
-<meta id="meta-description" name="description" content="Someone shared a recipe with you from Fridgenie, your AI kitchen companion.">
-<meta id="og-title" property="og:title" content="Fridgenie — A recipe was shared with you">
-<meta id="og-description" property="og:description" content="Someone shared a recipe with you from Fridgenie, your AI kitchen companion.">
+<title>Jujube — Recipe</title>
+<meta id="meta-description" name="description" content="Someone shared a recipe with you from Jujube, your AI kitchen companion.">
+<meta id="og-title" property="og:title" content="Jujube — A recipe was shared with you">
+<meta id="og-description" property="og:description" content="Someone shared a recipe with you from Jujube, your AI kitchen companion.">
 <meta property="og:type" content="website">
-<meta id="og-url" property="og:url" content="https://fridgenie.app/">
-<meta id="og-image" property="og:image" content="https://fridgenie.app/icon.png">
+<meta id="og-url" property="og:url" content="https://myjujube.app/">
+<meta id="og-image" property="og:image" content="https://myjujube.app/icon.png">
 <meta name="twitter:card" content="summary">
-<meta id="twitter-title" name="twitter:title" content="Fridgenie — A recipe was shared with you">
-<meta id="twitter-description" name="twitter:description" content="Someone shared a recipe with you from Fridgenie, your AI kitchen companion.">
+<meta id="twitter-title" name="twitter:title" content="Jujube — A recipe was shared with you">
+<meta id="twitter-description" name="twitter:description" content="Someone shared a recipe with you from Jujube, your AI kitchen companion.">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +66,7 @@ a:hover{opacity:.8}
 </head>
 <body>
 <div class="wrap">
-  <a href="/" class="nav-wordmark">Fridgenie</a>
+  <a href="/" class="nav-wordmark">Jujube</a>
 
   <div id="state-loading">Loading recipe…</div>
 
@@ -89,9 +89,9 @@ a:hover{opacity:.8}
         <p class="more" id="r-steps-more" style="display:none"></p>
       </div>
 
-      <button class="open-app-btn" id="open-app-btn">Open in Fridgenie</button>
+      <button class="open-app-btn" id="open-app-btn">Open in Jujube</button>
       <p class="get-app-note" id="get-app-note">
-        Don't have Fridgenie yet? <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" rel="noopener">Get the beta on TestFlight</a>.
+        Don't have Jujube yet? <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" rel="noopener">Get the beta on TestFlight</a>.
       </p>
     </div>
   </div>
@@ -99,8 +99,8 @@ a:hover{opacity:.8}
   <div id="state-notfound">
     <div class="nf-icon">🌳</div>
     <h1 id="nf-title">Recipe not found</h1>
-    <p id="nf-body">This recipe link may have expired or the recipe was removed. Check out Fridgenie to discover recipes from what's already in your kitchen.</p>
-    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="open-app-btn" style="display:inline-flex" target="_blank" rel="noopener" id="nf-cta">Get Fridgenie</a>
+    <p id="nf-body">This recipe link may have expired or the recipe was removed. Check out Jujube to discover recipes from what's already in your kitchen.</p>
+    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="open-app-btn" style="display:inline-flex" target="_blank" rel="noopener" id="nf-cta">Get Jujube</a>
   </div>
 </div>
 
@@ -113,27 +113,27 @@ a:hover{opacity:.8}
   var COPY = {
     en: {
       loading: 'Loading recipe…', ingredients: 'Ingredients', steps: 'Steps',
-      openApp: 'Open in Fridgenie', getAppNote: 'Don’t have Fridgenie yet? ', getAppLink: 'Get the beta on TestFlight',
-      nfTitle: 'Recipe not found', nfBody: 'This recipe link may have expired or the recipe was removed. Check out Fridgenie to discover recipes from what’s already in your kitchen.',
-      nfCta: 'Get Fridgenie', prep: 'Prep', cook: 'Cook', min: function (n) { return n + ' min'; }, servings: function (n) { return n + ' servings'; },
+      openApp: 'Open in Jujube', getAppNote: 'Don’t have Jujube yet? ', getAppLink: 'Get the beta on TestFlight',
+      nfTitle: 'Recipe not found', nfBody: 'This recipe link may have expired or the recipe was removed. Check out Jujube to discover recipes from what’s already in your kitchen.',
+      nfCta: 'Get Jujube', prep: 'Prep', cook: 'Cook', min: function (n) { return n + ' min'; }, servings: function (n) { return n + ' servings'; },
       moreSteps: function (n) { return '+ ' + n + ' more step' + (n === 1 ? '' : 's') + ' in the app'; },
-      ogDescription: 'A recipe from Fridgenie, your AI kitchen companion.',
+      ogDescription: 'A recipe from Jujube, your AI kitchen companion.',
     },
     ko: {
       loading: '레시피 불러오는 중…', ingredients: '재료', steps: '조리 순서',
-      openApp: 'Fridgenie에서 열기', getAppNote: '아직 Fridgenie가 없으신가요? ', getAppLink: 'TestFlight에서 베타 받기',
-      nfTitle: '레시피를 찾을 수 없어요', nfBody: '링크가 만료되었거나 레시피가 삭제되었을 수 있어요. 냉장고 속 재료로 레시피를 찾아주는 Fridgenie를 만나보세요.',
-      nfCta: 'Fridgenie 받기', prep: '준비', cook: '조리', min: function (n) { return n + '분'; }, servings: function (n) { return n + '인분'; },
+      openApp: 'Jujube에서 열기', getAppNote: '아직 Jujube가 없으신가요? ', getAppLink: 'TestFlight에서 베타 받기',
+      nfTitle: '레시피를 찾을 수 없어요', nfBody: '링크가 만료되었거나 레시피가 삭제되었을 수 있어요. 냉장고 속 재료로 레시피를 찾아주는 Jujube를 만나보세요.',
+      nfCta: 'Jujube 받기', prep: '준비', cook: '조리', min: function (n) { return n + '분'; }, servings: function (n) { return n + '인분'; },
       moreSteps: function (n) { return '앱에서 ' + n + '단계 더 보기'; },
-      ogDescription: 'AI 키친 컴패니언 Fridgenie에서 온 레시피예요.',
+      ogDescription: 'AI 키친 컴패니언 Jujube에서 온 레시피예요.',
     },
     zh: {
       loading: '正在加载食谱…', ingredients: '食材', steps: '烹饪步骤',
-      openApp: '在 Fridgenie 中打开', getAppNote: '还没有 Fridgenie？', getAppLink: '在 TestFlight 上获取测试版',
-      nfTitle: '未找到该食谱', nfBody: '此链接可能已过期，或食谱已被移除。来看看 Fridgenie——根据你冰箱里现有的食材推荐食谱。',
-      nfCta: '获取 Fridgenie', prep: '准备', cook: '烹饪', min: function (n) { return n + ' 分钟'; }, servings: function (n) { return n + ' 人份'; },
+      openApp: '在 Jujube 中打开', getAppNote: '还没有 Jujube？', getAppLink: '在 TestFlight 上获取测试版',
+      nfTitle: '未找到该食谱', nfBody: '此链接可能已过期，或食谱已被移除。来看看 Jujube——根据你冰箱里现有的食材推荐食谱。',
+      nfCta: '获取 Jujube', prep: '准备', cook: '烹饪', min: function (n) { return n + ' 分钟'; }, servings: function (n) { return n + ' 人份'; },
       moreSteps: function (n) { return '在应用中查看还有 ' + n + ' 个步骤'; },
-      ogDescription: '来自 AI 厨房助手 Fridgenie 的食谱。',
+      ogDescription: '来自 AI 厨房助手 Jujube 的食谱。',
     },
   };
 
@@ -178,12 +178,12 @@ a:hover{opacity:.8}
     document.getElementById('nf-title').textContent = c.nfTitle;
     document.getElementById('nf-body').textContent = c.nfBody;
     document.getElementById('nf-cta').textContent = c.nfCta;
-    setMeta('og-title', 'Fridgenie');
+    setMeta('og-title', 'Jujube');
     setMeta('og-description', c.ogDescription);
-    setMeta('twitter-title', 'Fridgenie');
+    setMeta('twitter-title', 'Jujube');
     setMeta('twitter-description', c.ogDescription);
     setMeta('meta-description', c.ogDescription);
-    document.title = 'Fridgenie';
+    document.title = 'Jujube';
     show('state-notfound');
   }
 
@@ -192,11 +192,11 @@ a:hover{opacity:.8}
     var title = localized(recipe, 'title', lang);
     var desc = localized(recipe, 'description', lang);
 
-    document.title = title + ' — Fridgenie';
+    document.title = title + ' — Jujube';
     setMeta('meta-description', desc);
-    setMeta('og-title', title + ' — Fridgenie');
+    setMeta('og-title', title + ' — Jujube');
     setMeta('og-description', desc);
-    setMeta('twitter-title', title + ' — Fridgenie');
+    setMeta('twitter-title', title + ' — Jujube');
     setMeta('twitter-description', desc);
     setMeta('og-url', window.location.href);
     if (recipe.image_url) {
