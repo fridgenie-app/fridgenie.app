@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Jujube · Admin</title>
+  <link rel="icon" href="../favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&family=Shippori+Antique+B1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ───────────────────────── Loading ───────────────────────── -->
+  <div id="view-loading" class="view center">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- ───────────────────────── Sign in ───────────────────────── -->
+  <div id="view-signin" class="view center hidden">
+    <div class="card auth-card">
+      <div class="wordmark">JUJUBE</div>
+      <p class="auth-sub">Admin console</p>
+      <form id="signin-form">
+        <input id="email" type="email" required autocomplete="email"
+               placeholder="you@example.com" />
+        <button type="submit" class="btn btn-primary" id="signin-btn">
+          Email me a magic link
+        </button>
+      </form>
+      <p id="signin-msg" class="msg"></p>
+    </div>
+  </div>
+
+  <!-- ─────────────────────── Not authorized ──────────────────── -->
+  <div id="view-denied" class="view center hidden">
+    <div class="card auth-card">
+      <div class="wordmark">JUJUBE</div>
+      <h1 class="denied-title">Not authorized</h1>
+      <p>This account doesn't have admin access.</p>
+      <p id="denied-email" class="muted small"></p>
+      <button class="btn btn-ghost" id="denied-signout">Sign out</button>
+    </div>
+  </div>
+
+  <!-- ───────────────────────── Dashboard ─────────────────────── -->
+  <div id="view-dash" class="view hidden">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="wordmark small-wordmark">JUJUBE</span>
+          <span class="brand-tag">Admin</span>
+        </div>
+        <div class="topbar-right">
+          <span id="who" class="muted small"></span>
+          <button class="btn btn-ghost btn-sm" id="refresh-btn">Refresh</button>
+          <button class="btn btn-ghost btn-sm" id="signout-btn">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Headline KPI tiles -->
+      <section class="tiles" id="tiles">
+        <div class="tile" data-k="total_users"><span class="tile-label">Total users</span><span class="tile-val">–</span></div>
+        <div class="tile" data-k="pro_users"><span class="tile-label">Pro users</span><span class="tile-val">–</span></div>
+        <div class="tile" data-k="dau"><span class="tile-label">DAU</span><span class="tile-val">–</span></div>
+        <div class="tile" data-k="wau"><span class="tile-label">WAU</span><span class="tile-val">–</span></div>
+        <div class="tile" data-k="mau"><span class="tile-label">MAU</span><span class="tile-val">–</span></div>
+        <div class="tile" data-k="cost_30d_usd"><span class="tile-label">AI spend · 30d</span><span class="tile-val">–</span></div>
+      </section>
+
+      <div class="grid-2">
+        <!-- Signups -->
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>Signups</h2>
+            <span class="panel-note" id="signups-note"></span>
+          </div>
+          <div id="signups-chart" class="chart"></div>
+          <div id="signups-state" class="panel-state"></div>
+        </section>
+
+        <!-- AI daily spend -->
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>AI spend · daily (30d)</h2>
+            <span class="panel-note" id="cost-note"></span>
+          </div>
+          <div id="cost-chart" class="chart"></div>
+          <div id="cost-state" class="panel-state"></div>
+        </section>
+      </div>
+
+      <div class="grid-2">
+        <!-- Content usage -->
+        <section class="card panel">
+          <div class="panel-head"><h2>Content usage</h2></div>
+          <div class="mini-tiles" id="content-tiles">
+            <div class="mini-tile"><span class="mini-label">Households</span><span class="mini-val" data-k="households">–</span></div>
+            <div class="mini-tile"><span class="mini-label">Pantry items</span><span class="mini-val" data-k="pantry_items">–</span></div>
+            <div class="mini-tile"><span class="mini-label">Recipes cooked</span><span class="mini-val" data-k="recipes_cooked">–</span></div>
+            <div class="mini-tile"><span class="mini-label">AI recipes</span><span class="mini-val" data-k="ai_recipes">–</span></div>
+          </div>
+        </section>
+
+        <!-- Top users by tokens -->
+        <section class="card panel">
+          <div class="panel-head"><h2>Top users · tokens (30d)</h2></div>
+          <div class="scroll">
+            <table class="tbl" id="top-users-tbl">
+              <thead><tr><th>User</th><th class="num">Tokens</th><th class="num">Calls</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="top-users-state" class="panel-state"></div>
+        </section>
+      </div>
+
+      <!-- User list -->
+      <section class="card panel">
+        <div class="panel-head">
+          <h2>Users</h2>
+          <input id="user-search" class="search" type="search" placeholder="Search email, name, household…" />
+        </div>
+        <div class="scroll">
+          <table class="tbl" id="users-tbl">
+            <thead>
+              <tr>
+                <th>Email</th><th>Signed up</th><th>Last active</th>
+                <th class="num">Items</th><th>Household</th><th>Tier</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="users-state" class="panel-state"></div>
+      </section>
+
+      <footer class="foot muted small">
+        Jujube admin · read-only analytics via <code>is_admin()</code> RLS + the
+        <code>admin-console</code> edge function. Service-role key never reaches the browser.
+      </footer>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
