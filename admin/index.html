@@ -118,8 +118,8 @@
         <!-- Top users by tokens -->
         <section class="card panel">
           <div class="panel-head"><h2>Top users · tokens (30d)</h2></div>
-          <div class="scroll">
-            <table class="tbl" id="top-users-tbl">
+          <div class="scroll scroll-mobile-flat">
+            <table class="tbl tbl-cardify" id="top-users-tbl">
               <thead><tr><th>User</th><th class="num">Tokens</th><th class="num">Calls</th></tr></thead>
               <tbody></tbody>
             </table>
@@ -135,8 +135,8 @@
             <h2>AI cost by function (30d)</h2>
             <span class="panel-note" id="cbf-note"></span>
           </div>
-          <div class="scroll">
-            <table class="tbl" id="cbf-tbl">
+          <div class="scroll scroll-mobile-flat">
+            <table class="tbl tbl-cardify" id="cbf-tbl">
               <thead><tr><th>Function</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
               <tbody></tbody>
             </table>
@@ -149,8 +149,8 @@
             <h2>AI cost by model (30d)</h2>
             <span class="panel-note" id="cbm-note"></span>
           </div>
-          <div class="scroll">
-            <table class="tbl" id="cbm-tbl">
+          <div class="scroll scroll-mobile-flat">
+            <table class="tbl tbl-cardify" id="cbm-tbl">
               <thead><tr><th>Model</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
               <tbody></tbody>
             </table>
@@ -221,7 +221,7 @@
           </div>
         </div>
         <p class="muted small users-hint">Tap a row for detail &amp; actions.</p>
-        <div class="scroll">
+        <div class="scroll users-table-wrap">
           <table class="tbl tbl-users" id="users-tbl">
             <thead>
               <tr>
@@ -241,6 +241,7 @@
             <tbody></tbody>
           </table>
         </div>
+        <div id="users-cards" class="user-cards"></div>
         <div id="users-state" class="panel-state"></div>
       </section>
 
