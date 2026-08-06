@@ -233,9 +233,9 @@ async function loadTopUsers() {
     if (!r.top.length) { state.textContent = "No AI usage in the last 30 days."; return; }
     for (const u of r.top) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td title="${u.user_id}">${escapeHtml(u.email)}</td>
-        <td class="num">${fmtInt(u.total_tokens)}</td>
-        <td class="num">${fmtInt(u.calls)}</td>`;
+      tr.innerHTML = `<td data-label="User" title="${u.user_id}">${escapeHtml(u.email)}</td>
+        <td class="num" data-label="Tokens">${fmtInt(u.total_tokens)}</td>
+        <td class="num" data-label="Calls">${fmtInt(u.calls)}</td>`;
       tb.appendChild(tr);
     }
     state.textContent = "";
@@ -243,7 +243,7 @@ async function loadTopUsers() {
 }
 
 // ── v2: cost breakdowns (function / model) ──────────────────────────────────
-async function loadCostBreakdown(action, ids) {
+async function loadCostBreakdown(action, ids, firstLabel = "Label") {
   const state = $(`#${ids.state}`);
   const tb = $(`#${ids.tbl} tbody`);
   try {
@@ -254,17 +254,17 @@ async function loadCostBreakdown(action, ids) {
     const max = r.total_usd || 1;
     for (const row of r.rows) {
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td class="mono-lbl">${escapeHtml(row.label)}</td>
-        <td class="num">${fmtUSDsmall(row.cost_usd)}</td>
-        <td class="num">${fmtInt(row.calls)}</td>
-        <td class="share">${shareBar(row.cost_usd / max)}</td>`;
+      tr.innerHTML = `<td class="mono-lbl" data-label="${firstLabel}">${escapeHtml(row.label)}</td>
+        <td class="num" data-label="Cost">${fmtUSDsmall(row.cost_usd)}</td>
+        <td class="num" data-label="Calls">${fmtInt(row.calls)}</td>
+        <td class="share" data-label="Share">${shareBar(row.cost_usd / max)}</td>`;
       tb.appendChild(tr);
     }
     state.textContent = "";
   } catch (e) { sectionErr(state, e); }
 }
-const loadCostByFunction = () => loadCostBreakdown("cost_by_function", { state: "cbf-state", tbl: "cbf-tbl", note: "cbf-note" });
-const loadCostByModel = () => loadCostBreakdown("cost_by_model", { state: "cbm-state", tbl: "cbm-tbl", note: "cbm-note" });
+const loadCostByFunction = () => loadCostBreakdown("cost_by_function", { state: "cbf-state", tbl: "cbf-tbl", note: "cbf-note" }, "Function");
+const loadCostByModel = () => loadCostBreakdown("cost_by_model", { state: "cbm-state", tbl: "cbm-tbl", note: "cbm-note" }, "Model");
 
 // ── v2: quota-reached events ────────────────────────────────────────────────
 async function loadQuotaEvents() {
@@ -455,11 +455,9 @@ function detailField(label, value, copyText) {
   return f;
 }
 
-function buildDetailRow(u, colCount) {
-  const tr = document.createElement("tr");
-  tr.className = "detail-row hidden";
-  const td = document.createElement("td");
-  td.colSpan = colCount;
+// Shared detail content (tier toggle + full stats + household membership) used
+// by both the desktop expandable table row and the mobile expandable card.
+function buildUserDetailBox(u) {
   const box = document.createElement("div");
   box.className = "user-detail";
   const grid = document.createElement("div");
@@ -476,16 +474,86 @@ function buildDetailRow(u, colCount) {
   );
   box.appendChild(grid);
   box.appendChild(buildUserActions(u));
-  td.appendChild(box);
+  return box;
+}
+
+function buildDetailRow(u, colCount) {
+  const tr = document.createElement("tr");
+  tr.className = "detail-row hidden";
+  const td = document.createElement("td");
+  td.colSpan = colCount;
+  td.appendChild(buildUserDetailBox(u));
   tr.appendChild(td);
   return tr;
+}
+
+// ── v4: mobile card list (one card per user, tap to expand) ────────────────
+function userInitial(u) {
+  const src = (u.display_name || u.email || "?").trim();
+  return src ? src[0].toUpperCase() : "?";
+}
+function buildUserCard(u) {
+  const card = document.createElement("div");
+  card.className = "user-card" + (u.is_deleted ? " deleted" : "");
+
+  const head = document.createElement("div");
+  head.className = "user-card-head";
+  const avatar = document.createElement("div");
+  avatar.className = "user-avatar";
+  avatar.textContent = userInitial(u);
+  const nameWrap = document.createElement("div");
+  nameWrap.className = "user-card-namewrap";
+  const nameEl = document.createElement("div");
+  nameEl.className = "user-card-name";
+  nameEl.textContent = u.display_name || u.email;
+  nameWrap.appendChild(nameEl);
+  if (u.display_name) {
+    const emailEl = document.createElement("div");
+    emailEl.className = "user-card-email muted small";
+    emailEl.textContent = u.email;
+    nameWrap.appendChild(emailEl);
+  }
+  const tierPill = document.createElement("span");
+  tierPill.className = `pill ${u.tier === "pro" ? "pro" : "free"} user-card-tier`;
+  tierPill.textContent = u.tier === "pro" ? "pro" : "free";
+  const expandBtn = document.createElement("button");
+  expandBtn.type = "button";
+  expandBtn.className = "expand-btn user-card-expand";
+  expandBtn.setAttribute("aria-label", "Toggle detail");
+  expandBtn.textContent = "▸";
+  head.append(avatar, nameWrap, tierPill, expandBtn);
+
+  const meta = document.createElement("div");
+  meta.className = "user-card-meta";
+  const relay = u.private_relay ? ` <span class="tag-relay" title="Apple Private Relay address">relay</span>` : "";
+  meta.innerHTML = `${providerBadge(u.provider)}<span class="muted small">${relTime(u.last_active_at)}</span><span class="muted small">${fmtUSDsmall(u.cost_30d_usd)} · 30d</span>${relay}`;
+
+  const detailBox = buildUserDetailBox(u);
+  detailBox.classList.add("hidden");
+
+  const toggle = () => {
+    const willOpen = detailBox.classList.contains("hidden");
+    detailBox.classList.toggle("hidden", !willOpen);
+    card.classList.toggle("expanded", willOpen);
+  };
+  head.addEventListener("click", toggle);
+  meta.addEventListener("click", toggle);
+
+  card.append(head, meta, detailBox);
+  return card;
 }
 
 const USER_COL_COUNT = 8;
 function renderUsers(list) {
   const tb = $("#users-tbl tbody");
+  const cards = $("#users-cards");
   tb.innerHTML = "";
-  if (!list.length) { tb.innerHTML = `<tr><td colspan="${USER_COL_COUNT}" class="muted small">No matching users.</td></tr>`; return; }
+  cards.innerHTML = "";
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="${USER_COL_COUNT}" class="muted small">No matching users.</td></tr>`;
+    cards.innerHTML = `<p class="muted small">No matching users.</p>`;
+    return;
+  }
   for (const u of list) {
     const tr = document.createElement("tr");
     tr.className = "row-clickable";
@@ -530,6 +598,7 @@ function renderUsers(list) {
 
     tb.appendChild(tr);
     tb.appendChild(detailTr);
+    cards.appendChild(buildUserCard(u));
   }
 }
 
