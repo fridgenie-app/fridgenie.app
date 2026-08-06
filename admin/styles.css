@@ -222,3 +222,88 @@ td.share { min-width: 120px; }
 .tbl tr.log-err td { color: var(--red); }
 
 @media (max-width: 520px) { .stat-num { font-size: 2rem; } .row-actions { flex-wrap: wrap; } }
+
+/* ── v3: users table revamp (sticky col, expandable row, column toggle) ──── */
+.users-head { flex-wrap: wrap; }
+.users-head-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.users-hint { margin: -6px 0 10px; }
+
+.tbl-users .col-user { max-width: 260px; }
+.tbl-users .sticky-col {
+  position: sticky; left: 0; z-index: 2;
+  background: var(--card);
+  box-shadow: 1px 0 0 var(--border);
+}
+.tbl-users thead .sticky-col { z-index: 3; background: var(--card); }
+.tbl-users tbody tr:hover .sticky-col { background: var(--cream); }
+.tbl-users tbody tr.deleted .sticky-col { background: var(--card); }
+.tbl-users tbody tr.expanded .sticky-col { background: var(--cream); }
+
+.user-primary { display: flex; align-items: center; gap: 6px; max-width: 240px; }
+.user-primary-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-name { font-weight: 500; }
+.copy-btn {
+  flex: none; border: none; background: transparent; color: var(--text-light);
+  cursor: pointer; font-size: .8rem; padding: 2px 4px; border-radius: 6px; line-height: 1;
+}
+.copy-btn:hover { color: var(--red); background: var(--cream); }
+.copy-btn.copied { color: var(--good); }
+
+.row-clickable { cursor: pointer; }
+.row-clickable td:not(.col-expand) { }
+.expand-btn {
+  border: none; background: transparent; color: var(--text-light); cursor: pointer;
+  font-size: .8rem; width: 26px; height: 26px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform .15s;
+}
+.expand-btn:hover { color: var(--red); background: var(--cream); }
+tr.expanded .expand-btn { transform: rotate(90deg); color: var(--red); }
+
+.info-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 13px; height: 13px; border-radius: 50%; margin-left: 4px;
+  background: var(--cream); color: var(--text-light); border: 1px solid var(--border-strong);
+  font-size: .62rem; font-weight: 700; cursor: help; vertical-align: middle;
+}
+.info-dot:hover, .info-dot:focus { color: var(--red); border-color: var(--red-light); outline: none; }
+
+/* Detail row: a full-width panel that expands under the clicked user row. */
+tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); white-space: normal; }
+tr.detail-row.hidden { display: none; }
+.user-detail { background: var(--cream); padding: 16px 18px; }
+.user-detail-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px 20px; margin-bottom: 14px;
+}
+.user-detail-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.user-detail-field .mini-label { font-size: .64rem; }
+.user-detail-value { display: flex; align-items: center; gap: 4px; font-size: .82rem; min-width: 0; }
+.user-detail-value span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-detail-actions { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--border-strong); }
+
+/* Column show/hide */
+.col-toggle { position: relative; }
+.col-toggle-menu {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 10;
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 10px 12px; min-width: 160px;
+}
+.col-toggle-menu label {
+  display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--text-mid);
+  padding: 5px 2px; cursor: pointer;
+}
+.col-toggle-menu input { accent-color: var(--red); }
+
+/* data-col hide state, driven by classes on the table root */
+.tbl-users.hide-method [data-col="method"],
+.tbl-users.hide-signup [data-col="signup"],
+.tbl-users.hide-active [data-col="active"],
+.tbl-users.hide-items [data-col="items"],
+.tbl-users.hide-cost [data-col="cost"],
+.tbl-users.hide-tier [data-col="tier"] { display: none; }
+
+@media (max-width: 640px) {
+  .tbl-users .col-user { max-width: 150px; }
+  .user-primary { max-width: 130px; }
+}
