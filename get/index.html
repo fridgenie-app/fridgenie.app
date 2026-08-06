@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Jujube</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<style>
+  :root{--cream:#f5efe6;--ink:#2b2620;--red:#a63a2b;--muted:#7a715f}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+  .card{max-width:420px}
+  .logo{width:72px;height:72px;border-radius:22px;margin:0 auto 20px;display:block}
+  h1{font-size:1.7rem;font-weight:600;margin-bottom:12px;letter-spacing:-.01em}
+  p{color:var(--muted);line-height:1.55;margin-bottom:22px;font-size:1.02rem}
+  .btn{display:inline-block;background:var(--red);color:var(--cream);text-decoration:none;
+    padding:14px 30px;border-radius:100px;font-size:1rem}
+  .sub{margin-top:18px;font-size:.85rem}
+  .sub a{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="logo" src="/icon.png" alt="Jujube">
+  <div id="ios" style="display:none">
+    <h1>Taking you to the App&nbsp;Store…</h1>
+    <p>Jujube — pantry tracking, receipt scanning, and AI recipes for your household.</p>
+    <a class="btn" href="https://apps.apple.com/app/jujube-pantry/id6760092997">Open the App Store</a>
+  </div>
+  <div id="android" style="display:none">
+    <h1>Jujube for Android is almost here</h1>
+    <p>We're in Google Play review right now. Check back very soon — or if you have an iPhone or iPad, Jujube is live on the App Store today.</p>
+    <a class="btn" href="https://myjujube.app">Visit myjujube.app</a>
+  </div>
+  <div id="other" style="display:none">
+    <h1>Get Jujube</h1>
+    <p>Jujube is available for iPhone and iPad on the App Store. Android is coming soon.</p>
+    <a class="btn" href="https://apps.apple.com/app/jujube-pantry/id6760092997">View on the App Store</a>
+    <div class="sub"><a href="https://myjujube.app">Learn more at myjujube.app</a></div>
+  </div>
+</div>
+<script>
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
+  if (isIOS) {
+    document.getElementById("ios").style.display = "block";
+    location.replace("https://apps.apple.com/app/jujube-pantry/id6760092997");
+  } else if (isAndroid) {
+    document.getElementById("android").style.display = "block";
+  } else {
+    document.getElementById("other").style.display = "block";
+  }
+</script>
+</body>
+</html>
