@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Jujube · Admin</title>
   <link rel="icon" href="../favicon.svg" />
@@ -118,12 +118,13 @@
         <!-- Top users by tokens -->
         <section class="card panel">
           <div class="panel-head"><h2>Top users · tokens (30d)</h2></div>
-          <div class="scroll">
+          <div class="scroll top-users-scroll">
             <table class="tbl" id="top-users-tbl">
               <thead><tr><th>User</th><th class="num">Tokens</th><th class="num">Calls</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
+          <div class="top-user-cards" id="top-users-cards"></div>
           <div id="top-users-state" class="panel-state"></div>
         </section>
       </div>
@@ -215,13 +216,14 @@
           <div class="users-head-tools">
             <input id="user-search" class="search" type="search" placeholder="Search email, name, household…" />
             <div class="col-toggle">
-              <button type="button" class="btn btn-ghost btn-sm" id="col-toggle-btn">Columns</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="col-toggle-btn">Fields</button>
               <div class="col-toggle-menu hidden" id="col-toggle-menu"></div>
             </div>
           </div>
         </div>
-        <p class="muted small users-hint">Tap a row for detail &amp; actions.</p>
-        <div class="scroll">
+        <p class="muted small users-hint users-hint-desktop">Tap a row for detail &amp; actions.</p>
+        <p class="muted small users-hint users-hint-mobile">Tap a card for detail &amp; actions.</p>
+        <div class="scroll users-table-wrap">
           <table class="tbl tbl-users" id="users-tbl">
             <thead>
               <tr>
@@ -241,6 +243,7 @@
             <tbody></tbody>
           </table>
         </div>
+        <div class="user-cards" id="users-cards"></div>
         <div id="users-state" class="panel-state"></div>
       </section>
 

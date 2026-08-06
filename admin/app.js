@@ -227,9 +227,11 @@ async function loadCost() {
 async function loadTopUsers() {
   const state = $("#top-users-state");
   const tb = $("#top-users-tbl tbody");
+  const cards = $("#top-users-cards");
   try {
     const r = await callFn("top_users");
     tb.innerHTML = "";
+    if (cards) cards.innerHTML = "";
     if (!r.top.length) { state.textContent = "No AI usage in the last 30 days."; return; }
     for (const u of r.top) {
       const tr = document.createElement("tr");
@@ -237,6 +239,18 @@ async function loadTopUsers() {
         <td class="num">${fmtInt(u.total_tokens)}</td>
         <td class="num">${fmtInt(u.calls)}</td>`;
       tb.appendChild(tr);
+
+      if (cards) {
+        const card = document.createElement("div");
+        card.className = "top-user-card";
+        card.innerHTML = `
+          <span class="top-user-card-label" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</span>
+          <span class="top-user-card-stats">
+            <span><span class="top-user-card-num">${fmtInt(u.total_tokens)}</span><span class="ucf-label">tokens</span></span>
+            <span><span class="top-user-card-num">${fmtInt(u.calls)}</span><span class="ucf-label">calls</span></span>
+          </span>`;
+        cards.appendChild(card);
+      }
     }
     state.textContent = "";
   } catch (e) { sectionErr(state, e); }
@@ -481,11 +495,75 @@ function buildDetailRow(u, colCount) {
   return tr;
 }
 
+// ── v4: mobile card list for the users panel (same data as renderUsers,
+// laid out as tappable cards instead of a horizontally-scrolling table). ────
+function userCardFieldsHTML(u) {
+  const dSignup = daysSince(u.created_at);
+  return `
+    <div class="ucf" data-col="signup"><span class="ucf-label">Signup date</span><span class="ucf-val" title="${u.created_at ?? ""}">${fmtDate(u.created_at)}${dSignup != null ? ` · ${dSignup}d` : ""}</span></div>
+    <div class="ucf" data-col="active"><span class="ucf-label">Last active</span><span class="ucf-val" title="${u.last_active_at ?? ""}">${relTime(u.last_active_at)}</span></div>
+    <div class="ucf" data-col="items"><span class="ucf-label">Items</span><span class="ucf-val">${fmtInt(u.item_count)}</span></div>
+    <div class="ucf" data-col="cost"><span class="ucf-label">AI spend · 30d</span><span class="ucf-val">${fmtUSDsmall(u.cost_30d_usd)}</span></div>
+    <div class="ucf" data-col="method"><span class="ucf-label">Provider</span><span class="ucf-val">${providerBadge(u.provider)}</span></div>
+  `;
+}
+function renderUserCards(list) {
+  const wrap = $("#users-cards");
+  if (!wrap) return;
+  wrap.innerHTML = "";
+  if (!list.length) { wrap.innerHTML = `<p class="muted small">No matching users.</p>`; return; }
+  for (const u of list) {
+    const card = document.createElement("div");
+    card.className = "user-card" + (u.is_deleted ? " deleted" : "");
+    const proPill = u.tier === "pro" ? `<span class="pill pro">pro</span>` : `<span class="pill free">free</span>`;
+    const relay = u.private_relay ? `<span class="tag-relay" title="Apple Private Relay address">relay</span>` : "";
+    card.innerHTML = `
+      <div class="user-card-top">
+        <div class="user-card-id">
+          ${u.display_name ? `<div class="user-card-name">${escapeHtml(u.display_name)}</div>` : ""}
+          <div class="user-card-email">
+            <span class="user-card-email-text" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</span>
+          </div>
+          ${relay}
+        </div>
+        ${proPill}
+      </div>
+      <div class="user-card-fields">${userCardFieldsHTML(u)}</div>
+      <button type="button" class="user-card-toggle" aria-expanded="false">
+        <span class="user-card-toggle-label">Details &amp; actions</span><span class="user-card-toggle-icon">▾</span>
+      </button>
+      <div class="user-card-detail hidden"></div>`;
+
+    $(".user-card-email", card).appendChild(copyBtn(u.email, "Email"));
+
+    const detail = $(".user-card-detail", card);
+    const idGrid = document.createElement("div");
+    idGrid.className = "user-detail-grid user-card-detail-grid";
+    idGrid.append(
+      detailField("User ID", u.id, u.id),
+      detailField("Household", u.household_id || "—", u.household_id || undefined),
+    );
+    detail.appendChild(idGrid);
+    detail.appendChild(buildUserActions(u));
+
+    const toggleBtn = $(".user-card-toggle", card);
+    toggleBtn.addEventListener("click", () => {
+      const willOpen = detail.classList.contains("hidden");
+      detail.classList.toggle("hidden", !willOpen);
+      toggleBtn.setAttribute("aria-expanded", String(willOpen));
+      toggleBtn.classList.toggle("open", willOpen);
+      card.classList.toggle("expanded", willOpen);
+    });
+
+    wrap.appendChild(card);
+  }
+}
+
 const USER_COL_COUNT = 8;
 function renderUsers(list) {
   const tb = $("#users-tbl tbody");
   tb.innerHTML = "";
-  if (!list.length) { tb.innerHTML = `<tr><td colspan="${USER_COL_COUNT}" class="muted small">No matching users.</td></tr>`; return; }
+  if (!list.length) { tb.innerHTML = `<tr><td colspan="${USER_COL_COUNT}" class="muted small">No matching users.</td></tr>`; renderUserCards(list); return; }
   for (const u of list) {
     const tr = document.createElement("tr");
     tr.className = "row-clickable";
@@ -531,6 +609,7 @@ function renderUsers(list) {
     tb.appendChild(tr);
     tb.appendChild(detailTr);
   }
+  renderUserCards(list);
 }
 
 // ── v3: column show/hide, persisted locally per-browser ─────────────────────
@@ -552,7 +631,11 @@ function saveHiddenCols(set) {
 }
 function applyHiddenCols(hidden) {
   const tbl = $("#users-tbl");
-  for (const { key } of TOGGLEABLE_COLS) tbl.classList.toggle(`hide-${key}`, hidden.has(key));
+  const cards = $("#users-cards");
+  for (const { key } of TOGGLEABLE_COLS) {
+    tbl.classList.toggle(`hide-${key}`, hidden.has(key));
+    if (cards) cards.classList.toggle(`hide-${key}`, hidden.has(key));
+  }
 }
 function initColumnToggle() {
   const hidden = loadHiddenCols();
