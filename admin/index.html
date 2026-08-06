@@ -71,6 +71,16 @@
         <div class="tile" data-k="cost_30d_usd"><span class="tile-label">AI spend · 30d</span><span class="tile-val">–</span></div>
       </section>
 
+      <!-- Daily actives (app opens) -->
+      <section class="card panel">
+        <div class="panel-head">
+          <h2>Daily actives · app opens</h2>
+          <span class="panel-note" id="dau-trend-note"></span>
+        </div>
+        <div id="dau-trend-chart" class="chart"></div>
+        <div id="dau-trend-state" class="panel-state"></div>
+      </section>
+
       <div class="grid-2">
         <!-- Signups -->
         <section class="card panel">
@@ -200,16 +210,32 @@
 
       <!-- User list -->
       <section class="card panel">
-        <div class="panel-head">
+        <div class="panel-head users-head">
           <h2>Users</h2>
-          <input id="user-search" class="search" type="search" placeholder="Search email, name, household…" />
+          <div class="users-head-tools">
+            <input id="user-search" class="search" type="search" placeholder="Search email, name, household…" />
+            <div class="col-toggle">
+              <button type="button" class="btn btn-ghost btn-sm" id="col-toggle-btn">Columns</button>
+              <div class="col-toggle-menu hidden" id="col-toggle-menu"></div>
+            </div>
+          </div>
         </div>
+        <p class="muted small users-hint">Tap a row for detail &amp; actions.</p>
         <div class="scroll">
-          <table class="tbl" id="users-tbl">
+          <table class="tbl tbl-users" id="users-tbl">
             <thead>
               <tr>
-                <th>User</th><th>Method</th><th>Signed up</th><th>Last active</th>
-                <th class="num">Items</th><th class="num">AI cost 30d</th><th>Tier</th><th>Actions</th>
+                <th class="col-user sticky-col">User</th>
+                <th data-col="method">Method</th>
+                <th data-col="signup">Signed up</th>
+                <th data-col="active">Last active
+                  <span class="info-dot" tabindex="0"
+                        title="The most recent of: a profile activity ping, an AI recipe call, or an app open/resume — never shows a time older than what we can prove happened.">?</span>
+                </th>
+                <th class="num" data-col="items">Items</th>
+                <th class="num" data-col="cost">AI cost 30d</th>
+                <th data-col="tier">Tier</th>
+                <th class="col-expand"></th>
               </tr>
             </thead>
             <tbody></tbody>

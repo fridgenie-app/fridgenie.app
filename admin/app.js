@@ -46,6 +46,33 @@ const fmtUSDsmall = (n) => {
   return `$${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 const daysSince = (s) => (s ? Math.max(0, Math.floor((Date.now() - new Date(s).getTime()) / 86400000)) : null);
+const fmtFull = (s) => (s ? new Date(s).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) : "—");
+async function copyToClipboard(text, btn) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    // Fallback for contexts without the async clipboard API (older mobile Safari).
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch { /* best-effort */ }
+    ta.remove();
+  }
+  if (btn) {
+    const prev = btn.textContent;
+    btn.textContent = "✓"; btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = prev; btn.classList.remove("copied"); }, 1100);
+  }
+}
+function copyBtn(text, label = "Copy") {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "copy-btn";
+  b.textContent = "⧉";
+  b.title = `${label} (click to copy)`;
+  b.addEventListener("click", (ev) => { ev.stopPropagation(); copyToClipboard(text, b); });
+  return b;
+}
 const PROVIDER_LABEL = { apple: "Apple", google: "Google", email: "Email", other: "—" };
 function providerBadge(p) {
   const key = PROVIDER_LABEL[p] ? p : "other";
@@ -163,6 +190,26 @@ async function loadSignups() {
     $("#signups-note").textContent = `${fmtInt(r.total)} total · ${fmtInt(r.window_new)} in 30d`;
     barChart($("#signups-chart"), r.daily, { valueKey: "count", labelKey: "date", fmt: fmtInt });
     state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── v3: DAU/WAU/MAU from app_open_events (v2.4.3+, separate from the
+// AI-usage-driven dau/wau/mau tiles in the overview() headline). ────────────
+async function loadActiveUsersTrend() {
+  const state = $("#dau-trend-state");
+  try {
+    const r = await callFn("active_users_trend");
+    if (r.sparse) {
+      $("#dau-trend-note").textContent = r.since
+        ? `Tracking since ${fmtDate(r.since)} — still filling in`
+        : "No app-open data yet";
+    } else {
+      $("#dau-trend-note").textContent = `DAU ${fmtInt(r.dau)} · WAU ${fmtInt(r.wau)} · MAU ${fmtInt(r.mau)}`;
+    }
+    barChart($("#dau-trend-chart"), r.daily, { valueKey: "dau", labelKey: "date", fmt: fmtInt });
+    state.textContent = r.sparse
+      ? `App-open tracking is new (since ${fmtDate(r.since)}) — DAU ${fmtInt(r.dau)} · WAU ${fmtInt(r.wau)} · MAU ${fmtInt(r.mau)} so far.`
+      : "";
   } catch (e) { sectionErr(state, e); }
 }
 
@@ -362,56 +409,175 @@ async function loadUsers() {
   } catch (e) { sectionErr(state, e); }
 }
 
+// Action buttons shared between the (now-removed) inline actions column and
+// the expanded per-user detail panel — built fresh each time so `u`/button
+// state (disabled while a request is in flight) stays correct per row.
+function buildUserActions(u) {
+  const wrap = document.createElement("div");
+  wrap.className = "row-actions user-detail-actions";
+  const proBtn = document.createElement("button");
+  proBtn.className = "btn btn-ghost btn-mini";
+  proBtn.textContent = u.tier === "pro" ? "Revoke pro" : "Grant pro";
+  proBtn.onclick = () => setTier(u, u.tier === "pro" ? "free" : "pro", proBtn);
+  const delBtn = document.createElement("button");
+  delBtn.className = "btn btn-ghost btn-mini";
+  delBtn.textContent = u.is_deleted ? "Restore" : "Soft-delete";
+  delBtn.onclick = () => setDeleted(u, !u.is_deleted, delBtn);
+  const pantryBtn = document.createElement("button");
+  pantryBtn.className = "btn btn-ghost btn-mini";
+  pantryBtn.textContent = "Pantry";
+  pantryBtn.onclick = () => openPantry(u);
+  const logBtn = document.createElement("button");
+  logBtn.className = "btn btn-ghost btn-mini";
+  logBtn.textContent = "Usage";
+  logBtn.onclick = () => openUsageLog(u);
+  const resetBtn = document.createElement("button");
+  resetBtn.className = "btn btn-ghost btn-mini";
+  resetBtn.textContent = "Reset quota";
+  resetBtn.onclick = () => resetQuota(u, resetBtn);
+  wrap.append(proBtn, delBtn, pantryBtn, logBtn, resetBtn);
+  return wrap;
+}
+
+function detailField(label, value, copyText) {
+  const f = document.createElement("div");
+  f.className = "user-detail-field";
+  const l = document.createElement("span");
+  l.className = "mini-label"; l.textContent = label;
+  const v = document.createElement("div");
+  v.className = "user-detail-value";
+  const span = document.createElement("span");
+  span.textContent = value;
+  span.title = value;
+  v.appendChild(span);
+  if (copyText) v.appendChild(copyBtn(copyText, label));
+  f.append(l, v);
+  return f;
+}
+
+function buildDetailRow(u, colCount) {
+  const tr = document.createElement("tr");
+  tr.className = "detail-row hidden";
+  const td = document.createElement("td");
+  td.colSpan = colCount;
+  const box = document.createElement("div");
+  box.className = "user-detail";
+  const grid = document.createElement("div");
+  grid.className = "user-detail-grid";
+  grid.append(
+    detailField("Email", u.email, u.email),
+    detailField("User ID", u.id, u.id),
+    detailField("Household", u.household_id || "—", u.household_id || undefined),
+    detailField("Signed up", `${fmtFull(u.created_at)}`),
+    detailField("Last active", fmtFull(u.last_active_at)),
+    detailField("Pantry items", fmtInt(u.item_count)),
+    detailField("AI cost · 30d", fmtUSDsmall(u.cost_30d_usd)),
+    detailField("Method", u.provider),
+  );
+  box.appendChild(grid);
+  box.appendChild(buildUserActions(u));
+  td.appendChild(box);
+  tr.appendChild(td);
+  return tr;
+}
+
+const USER_COL_COUNT = 8;
 function renderUsers(list) {
   const tb = $("#users-tbl tbody");
   tb.innerHTML = "";
-  if (!list.length) { tb.innerHTML = `<tr><td colspan="8" class="muted small">No matching users.</td></tr>`; return; }
+  if (!list.length) { tb.innerHTML = `<tr><td colspan="${USER_COL_COUNT}" class="muted small">No matching users.</td></tr>`; return; }
   for (const u of list) {
     const tr = document.createElement("tr");
+    tr.className = "row-clickable";
     if (u.is_deleted) tr.classList.add("deleted");
     const proPill = u.tier === "pro"
       ? `<span class="pill pro">pro</span>` : `<span class="pill free">free</span>`;
-    // Display name if set; else email; else the Apple private-relay ids get a tag.
     const relay = u.private_relay ? ` <span class="tag-relay" title="Apple Private Relay address">relay</span>` : "";
-    const primary = u.display_name
-      ? `${escapeHtml(u.display_name)} <span class="muted small">· ${escapeHtml(u.email)}</span>`
-      : escapeHtml(u.email);
     const dSignup = daysSince(u.created_at);
+
+    const userTd = document.createElement("td");
+    userTd.className = "col-user sticky-col";
+    const primary = document.createElement("div");
+    primary.className = "user-primary";
+    const textSpan = document.createElement("span");
+    textSpan.className = "user-primary-text";
+    textSpan.title = u.display_name ? `${u.display_name} · ${u.email}` : u.email;
+    textSpan.innerHTML = u.display_name
+      ? `<span class="user-name">${escapeHtml(u.display_name)}</span> <span class="muted small">${escapeHtml(u.email)}</span>`
+      : escapeHtml(u.email);
+    primary.appendChild(textSpan);
+    primary.appendChild(copyBtn(u.email, "Email"));
+    if (relay) primary.insertAdjacentHTML("beforeend", relay);
+    userTd.appendChild(primary);
+
     tr.innerHTML = `
-      <td>${primary}${relay}</td>
-      <td>${providerBadge(u.provider)}</td>
-      <td title="${u.created_at ?? ""}">${fmtDate(u.created_at)}${dSignup != null ? ` <span class="muted small">· ${dSignup}d</span>` : ""}</td>
-      <td title="${u.last_active_at ?? ""}">${relTime(u.last_active_at)}</td>
-      <td class="num">${fmtInt(u.item_count)}</td>
-      <td class="num">${fmtUSDsmall(u.cost_30d_usd)}</td>
-      <td>${proPill}</td>
-      <td></td>`;
-    const actions = document.createElement("div");
-    actions.className = "row-actions";
-    const proBtn = document.createElement("button");
-    proBtn.className = "btn btn-ghost btn-mini";
-    proBtn.textContent = u.tier === "pro" ? "Revoke pro" : "Grant pro";
-    proBtn.onclick = () => setTier(u, u.tier === "pro" ? "free" : "pro", proBtn);
-    const delBtn = document.createElement("button");
-    delBtn.className = "btn btn-ghost btn-mini";
-    delBtn.textContent = u.is_deleted ? "Restore" : "Soft-delete";
-    delBtn.onclick = () => setDeleted(u, !u.is_deleted, delBtn);
-    const pantryBtn = document.createElement("button");
-    pantryBtn.className = "btn btn-ghost btn-mini";
-    pantryBtn.textContent = "Pantry";
-    pantryBtn.onclick = () => openPantry(u);
-    const logBtn = document.createElement("button");
-    logBtn.className = "btn btn-ghost btn-mini";
-    logBtn.textContent = "Usage";
-    logBtn.onclick = () => openUsageLog(u);
-    const resetBtn = document.createElement("button");
-    resetBtn.className = "btn btn-ghost btn-mini";
-    resetBtn.textContent = "Reset quota";
-    resetBtn.onclick = () => resetQuota(u, resetBtn);
-    actions.append(proBtn, delBtn, pantryBtn, logBtn, resetBtn);
-    tr.lastElementChild.appendChild(actions);
+      <td data-col="method">${providerBadge(u.provider)}</td>
+      <td data-col="signup" title="${u.created_at ?? ""}">${fmtDate(u.created_at)}${dSignup != null ? ` <span class="muted small">· ${dSignup}d</span>` : ""}</td>
+      <td data-col="active" title="${u.last_active_at ?? ""}">${relTime(u.last_active_at)}</td>
+      <td class="num" data-col="items">${fmtInt(u.item_count)}</td>
+      <td class="num" data-col="cost">${fmtUSDsmall(u.cost_30d_usd)}</td>
+      <td data-col="tier">${proPill}</td>
+      <td class="col-expand"><button type="button" class="expand-btn" aria-label="Toggle detail">▸</button></td>`;
+    tr.insertBefore(userTd, tr.firstChild);
+
+    const detailTr = buildDetailRow(u, USER_COL_COUNT);
+    const toggle = () => {
+      const willOpen = detailTr.classList.contains("hidden");
+      detailTr.classList.toggle("hidden", !willOpen);
+      tr.classList.toggle("expanded", willOpen);
+    };
+    tr.addEventListener("click", toggle);
+
     tb.appendChild(tr);
+    tb.appendChild(detailTr);
   }
+}
+
+// ── v3: column show/hide, persisted locally per-browser ─────────────────────
+const TOGGLEABLE_COLS = [
+  { key: "method", label: "Method" },
+  { key: "signup", label: "Signed up" },
+  { key: "active", label: "Last active" },
+  { key: "items", label: "Items" },
+  { key: "cost", label: "AI cost 30d" },
+  { key: "tier", label: "Tier" },
+];
+const COL_PREF_KEY = "jujube_admin_users_hidden_cols";
+function loadHiddenCols() {
+  try { return new Set(JSON.parse(localStorage.getItem(COL_PREF_KEY) || "[]")); }
+  catch { return new Set(); }
+}
+function saveHiddenCols(set) {
+  try { localStorage.setItem(COL_PREF_KEY, JSON.stringify([...set])); } catch { /* private mode etc. */ }
+}
+function applyHiddenCols(hidden) {
+  const tbl = $("#users-tbl");
+  for (const { key } of TOGGLEABLE_COLS) tbl.classList.toggle(`hide-${key}`, hidden.has(key));
+}
+function initColumnToggle() {
+  const hidden = loadHiddenCols();
+  applyHiddenCols(hidden);
+  const menu = $("#col-toggle-menu");
+  menu.innerHTML = TOGGLEABLE_COLS.map(({ key, label }) => `
+    <label><input type="checkbox" data-col-key="${key}" ${hidden.has(key) ? "" : "checked"} /> ${escapeHtml(label)}</label>
+  `).join("");
+  $$("input[type=checkbox]", menu).forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const key = cb.dataset.colKey;
+      if (cb.checked) hidden.delete(key); else hidden.add(key);
+      applyHiddenCols(hidden);
+      saveHiddenCols(hidden);
+    });
+  });
+  $("#col-toggle-btn").addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    menu.classList.toggle("hidden");
+  });
+  document.addEventListener("click", (ev) => {
+    if (!menu.classList.contains("hidden") && !menu.contains(ev.target) && ev.target.id !== "col-toggle-btn") {
+      menu.classList.add("hidden");
+    }
+  });
 }
 
 async function setTier(u, tier, btn) {
@@ -462,7 +628,7 @@ function escapeHtml(s) {
 
 const V2_LOADERS = [
   loadCostByFunction, loadCostByModel, loadQuotaEvents,
-  loadRegeneration, loadSignupSources, loadActivity,
+  loadRegeneration, loadSignupSources, loadActivity, loadActiveUsersTrend,
 ];
 async function loadDashboard() {
   await Promise.allSettled([
@@ -495,7 +661,8 @@ async function gateAndShow(session) {
     // admin sees per-section diagnostics instead of a dead page.
     show("dash");
     ["#signups-state", "#cost-state", "#top-users-state", "#users-state",
-     "#cbf-state", "#cbm-state", "#quota-state", "#regen-state", "#src-state", "#activity-state"]
+     "#cbf-state", "#cbm-state", "#quota-state", "#regen-state", "#src-state", "#activity-state",
+     "#dau-trend-state"]
       .forEach((s) => sectionErr($(s), e));
     toast(`Backend error: ${e.message}`, true);
   }
@@ -522,6 +689,7 @@ $("#signout-btn").addEventListener("click", async () => { await sb.auth.signOut(
 $("#denied-signout").addEventListener("click", async () => { await sb.auth.signOut(); show("signin"); });
 $("#refresh-btn").addEventListener("click", () => { toast("Refreshing…"); loadDashboard(); });
 $("#user-search").addEventListener("input", () => renderUsers(filterUsers()));
+initColumnToggle();
 
 // Modal close: button, backdrop click, Escape.
 $("#modal-close").addEventListener("click", closeModal);
