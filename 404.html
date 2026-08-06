@@ -91,7 +91,7 @@ a:hover{opacity:.8}
 
       <button class="open-app-btn" id="open-app-btn">Open in Jujube</button>
       <p class="get-app-note" id="get-app-note">
-        Don't have Jujube yet? <a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" rel="noopener">Get the beta on TestFlight</a>.
+        Don't have Jujube yet? <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" rel="noopener">Get it on the App Store</a>.
       </p>
     </div>
   </div>
@@ -100,7 +100,7 @@ a:hover{opacity:.8}
     <div class="nf-icon">🌳</div>
     <h1 id="nf-title">Recipe not found</h1>
     <p id="nf-body">This recipe link may have expired or the recipe was removed. Check out Jujube to discover recipes from what's already in your kitchen.</p>
-    <a href="https://testflight.apple.com/join/dgMH2Qkp" class="open-app-btn" style="display:inline-flex" target="_blank" rel="noopener" id="nf-cta">Get Jujube</a>
+    <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" class="open-app-btn" style="display:inline-flex" target="_blank" rel="noopener" id="nf-cta">Get Jujube</a>
   </div>
 </div>
 
@@ -113,7 +113,7 @@ a:hover{opacity:.8}
   var COPY = {
     en: {
       loading: 'Loading recipe…', ingredients: 'Ingredients', steps: 'Steps',
-      openApp: 'Open in Jujube', getAppNote: 'Don’t have Jujube yet? ', getAppLink: 'Get the beta on TestFlight',
+      openApp: 'Open in Jujube', getAppNote: 'Don’t have Jujube yet? ', getAppLink: 'Get it on the App Store',
       nfTitle: 'Recipe not found', nfBody: 'This recipe link may have expired or the recipe was removed. Check out Jujube to discover recipes from what’s already in your kitchen.',
       nfCta: 'Get Jujube', prep: 'Prep', cook: 'Cook', min: function (n) { return n + ' min'; }, servings: function (n) { return n + ' servings'; },
       moreSteps: function (n) { return '+ ' + n + ' more step' + (n === 1 ? '' : 's') + ' in the app'; },
@@ -121,7 +121,7 @@ a:hover{opacity:.8}
     },
     ko: {
       loading: '레시피 불러오는 중…', ingredients: '재료', steps: '조리 순서',
-      openApp: 'Jujube에서 열기', getAppNote: '아직 Jujube가 없으신가요? ', getAppLink: 'TestFlight에서 베타 받기',
+      openApp: 'Jujube에서 열기', getAppNote: '아직 Jujube가 없으신가요? ', getAppLink: 'App Store에서 받기',
       nfTitle: '레시피를 찾을 수 없어요', nfBody: '링크가 만료되었거나 레시피가 삭제되었을 수 있어요. 냉장고 속 재료로 레시피를 찾아주는 Jujube를 만나보세요.',
       nfCta: 'Jujube 받기', prep: '준비', cook: '조리', min: function (n) { return n + '분'; }, servings: function (n) { return n + '인분'; },
       moreSteps: function (n) { return '앱에서 ' + n + '단계 더 보기'; },
@@ -129,7 +129,7 @@ a:hover{opacity:.8}
     },
     zh: {
       loading: '正在加载食谱…', ingredients: '食材', steps: '烹饪步骤',
-      openApp: '在 Jujube 中打开', getAppNote: '还没有 Jujube？', getAppLink: '在 TestFlight 上获取测试版',
+      openApp: '在 Jujube 中打开', getAppNote: '还没有 Jujube？', getAppLink: '在 App Store 获取',
       nfTitle: '未找到该食谱', nfBody: '此链接可能已过期，或食谱已被移除。来看看 Jujube——根据你冰箱里现有的食材推荐食谱。',
       nfCta: '获取 Jujube', prep: '准备', cook: '烹饪', min: function (n) { return n + ' 分钟'; }, servings: function (n) { return n + ' 人份'; },
       moreSteps: function (n) { return '在应用中查看还有 ' + n + ' 个步骤'; },
@@ -245,7 +245,7 @@ a:hover{opacity:.8}
     btn.addEventListener('click', openApp);
 
     document.getElementById('get-app-note').innerHTML =
-      c.getAppNote + '<a href="https://testflight.apple.com/join/dgMH2Qkp" target="_blank" rel="noopener">' + c.getAppLink + '</a>.';
+      c.getAppNote + '<a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" rel="noopener">' + c.getAppLink + '</a>.';
 
     show('state-recipe');
   }
