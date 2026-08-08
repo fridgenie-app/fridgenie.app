@@ -1,0 +1,21 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["7373NYW784.com.fridgenie.app"],
+        "appID": "7373NYW784.com.fridgenie.app",
+        "components": [
+          {
+            "/": "/invite/*",
+            "comment": "Invite links open the app to the join-household flow"
+          }
+        ],
+        "paths": ["/invite/*"]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["7373NYW784.com.fridgenie.app"]
+  }
+}

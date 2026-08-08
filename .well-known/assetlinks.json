@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.fridgenie.app",
+      "sha256_cert_fingerprints": [
+        "D0:79:CB:98:51:85:EC:36:4E:38:57:BC:36:9D:CF:49:A1:49:F7:30:0F:54:AD:DA:65:D6:AE:74:78:0B:8F:0E"
+      ]
+    }
+  }
+]
