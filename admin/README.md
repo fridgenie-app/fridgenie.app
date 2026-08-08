@@ -61,6 +61,17 @@ The v2 actions add **no new migration** — they reuse the existing tables/RPCs.
   RPCs additionally re-verify the acting admin and write an `admin_activity_logs`
   audit row.
 
+## Grant/Revoke safety (Aug 2026)
+
+To prevent mis-clicks landing on the wrong user (the Aug 6 incident), Grant Pro,
+Revoke Pro, Soft-delete/Restore, and Reset-quota now go through a **styled
+confirmation dialog** that names exactly who is affected — display name, email,
+and current tier badge — instead of a bare `window.confirm()`. Grant uses a
+green confirm button; Revoke/Delete use red. Every user row and card also shows
+a visible **tier badge** (Free / Pro / Founding) so a Pro/Founding row can't be
+misread as Free before an action. `confirmDialog()` in `app.js` returns a
+`Promise<boolean>` and is the single entry point for these confirmations.
+
 ## Files
 - `index.html` — the single page (loading / sign-in / not-authorized / dashboard).
 - `styles.css` — Jujube brand tokens (warm paper, coral, Shippori Mincho / Inter).

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>You're invited to Jujube</title>
+<meta name="description" content="Join a household on Jujube — smart pantry tracking, receipt scanning, and AI recipes for your kitchen.">
+
+<!-- ── Open Graph (KakaoTalk / iMessage / Facebook / etc.) ──────────────────
+     These are STATIC and brand-generic on purpose: messaging crawlers do not
+     run JavaScript, so the rich preview must live in the initial HTML. The
+     invite {code} is applied client-side (below) for the deep link only. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Jujube">
+<meta property="og:title" content="You're invited to Jujube 🌿">
+<meta property="og:description" content="Join a household on Jujube — track your pantry, scan receipts, and get AI recipes from what you already have.">
+<meta property="og:url" content="https://myjujube.app/invite/">
+<!-- TODO(minjun): swap in the final designed invite share image. Current
+     assets/invite-og.png is an interim, code-generated 1200x630 brand card.
+     Replace the file at that same path (keep the name) and redeploy — or update
+     the four og:image / twitter:image URLs below if you rename it. -->
+<meta property="og:image" content="https://myjujube.app/assets/invite-og.png">
+<meta property="og:image:secure_url" content="https://myjujube.app/assets/invite-og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="You're invited to Jujube — your magical AI kitchen companion.">
+
+<!-- ── Twitter / X Card ── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="You're invited to Jujube 🌿">
+<meta name="twitter:description" content="Join a household on Jujube — track your pantry, scan receipts, and get AI recipes from what you already have.">
+<meta name="twitter:image" content="https://myjujube.app/assets/invite-og.png">
+<meta name="twitter:image:alt" content="You're invited to Jujube — your magical AI kitchen companion.">
+
+<link rel="canonical" href="https://myjujube.app/invite/">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#b63f39;--red-accent:#c94b44;--red-light:#e7a19b;
+  --bg:#faf7f2;--cream:#f4efe7;--card:#fffdf9;
+  --text:#2b1e1b;--text-mid:#5a4742;--text-light:#8c7b75;--border:#e4dccf;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;
+  padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0));
+  padding-bottom:calc(24px + env(safe-area-inset-bottom,0));
+  position:relative;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.card{
+  position:relative;z-index:2;max-width:440px;width:100%;background:var(--cream);
+  border-radius:32px;border:4px solid var(--red-light);
+  box-shadow:0 8px 40px rgba(43,30,27,.12);padding:44px 34px 34px;text-align:center;
+}
+.mark{width:66px;height:66px;margin:0 auto 22px;display:block}
+.eyebrow{
+  font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--red);margin-bottom:12px;
+}
+h1{
+  font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(2rem,9vw,2.7rem);
+  color:var(--text);letter-spacing:.02em;line-height:1.05;margin-bottom:14px;
+}
+.sub{
+  font-family:'Shippori Antique B1',serif;font-size:1rem;color:var(--text-mid);
+  line-height:1.55;max-width:340px;margin:0 auto 6px;letter-spacing:-.01em;
+}
+.inviter{font-weight:600;color:var(--text)}
+.open-btn{
+  display:inline-flex;align-items:center;justify-content:center;background:var(--red);
+  color:var(--cream);font-size:1rem;font-weight:600;padding:16px 44px;border-radius:100px;
+  margin:26px 0 6px;transition:opacity .2s,transform .05s;border:none;cursor:pointer;
+  font-family:inherit;width:100%;max-width:320px;
+}
+.open-btn:hover{opacity:.9}
+.open-btn:active{transform:translateY(1px)}
+.store{
+  display:inline-flex;align-items:center;gap:8px;font-size:.86rem;color:var(--red);
+  font-weight:600;margin-top:8px;padding:8px 12px;border-radius:100px;
+}
+.store:hover{opacity:.7}
+.code-line{
+  margin-top:20px;font-size:.72rem;color:var(--text-light);letter-spacing:.02em;
+}
+.code-chip{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;color:var(--text-mid);
+  background:var(--card);border:1px solid var(--border);border-radius:8px;padding:3px 9px;
+  letter-spacing:.06em;
+}
+.foot{margin-top:22px;font-size:.72rem;color:var(--text-light);line-height:1.5}
+.foot a{color:var(--red);text-decoration:underline}
+
+/* Decorative vines echoing the landing page, behind the card */
+.vine{position:fixed;z-index:1;pointer-events:none;opacity:.9}
+.vine-tl{top:-20px;left:-30px;width:150px;transform:rotate(12deg)}
+.vine-br{bottom:-30px;right:-30px;width:170px;transform:scaleX(-1) rotate(8deg)}
+@media(max-width:520px){.vine{display:none}}
+</style>
+</head>
+<body>
+<img class="vine vine-tl" src="/assets/vine-top.svg" alt="">
+<img class="vine vine-br" src="/assets/vine-bottom.svg" alt="">
+
+<main class="card">
+  <!-- Jujube sparkle mark (matches favicon.svg) -->
+  <svg class="mark" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+    <circle cx="30" cy="30" r="28" fill="#B63F39"/>
+    <path d="M30 10 Q33 27, 50 30 Q33 33, 30 50 Q27 33, 10 30 Q27 27, 30 10Z"
+          stroke="#fff" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+  </svg>
+
+  <div class="eyebrow">You're invited</div>
+  <h1>Join us on Jujube</h1>
+  <p class="sub" id="sub">
+    <span id="inviter-line"></span>Jujube is a smart pantry app — track your fridge,
+    scan receipts, and get AI recipes from what you already have.
+  </p>
+
+  <button class="open-btn" id="open-btn" type="button">Accept invite &amp; open Jujube</button>
+  <div><a class="store" id="store-link" href="https://apps.apple.com/app/jujube-pantry/id6760092997">Don't have the app? Get Jujube →</a></div>
+
+  <div class="code-line" id="code-line" hidden>Invite code: <span class="code-chip" id="code-chip"></span></div>
+
+  <p class="foot">
+    Jujube — your magical AI kitchen companion.<br>
+    <a href="https://myjujube.app">myjujube.app</a>
+  </p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var APP_STORE = "https://apps.apple.com/app/jujube-pantry/id6760092997";
+  var PLAY_STORE = "https://play.google.com/store/apps/details?id=com.fridgenie.app";
+  var LANDING = "https://myjujube.app/get";
+  // App deep link (custom scheme registered by the mobile app — see /well-known/*
+  // for the matching Universal Link / App Link association).
+  var SCHEME = "com.fridgenie.app://invite/";
+
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPhone|iPad|iPod/.test(ua) ||
+              (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
+  var isMobile = isIOS || isAndroid;
+
+  function storeUrl() {
+    if (isIOS) return APP_STORE;
+    if (isAndroid) return PLAY_STORE;
+    return LANDING;
+  }
+
+  // ── Read the invite code, robustly, from every plausible carrier ──────────
+  //  • /invite/?c=CODE          (canonical, returns 200 → rich preview)
+  //  • /invite/?code=CODE
+  //  • /invite/?CODE            (bare query)
+  //  • /invite/#CODE            (hash)
+  //  • /invite/CODE             (path form; served via the 404 fallback route)
+  function readCode() {
+    var qs = new URLSearchParams(location.search);
+    var code = qs.get("c") || qs.get("code");
+    if (!code && location.search.length > 1 && !location.search.includes("=")) {
+      code = decodeURIComponent(location.search.slice(1));
+    }
+    if (!code && location.hash.length > 1) {
+      code = decodeURIComponent(location.hash.slice(1));
+    }
+    if (!code) {
+      var parts = location.pathname.split("/").filter(Boolean); // ['invite','CODE']
+      if (parts.length > 1 && parts[0] === "invite") code = decodeURIComponent(parts[1]);
+    }
+    // Guard against garbage; invite codes are short alphanumerics.
+    if (code) code = code.trim();
+    if (code && !/^[A-Za-z0-9_-]{1,64}$/.test(code)) code = "";
+    return code || "";
+  }
+
+  var CODE = readCode();
+
+  // Optional personalization the app MAY add to the link (?n=Name&h=Household).
+  var qs = new URLSearchParams(location.search);
+  var inviter = (qs.get("n") || "").trim().slice(0, 60);
+  var household = (qs.get("h") || "").trim().slice(0, 60);
+  var esc = function (s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+  if (inviter || household) {
+    var line = inviter && household
+      ? esc(inviter) + " invited you to join <span class=\"inviter\">" + esc(household) + "</span> on Jujube. "
+      : inviter
+        ? "<span class=\"inviter\">" + esc(inviter) + "</span> invited you to Jujube. "
+        : "You've been invited to join <span class=\"inviter\">" + esc(household) + "</span> on Jujube. ";
+    document.getElementById("inviter-line").innerHTML = line;
+  }
+
+  if (CODE) {
+    document.getElementById("code-chip").textContent = CODE;
+    document.getElementById("code-line").hidden = false;
+  }
+
+  // Store link tuned to the platform.
+  var storeLink = document.getElementById("store-link");
+  storeLink.href = storeUrl();
+  if (isAndroid) storeLink.textContent = "Don't have the app? Get Jujube on Google Play →";
+
+  // ── Deep-link attempt with a timed store fallback ─────────────────────────
+  // Navigating to the custom scheme opens the app if installed. If it isn't,
+  // the page stays visible → after a short delay we send them to the store.
+  // We cancel that fallback the moment the page is hidden (app took over).
+  function openApp() {
+    var target = SCHEME + (CODE ? encodeURIComponent(CODE) : "");
+    var store = storeUrl();
+    var settled = false;
+    function settle() { settled = true; }
+    var onHide = function () { if (document.hidden) settle(); };
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("pagehide", settle, { once: true });
+    window.addEventListener("blur", settle, { once: true });
+
+    setTimeout(function () {
+      document.removeEventListener("visibilitychange", onHide);
+      if (!settled && document.visibilityState === "visible") {
+        location.replace(store);
+      }
+    }, 1600);
+
+    // Trigger the app.
+    try { location.href = target; } catch (e) { location.replace(store); }
+  }
+
+  document.getElementById("open-btn").addEventListener("click", openApp);
+
+  // On mobile, gently auto-attempt the hand-off once on load. Desktop users
+  // just see the branded card + explicit buttons (no surprise redirects).
+  if (isMobile) {
+    // A tiny delay lets the page paint first (and lets a real Universal Link,
+    // if the app is installed & associated-domains is configured, win before JS).
+    setTimeout(openApp, 350);
+  }
+})();
+</script>
+</body>
+</html>

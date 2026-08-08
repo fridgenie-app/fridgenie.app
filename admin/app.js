@@ -78,6 +78,17 @@ function providerBadge(p) {
   const key = PROVIDER_LABEL[p] ? p : "other";
   return `<span class="method method-${key}">${PROVIDER_LABEL[key]}</span>`;
 }
+// Visible tier badge per user row/card (Free / Pro / Founding) — makes it hard
+// to misread a row's tier before a grant/revoke. Unknown tiers fall back to Free.
+const TIER_META = {
+  pro: { label: "Pro", cls: "pro" },
+  founding: { label: "Founding", cls: "founding" },
+  free: { label: "Free", cls: "free" },
+};
+function tierBadge(tier) {
+  const t = TIER_META[tier] || TIER_META.free;
+  return `<span class="pill tier-pill ${t.cls}">${t.label}</span>`;
+}
 // Inline percentage bar used by the cost-breakdown tables.
 function shareBar(frac) {
   const pct = Math.max(0, Math.min(100, Math.round(frac * 100)));
@@ -368,6 +379,49 @@ function openModal(title) {
 }
 function closeModal() { $("#modal").classList.add("hidden"); }
 
+// ── confirmation dialog ──────────────────────────────────────────────────────
+// A styled, deliberate replacement for window.confirm() for consequential user
+// actions (grant/revoke pro, soft-delete). Shows exactly WHO is affected — name,
+// email, and current tier — so a click can't silently land on the wrong user.
+// Returns a Promise<boolean>.
+function confirmDialog({ title, icon = "", bodyHtml = "", confirmLabel = "Confirm", variant = "primary" }) {
+  return new Promise((resolve) => {
+    const overlay = $("#confirm");
+    const okBtn = $("#confirm-ok");
+    const cancelBtn = $("#confirm-cancel");
+    $("#confirm-title").textContent = title;
+    $("#confirm-icon").textContent = icon;
+    $("#confirm-icon").style.display = icon ? "" : "none";
+    $("#confirm-body").innerHTML = bodyHtml;
+    okBtn.textContent = confirmLabel;
+    okBtn.className = "btn btn-" + variant; // btn-primary | btn-good | btn-danger
+    overlay.classList.remove("hidden");
+    okBtn.focus();
+
+    let done = false;
+    const cleanup = () => {
+      overlay.classList.add("hidden");
+      okBtn.removeEventListener("click", onOk);
+      cancelBtn.removeEventListener("click", onCancel);
+      overlay.removeEventListener("click", onBackdrop);
+      document.removeEventListener("keydown", onKey, true);
+    };
+    const finish = (val) => { if (done) return; done = true; cleanup(); resolve(val); };
+    const onOk = () => finish(true);
+    const onCancel = () => finish(false);
+    const onBackdrop = (ev) => { if (ev.target === overlay) finish(false); };
+    const onKey = (ev) => {
+      if (ev.key === "Escape") { ev.stopPropagation(); finish(false); }
+      else if (ev.key === "Enter") { ev.preventDefault(); finish(true); }
+    };
+    okBtn.addEventListener("click", onOk);
+    cancelBtn.addEventListener("click", onCancel);
+    overlay.addEventListener("click", onBackdrop);
+    // Capture-phase so Escape resolves the dialog before the page-level handler.
+    document.addEventListener("keydown", onKey, true);
+  });
+}
+
 async function openPantry(u) {
   openModal(`Pantry · ${u.display_name || u.email}`);
   try {
@@ -401,7 +455,21 @@ async function openUsageLog(u) {
 }
 
 async function resetQuota(u, btn) {
-  if (!confirm(`Reset today's AI quota (all features) for ${u.email}?`)) return;
+  const name = u.display_name || "(no display name)";
+  const ok = await confirmDialog({
+    title: "Reset daily quota?",
+    icon: "↺",
+    bodyHtml: `
+      <p class="confirm-lead">Reset today's AI quota (all features) for <b>${escapeHtml(name)}</b>?</p>
+      <div class="confirm-user">
+        <span class="confirm-email">${escapeHtml(u.email)}</span>
+        <span class="confirm-tier">Current tier: ${tierBadge(u.tier)}</span>
+      </div>
+      <p class="confirm-note">Their daily AI limits reset to zero for the rest of today.</p>`,
+    confirmLabel: "Reset quota",
+    variant: "primary",
+  });
+  if (!ok) return;
   btn.disabled = true;
   try {
     const r = await callFn("reset_quota", { method: "POST", body: { user_id: u.id } });
@@ -431,7 +499,7 @@ function buildUserActions(u) {
   wrap.className = "row-actions user-detail-actions";
   const proBtn = document.createElement("button");
   proBtn.className = "btn btn-ghost btn-mini";
-  proBtn.textContent = u.tier === "pro" ? "Revoke pro" : "Grant pro";
+  proBtn.textContent = u.tier === "pro" ? "Revoke Pro" : "Grant Pro";
   proBtn.onclick = () => setTier(u, u.tier === "pro" ? "free" : "pro", proBtn);
   const delBtn = document.createElement("button");
   delBtn.className = "btn btn-ghost btn-mini";
@@ -515,7 +583,7 @@ function renderUserCards(list) {
   for (const u of list) {
     const card = document.createElement("div");
     card.className = "user-card" + (u.is_deleted ? " deleted" : "");
-    const proPill = u.tier === "pro" ? `<span class="pill pro">pro</span>` : `<span class="pill free">free</span>`;
+    const proPill = tierBadge(u.tier);
     const relay = u.private_relay ? `<span class="tag-relay" title="Apple Private Relay address">relay</span>` : "";
     card.innerHTML = `
       <div class="user-card-top">
@@ -568,8 +636,7 @@ function renderUsers(list) {
     const tr = document.createElement("tr");
     tr.className = "row-clickable";
     if (u.is_deleted) tr.classList.add("deleted");
-    const proPill = u.tier === "pro"
-      ? `<span class="pill pro">pro</span>` : `<span class="pill free">free</span>`;
+    const proPill = tierBadge(u.tier);
     const relay = u.private_relay ? ` <span class="tag-relay" title="Apple Private Relay address">relay</span>` : "";
     const dSignup = daysSince(u.created_at);
 
@@ -664,25 +731,60 @@ function initColumnToggle() {
 }
 
 async function setTier(u, tier, btn) {
-  if (!confirm(`${tier === "pro" ? "Grant" : "Revoke"} pro for ${u.email}?`)) return;
-  btn.disabled = true;
+  const grant = tier === "pro";
+  const name = u.display_name || "(no display name)";
+  const ok = await confirmDialog({
+    title: grant ? "Grant Pro?" : "Revoke Pro?",
+    icon: grant ? "★" : "⚠",
+    bodyHtml: `
+      <p class="confirm-lead">${grant ? "Grant Pro to" : "Revoke Pro from"} <b>${escapeHtml(name)}</b>?</p>
+      <div class="confirm-user">
+        <span class="confirm-email">${escapeHtml(u.email)}</span>
+        <span class="confirm-tier">Current tier: ${tierBadge(u.tier)}</span>
+      </div>
+      <p class="confirm-note">${grant
+        ? "They'll be moved to <b>Pro</b> — unlimited AI recipes and Pro features."
+        : "They'll return to the <b>Free</b> tier and its daily limits."}</p>`,
+    confirmLabel: grant ? "Grant Pro" : "Revoke Pro",
+    variant: grant ? "good" : "danger",
+  });
+  if (!ok) return;
+  if (btn) btn.disabled = true;
   try {
     await callFn("set_tier", { method: "POST", body: { user_id: u.id, tier } });
     u.tier = tier;
     renderUsers(filterUsers());
     toast(`${u.email} → ${tier}`);
-  } catch (e) { toast(`Failed: ${e.message}`, true); btn.disabled = false; }
+    loadActivity();
+  } catch (e) { toast(`Failed: ${e.message}`, true); if (btn) btn.disabled = false; }
 }
 
 async function setDeleted(u, deleted, btn) {
-  if (!confirm(`${deleted ? "Soft-delete" : "Restore"} ${u.email}?`)) return;
-  btn.disabled = true;
+  const name = u.display_name || "(no display name)";
+  const ok = await confirmDialog({
+    title: deleted ? "Soft-delete user?" : "Restore user?",
+    icon: deleted ? "⚠" : "↺",
+    bodyHtml: `
+      <p class="confirm-lead">${deleted ? "Soft-delete" : "Restore"} <b>${escapeHtml(name)}</b>?</p>
+      <div class="confirm-user">
+        <span class="confirm-email">${escapeHtml(u.email)}</span>
+        <span class="confirm-tier">Current tier: ${tierBadge(u.tier)}</span>
+      </div>
+      <p class="confirm-note">${deleted
+        ? "Reversible — you can restore this account later."
+        : "The account will be reactivated."}</p>`,
+    confirmLabel: deleted ? "Soft-delete" : "Restore",
+    variant: deleted ? "danger" : "primary",
+  });
+  if (!ok) return;
+  if (btn) btn.disabled = true;
   try {
     await callFn("set_deleted", { method: "POST", body: { user_id: u.id, deleted } });
     u.is_deleted = deleted;
     renderUsers(filterUsers());
     toast(`${u.email} ${deleted ? "soft-deleted" : "restored"}`);
-  } catch (e) { toast(`Failed: ${e.message}`, true); btn.disabled = false; }
+    loadActivity();
+  } catch (e) { toast(`Failed: ${e.message}`, true); if (btn) btn.disabled = false; }
 }
 
 function filterUsers() {

@@ -254,6 +254,19 @@ a:hover{opacity:.8}
     var lang = detectLang();
     document.getElementById('state-loading').textContent = COPY[lang].loading;
 
+    // Invite links pasted in path form (/invite/<code>) land here because
+    // GitHub Pages has no per-code file. Forward to the canonical invite page,
+    // which carries the branded invite OG card + deep-link logic.
+    // NOTE: rich chat previews require the /invite/?c=<code> form (HTTP 200) —
+    // a path-form link is fetched by crawlers as 404 and won't preview the
+    // invite card. See /invite/index.html and README for the recommended format.
+    var invite = window.location.pathname.match(/^\/invite\/(.+?)\/?$/i);
+    if (invite) {
+      var code = invite[1].split(/[/?#]/)[0];
+      window.location.replace('/invite/?c=' + encodeURIComponent(code));
+      return;
+    }
+
     var match = window.location.pathname.match(/^\/r\/([0-9a-f-]{8,})\/?$/i);
     if (!match) {
       renderNotFound(lang);

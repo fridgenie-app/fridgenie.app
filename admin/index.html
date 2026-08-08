@@ -277,6 +277,19 @@
     </div>
   </div>
 
+  <!-- Confirmation dialog (grant/revoke pro, soft-delete, reset quota) -->
+  <div id="confirm" class="modal-overlay hidden">
+    <div class="modal-card card confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-body">
+      <div class="confirm-icon" id="confirm-icon" aria-hidden="true"></div>
+      <h3 id="confirm-title" class="confirm-title">—</h3>
+      <div id="confirm-body" class="confirm-body"></div>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirm-cancel" type="button">Cancel</button>
+        <button class="btn btn-primary" id="confirm-ok" type="button">Confirm</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div id="toast" class="toast hidden"></div>
 
