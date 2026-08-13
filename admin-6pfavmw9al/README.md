@@ -1,7 +1,9 @@
 # Jujube Admin Console
 
 A static, vanilla HTML/CSS/JS admin dashboard served from the landing repo at
-**`/admin`** (e.g. `https://myjujube.app/admin`). No build step, no framework —
+an **obscure, non-guessable path** (not `/admin` — that's `noindex`ed and
+avoided on purpose so casual visitors can't find it; get the real URL from
+Minjun/the deploy log, not from this file). No build step, no framework —
 same stack as the rest of this repo.
 
 ## Architecture
@@ -84,7 +86,7 @@ misread as Free before an action. `confirmDialog()` in `app.js` returns a
 ```bash
 # from the repo root
 python3 -m http.server 8000
-open http://localhost:8000/admin/
+open http://localhost:8000/admin-<obscure-slug>/
 ```
 Add your local origin to the Edge Function `ALLOWED_ORIGINS` and to the Supabase
 Auth redirect allow-list while developing.

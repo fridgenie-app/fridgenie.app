@@ -502,3 +502,13 @@ tr.detail-row.hidden { display: none; }
 .promo-status-btn.inactive { background: var(--cream); color: var(--text-light); border-color: var(--border-strong); }
 .promo-status-btn:disabled { opacity: .55; cursor: default; }
 .promo-code-cell { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; }
+.field-err { color: var(--red); font-size: .74rem; margin-top: 2px; }
+.field-err.hidden { display: none; }
+.promo-delete-btn {
+  font-family: inherit; font-size: .78rem; cursor: pointer; border: none; background: none;
+  color: var(--text-light); padding: 4px 6px; border-radius: 8px; line-height: 1;
+}
+.promo-delete-btn:hover { color: var(--red); background: rgba(182,63,57,.1); }
+.promo-delete-btn:disabled { opacity: .5; cursor: default; }
+.promo-pagination { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
+.promo-pagination .btn:disabled { opacity: .4; cursor: default; }

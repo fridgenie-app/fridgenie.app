@@ -71,70 +71,6 @@
         <div class="tile" data-k="cost_30d_usd"><span class="tile-label">AI spend · 30d</span><span class="tile-val">–</span></div>
       </section>
 
-      <!-- Promo Codes -->
-      <section class="card panel">
-        <div class="panel-head">
-          <h2>Promo Codes</h2>
-          <span class="panel-note" id="promo-note"></span>
-        </div>
-
-        <form id="promo-form" class="promo-form">
-          <div class="promo-form-grid">
-            <div class="field">
-              <label for="promo-code">Code</label>
-              <input type="text" id="promo-code" placeholder="Leave blank to auto-generate" maxlength="16" autocomplete="off" />
-            </div>
-            <div class="field">
-              <label for="promo-desc">Description</label>
-              <input type="text" id="promo-desc" placeholder="e.g. Instagram giveaway Aug 2026" autocomplete="off" />
-            </div>
-            <div class="field">
-              <label for="promo-max-uses">Max uses</label>
-              <input type="number" id="promo-max-uses" min="1" step="1" placeholder="Unlimited" />
-              <span class="field-hint">How many <b>different people</b> can redeem this code. Blank = unlimited.</span>
-            </div>
-            <div class="field">
-              <label for="promo-expires">Redeem-by date</label>
-              <input type="date" id="promo-expires" />
-              <span class="field-hint">Deadline to <b>redeem</b> the code. Blank = never expires. This is not how long Pro lasts.</span>
-            </div>
-            <div class="field">
-              <label for="promo-duration">Grant duration</label>
-              <select id="promo-duration">
-                <option value="lifetime" selected>Lifetime</option>
-                <option value="three_month">3 months</option>
-                <option value="six_month">6 months</option>
-                <option value="yearly">12 months</option>
-              </select>
-              <span class="field-hint">How long the granted <b>Pro access</b> lasts once someone redeems it.</span>
-            </div>
-          </div>
-          <div class="promo-form-actions">
-            <button type="submit" class="btn btn-primary" id="promo-generate-btn">Generate Code</button>
-            <p id="promo-form-msg" class="msg"></p>
-          </div>
-        </form>
-
-        <div id="promo-result" class="promo-result hidden"></div>
-
-        <div class="scroll">
-          <table class="tbl" id="promo-tbl">
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Description</th>
-                <th class="num">Uses</th>
-                <th>Grant duration</th>
-                <th>Redeem-by</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div id="promo-state" class="panel-state"></div>
-      </section>
-
       <!-- Daily actives (app opens) -->
       <section class="card panel">
         <div class="panel-head">
@@ -351,6 +287,78 @@
           </table>
         </div>
         <div id="activity-state" class="panel-state"></div>
+      </section>
+
+      <!-- Promo Codes -->
+      <section class="card panel">
+        <div class="panel-head">
+          <h2>Promo Codes</h2>
+          <span class="panel-note" id="promo-note"></span>
+        </div>
+
+        <form id="promo-form" class="promo-form">
+          <div class="promo-form-grid">
+            <div class="field">
+              <label for="promo-code">Code</label>
+              <input type="text" id="promo-code" maxlength="16" autocomplete="off" />
+              <span class="field-hint">6-16 letters/numbers. Blank = auto-generate.</span>
+              <p id="promo-code-err" class="field-err hidden"></p>
+            </div>
+            <div class="field">
+              <label for="promo-desc">Description</label>
+              <input type="text" id="promo-desc" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="promo-max-uses">Max uses</label>
+              <input type="number" id="promo-max-uses" min="1" step="1" />
+              <span class="field-hint">How many <b>different people</b> can redeem this code. Blank = unlimited.</span>
+            </div>
+            <div class="field">
+              <label for="promo-expires">Redeem-by date</label>
+              <input type="date" id="promo-expires" />
+              <span class="field-hint">Deadline to <b>redeem</b> the code. Blank = never expires. This is not how long Pro lasts.</span>
+            </div>
+            <div class="field">
+              <label for="promo-duration">Grant duration</label>
+              <select id="promo-duration">
+                <option value="lifetime" selected>Lifetime</option>
+                <option value="three_month">3 months</option>
+                <option value="six_month">6 months</option>
+                <option value="yearly">12 months</option>
+              </select>
+              <span class="field-hint">How long the granted <b>Pro access</b> lasts once someone redeems it.</span>
+            </div>
+          </div>
+          <div class="promo-form-actions">
+            <button type="submit" class="btn btn-primary" id="promo-generate-btn">Generate Code</button>
+            <p id="promo-form-msg" class="msg"></p>
+          </div>
+        </form>
+
+        <div id="promo-result" class="promo-result hidden"></div>
+
+        <div class="scroll">
+          <table class="tbl" id="promo-tbl">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Description</th>
+                <th class="num">Uses</th>
+                <th>Grant duration</th>
+                <th>Redeem-by</th>
+                <th>Status</th>
+                <th class="col-expand"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="promo-pagination" id="promo-pagination">
+          <button type="button" class="btn btn-ghost btn-sm" id="promo-prev">Prev</button>
+          <span class="muted small" id="promo-page-info"></span>
+          <button type="button" class="btn btn-ghost btn-sm" id="promo-next">Next</button>
+        </div>
+        <div id="promo-state" class="panel-state"></div>
       </section>
 
       <footer class="foot muted small">
