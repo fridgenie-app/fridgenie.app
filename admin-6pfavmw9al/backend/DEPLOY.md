@@ -43,18 +43,26 @@ It is additive and idempotent — safe to run once, safe to re-run.
 ```bash
 cd ~/Projects/fridgenie                     # the Supabase-linked repo
 mkdir -p supabase/functions/admin-console
-cp <landing-repo>/admin/backend/admin-console/index.ts supabase/functions/admin-console/index.ts
+cp <landing-repo>/admin-<obscure-slug>/backend/admin-console/index.ts supabase/functions/admin-console/index.ts
 supabase functions deploy admin-console --project-ref rhhaojpsqfbapltcvsbz
+supabase functions deploy admin-login --project-ref rhhaojpsqfbapltcvsbz
 ```
-`verify_jwt` may stay **on** (default) — the function also re-checks admin in-body.
+`verify_jwt` may stay **on** (default) for `admin-console` — the function also
+re-checks admin in-body. `admin-login` deploys with `verify_jwt=false` (it runs
+pre-auth, before there's a session) and does its own service-role `is_admin`
+check before ever sending a magic-link email — see `supabase/config.toml`.
 
 ## 2. Allow the admin origin(s)
 - **Auth redirect allow-list** (Supabase → Authentication → URL Configuration →
-  Redirect URLs): add `https://myjujube.app/admin` and, if serving from the
-  current domain, `https://fridgenie.app/admin` (+ `http://localhost:8000/admin/`
-  for local dev). The magic link redirects back here.
-- **CORS**: origins are allow-listed in `admin-console/index.ts` (`ALLOWED_ORIGINS`).
-  Edit that array if the admin is served from a different origin.
+  Redirect URLs): add `https://myjujube.app/*` (or the specific
+  `https://myjujube.app/admin-<obscure-slug>/` path) and, if serving from the
+  current domain, the equivalent on `https://fridgenie.app` (+
+  `http://localhost:8000/*` for local dev). The magic link redirects back to
+  whatever path the sign-in request came from — `admin-login` only forwards a
+  `redirect_to` that matches an allow-listed origin.
+- **CORS**: origins are allow-listed in both `admin-console/index.ts` and
+  `admin-login/index.ts` (`ALLOWED_ORIGINS` — keep the two lists in sync).
+  Edit those arrays if the admin is served from a different origin.
 
 ## 3. Grant yourself admin
 Run **`seed_admin_minjun.sql`** (delivered separately — kept out of this public

@@ -5,6 +5,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CFG = window.JUJUBE_ADMIN_CONFIG;
 const FN_BASE = `${CFG.SUPABASE_URL}/functions/v1/${CFG.FUNCTION_NAME}`;
+const LOGIN_FN_URL = `${CFG.SUPABASE_URL}/functions/v1/admin-login`;
 
 const sb = createClient(CFG.SUPABASE_URL, CFG.PUBLISHABLE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -284,6 +285,8 @@ const GRANT_DURATION_LABEL = {
   yearly: "12 months", lifetime: "Lifetime",
 };
 let PROMO_CACHE = [];
+const PROMO_PAGE_SIZE = 10;
+let promoPage = 0;
 
 async function loadPromoCodes() {
   const state = $("#promo-state");
@@ -291,37 +294,65 @@ async function loadPromoCodes() {
   try {
     const r = await callFn("promo_codes");
     PROMO_CACHE = r.rows;
-    renderPromoCodes(PROMO_CACHE);
+    promoPage = 0;
+    renderPromoCodes();
     $("#promo-note").textContent = `${fmtInt(r.rows.length)} code${r.rows.length === 1 ? "" : "s"}`;
     state.textContent = "";
   } catch (e) { tb.innerHTML = ""; sectionErr(state, e); }
 }
 
-function renderPromoCodes(rows) {
+function renderPromoCodes() {
   const tb = $("#promo-tbl tbody");
   tb.innerHTML = "";
-  if (!rows.length) { tb.innerHTML = `<tr><td colspan="6" class="muted small">No promo codes yet.</td></tr>`; return; }
-  for (const row of rows) {
-    const tr = document.createElement("tr");
-    const usesLabel = row.max_uses == null ? `${fmtInt(row.redemption_count)} / ∞` : `${fmtInt(row.redemption_count)} / ${fmtInt(row.max_uses)}`;
-    const expiresLabel = row.expires_at ? fmtDate(row.expires_at) : "Never";
-    tr.innerHTML = `
-      <td class="promo-code-cell">${escapeHtml(row.code)}</td>
-      <td class="muted small">${escapeHtml(row.description || "—")}</td>
-      <td class="num">${usesLabel}</td>
-      <td>${escapeHtml(GRANT_DURATION_LABEL[row.grant_duration] || row.grant_duration)}</td>
-      <td>${expiresLabel}</td>
-      <td></td>`;
-    const statusTd = tr.lastElementChild;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = `promo-status-btn ${row.is_active ? "active" : "inactive"}`;
-    btn.textContent = row.is_active ? "Active" : "Inactive";
-    btn.addEventListener("click", () => togglePromoActive(row, btn));
-    statusTd.appendChild(btn);
-    tb.appendChild(tr);
+  const rows = PROMO_CACHE;
+  const totalPages = Math.max(1, Math.ceil(rows.length / PROMO_PAGE_SIZE));
+  promoPage = Math.min(promoPage, totalPages - 1);
+  const start = promoPage * PROMO_PAGE_SIZE;
+  const pageRows = rows.slice(start, start + PROMO_PAGE_SIZE);
+
+  if (!rows.length) {
+    tb.innerHTML = `<tr><td colspan="7" class="muted small">No promo codes yet.</td></tr>`;
+  } else {
+    for (const row of pageRows) {
+      const tr = document.createElement("tr");
+      const usesLabel = row.max_uses == null ? `${fmtInt(row.redemption_count)} / ∞` : `${fmtInt(row.redemption_count)} / ${fmtInt(row.max_uses)}`;
+      const expiresLabel = row.expires_at ? fmtDate(row.expires_at) : "Never";
+      tr.innerHTML = `
+        <td class="promo-code-cell">${escapeHtml(row.code)}</td>
+        <td class="muted small">${escapeHtml(row.description || "—")}</td>
+        <td class="num">${usesLabel}</td>
+        <td>${escapeHtml(GRANT_DURATION_LABEL[row.grant_duration] || row.grant_duration)}</td>
+        <td>${expiresLabel}</td>
+        <td></td>
+        <td></td>`;
+      const statusTd = tr.children[5];
+      const statusBtn = document.createElement("button");
+      statusBtn.type = "button";
+      statusBtn.className = `promo-status-btn ${row.is_active ? "active" : "inactive"}`;
+      statusBtn.textContent = row.is_active ? "Active" : "Inactive";
+      statusBtn.addEventListener("click", () => togglePromoActive(row, statusBtn));
+      statusTd.appendChild(statusBtn);
+
+      const actionsTd = tr.children[6];
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "promo-delete-btn";
+      delBtn.textContent = "🗑";
+      delBtn.title = "Delete code";
+      delBtn.addEventListener("click", () => deletePromoCode(row, delBtn));
+      actionsTd.appendChild(delBtn);
+
+      tb.appendChild(tr);
+    }
   }
+
+  $("#promo-page-info").textContent = rows.length ? `Page ${promoPage + 1} of ${totalPages}` : "";
+  $("#promo-prev").disabled = promoPage === 0;
+  $("#promo-next").disabled = promoPage >= totalPages - 1;
 }
+
+$("#promo-prev").addEventListener("click", () => { promoPage = Math.max(0, promoPage - 1); renderPromoCodes(); });
+$("#promo-next").addEventListener("click", () => { promoPage += 1; renderPromoCodes(); });
 
 async function togglePromoActive(row, btn) {
   const nextActive = !row.is_active;
@@ -336,6 +367,40 @@ async function togglePromoActive(row, btn) {
   finally { btn.disabled = false; }
 }
 
+async function deletePromoCode(row, btn) {
+  const hasRedemptions = row.redemption_count > 0;
+  const ok = await confirmDialog({
+    title: "Delete promo code?",
+    icon: "⚠",
+    bodyHtml: hasRedemptions
+      ? `<p class="confirm-lead">Delete <b>${escapeHtml(row.code)}</b>?</p>
+         <p class="confirm-note">This code has <b>${fmtInt(row.redemption_count)}</b> redemption${row.redemption_count === 1 ? "" : "s"} — deleting removes those users' promo access. Deactivate instead to keep their access while stopping new redemptions.</p>`
+      : `<p class="confirm-lead">Delete <b>${escapeHtml(row.code)}</b>?</p>
+         <p class="confirm-note">This code has no redemptions yet. This cannot be undone.</p>`,
+    confirmLabel: hasRedemptions ? "Delete anyway" : "Delete",
+    variant: "danger",
+  });
+  if (!ok) return;
+  btn.disabled = true;
+  try {
+    await callFn("delete_promo_code", { method: "POST", body: { code: row.code } });
+    PROMO_CACHE = PROMO_CACHE.filter((r) => r.code !== row.code);
+    renderPromoCodes();
+    $("#promo-note").textContent = `${fmtInt(PROMO_CACHE.length)} code${PROMO_CACHE.length === 1 ? "" : "s"}`;
+    toast(`Deleted ${row.code}`);
+    loadActivity();
+  } catch (e) {
+    toast(`Failed: ${e.message}`, true);
+    btn.disabled = false;
+  }
+}
+
+$("#promo-code").addEventListener("input", (ev) => {
+  const cleaned = ev.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (cleaned !== ev.target.value) ev.target.value = cleaned;
+  $("#promo-code-err").classList.add("hidden");
+});
+
 $("#promo-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const btn = $("#promo-generate-btn");
@@ -343,11 +408,25 @@ $("#promo-form").addEventListener("submit", async (ev) => {
   msg.className = "msg";
   msg.textContent = "";
 
-  const codeVal = $("#promo-code").value.trim();
+  const codeVal = $("#promo-code").value.trim().toUpperCase();
   const descVal = $("#promo-desc").value.trim();
   const maxUsesVal = $("#promo-max-uses").value.trim();
   const expiresVal = $("#promo-expires").value;
   const durationVal = $("#promo-duration").value;
+
+  const codeErr = $("#promo-code-err");
+  codeErr.classList.add("hidden");
+  codeErr.textContent = "";
+  if (codeVal && (codeVal.length < 6 || codeVal.length > 16)) {
+    codeErr.textContent = "Code must be 6-16 characters.";
+    codeErr.classList.remove("hidden");
+    return;
+  }
+  if (codeVal && !/^[A-Z0-9]+$/.test(codeVal)) {
+    codeErr.textContent = "Code must be letters and numbers only.";
+    codeErr.classList.remove("hidden");
+    return;
+  }
 
   const body = {
     code: codeVal || undefined,
@@ -1011,6 +1090,10 @@ async function gateAndShow(session) {
 }
 
 // ── wire up events ──────────────────────────────────────────────────────────
+// Sign-in goes through the admin-login Edge Function, NOT
+// supabase.auth.signInWithOtp() directly — that used to email a magic link
+// to any address typed into this form. admin-login checks profiles.is_admin
+// (service-role only) first and sends no email at all for a non-admin.
 $("#signin-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const email = $("#email").value.trim();
@@ -1018,13 +1101,32 @@ $("#signin-form").addEventListener("submit", async (ev) => {
   const msg = $("#signin-msg");
   msg.className = "msg";
   btn.disabled = true; btn.textContent = "Sending…";
-  const { error } = await sb.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: window.location.href.split("#")[0] },
-  });
-  btn.disabled = false; btn.textContent = "Email me a magic link";
-  if (error) { msg.classList.add("err"); msg.textContent = error.message; }
-  else { msg.classList.add("ok"); msg.textContent = "Check your inbox for the sign-in link."; }
+  try {
+    const res = await fetch(LOGIN_FN_URL, {
+      method: "POST",
+      headers: { apikey: CFG.PUBLISHABLE_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ email, redirect_to: window.location.href.split("#")[0] }),
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (res.status === 403) {
+      msg.classList.add("err");
+      msg.textContent = "Unauthorized — this email is not an admin.";
+    } else if (res.status === 429) {
+      msg.classList.add("err");
+      msg.textContent = "Too many attempts — please wait a few minutes and try again.";
+    } else if (!res.ok) {
+      msg.classList.add("err");
+      msg.textContent = `Error: ${payload.error || `http_${res.status}`}`;
+    } else {
+      msg.classList.add("ok");
+      msg.textContent = "Check your email for the sign-in link.";
+    }
+  } catch {
+    msg.classList.add("err");
+    msg.textContent = "Network error — please try again.";
+  } finally {
+    btn.disabled = false; btn.textContent = "Email me a magic link";
+  }
 });
 
 $("#signout-btn").addEventListener("click", async () => { await sb.auth.signOut(); show("signin"); });
