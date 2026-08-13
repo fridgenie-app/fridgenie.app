@@ -81,6 +81,36 @@
         <div id="dau-trend-state" class="panel-state"></div>
       </section>
 
+      <!-- Onboarding funnel (v2.5.0, onboarding_events) -->
+      <section class="card panel">
+        <div class="panel-head users-head">
+          <h2>Onboarding funnel</h2>
+          <div class="users-head-tools funnel-range">
+            <input type="date" id="funnel-from" aria-label="From date" />
+            <span class="muted small">to</span>
+            <input type="date" id="funnel-to" aria-label="To date" />
+            <button type="button" class="btn btn-ghost btn-sm" id="funnel-apply">Apply</button>
+          </div>
+          <span class="panel-note" id="funnel-note"></span>
+        </div>
+        <div class="scroll">
+          <table class="tbl" id="funnel-tbl">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th class="num">Users</th>
+                <th>% of signup</th>
+                <th>Drop-off</th>
+                <th class="num">iOS</th>
+                <th class="num">Android</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="funnel-state" class="panel-state"></div>
+      </section>
+
       <div class="grid-2">
         <!-- Signups -->
         <section class="card panel">
