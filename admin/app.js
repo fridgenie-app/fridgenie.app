@@ -273,6 +273,113 @@ async function loadOnboardingFunnel() {
   } catch (e) { sectionErr(state, e); }
 }
 
+// ── Promo Codes (admin-generated, v2.6.0) ───────────────────────────────────
+// UI-copy semantics kept explicit here so this stays legible without the
+// backend comment alongside it: max_uses = how many DIFFERENT people can
+// redeem; expires_at = deadline to REDEEM (not how long Pro lasts);
+// grant_duration = how long the granted Pro access lasts once redeemed.
+const GRANT_DURATION_LABEL = {
+  daily: "1 day", three_day: "3 days", weekly: "1 week", monthly: "1 month",
+  two_month: "2 months", three_month: "3 months", six_month: "6 months",
+  yearly: "12 months", lifetime: "Lifetime",
+};
+let PROMO_CACHE = [];
+
+async function loadPromoCodes() {
+  const state = $("#promo-state");
+  const tb = $("#promo-tbl tbody");
+  try {
+    const r = await callFn("promo_codes");
+    PROMO_CACHE = r.rows;
+    renderPromoCodes(PROMO_CACHE);
+    $("#promo-note").textContent = `${fmtInt(r.rows.length)} code${r.rows.length === 1 ? "" : "s"}`;
+    state.textContent = "";
+  } catch (e) { tb.innerHTML = ""; sectionErr(state, e); }
+}
+
+function renderPromoCodes(rows) {
+  const tb = $("#promo-tbl tbody");
+  tb.innerHTML = "";
+  if (!rows.length) { tb.innerHTML = `<tr><td colspan="6" class="muted small">No promo codes yet.</td></tr>`; return; }
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    const usesLabel = row.max_uses == null ? `${fmtInt(row.redemption_count)} / ∞` : `${fmtInt(row.redemption_count)} / ${fmtInt(row.max_uses)}`;
+    const expiresLabel = row.expires_at ? fmtDate(row.expires_at) : "Never";
+    tr.innerHTML = `
+      <td class="promo-code-cell">${escapeHtml(row.code)}</td>
+      <td class="muted small">${escapeHtml(row.description || "—")}</td>
+      <td class="num">${usesLabel}</td>
+      <td>${escapeHtml(GRANT_DURATION_LABEL[row.grant_duration] || row.grant_duration)}</td>
+      <td>${expiresLabel}</td>
+      <td></td>`;
+    const statusTd = tr.lastElementChild;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `promo-status-btn ${row.is_active ? "active" : "inactive"}`;
+    btn.textContent = row.is_active ? "Active" : "Inactive";
+    btn.addEventListener("click", () => togglePromoActive(row, btn));
+    statusTd.appendChild(btn);
+    tb.appendChild(tr);
+  }
+}
+
+async function togglePromoActive(row, btn) {
+  const nextActive = !row.is_active;
+  btn.disabled = true;
+  try {
+    const r = await callFn("set_promo_active", { method: "POST", body: { code: row.code, is_active: nextActive } });
+    row.is_active = r.is_active;
+    btn.className = `promo-status-btn ${row.is_active ? "active" : "inactive"}`;
+    btn.textContent = row.is_active ? "Active" : "Inactive";
+    toast(`${row.code} → ${row.is_active ? "active" : "inactive"}`);
+  } catch (e) { toast(`Failed: ${e.message}`, true); }
+  finally { btn.disabled = false; }
+}
+
+$("#promo-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const btn = $("#promo-generate-btn");
+  const msg = $("#promo-form-msg");
+  msg.className = "msg";
+  msg.textContent = "";
+
+  const codeVal = $("#promo-code").value.trim();
+  const descVal = $("#promo-desc").value.trim();
+  const maxUsesVal = $("#promo-max-uses").value.trim();
+  const expiresVal = $("#promo-expires").value;
+  const durationVal = $("#promo-duration").value;
+
+  const body = {
+    code: codeVal || undefined,
+    description: descVal || undefined,
+    max_uses: maxUsesVal ? Number(maxUsesVal) : null,
+    expires_at: expiresVal ? `${expiresVal}T23:59:59Z` : null,
+    grant_duration: durationVal,
+  };
+
+  btn.disabled = true; btn.textContent = "Generating…";
+  try {
+    const r = await callFn("create_promo_code", { method: "POST", body });
+    const created = r.promo_code;
+    const result = $("#promo-result");
+    result.classList.remove("hidden");
+    result.innerHTML = `
+      <span class="promo-result-code">${escapeHtml(created.code)}</span>
+      <span class="promo-result-note">Created · ${GRANT_DURATION_LABEL[created.grant_duration] || created.grant_duration} · ${created.max_uses == null ? "unlimited uses" : `max ${created.max_uses} uses`}</span>`;
+    result.appendChild(copyBtn(created.code, "Code"));
+    $("#promo-form").reset();
+    $("#promo-duration").value = "lifetime";
+    toast(`Created ${created.code}`);
+    loadPromoCodes();
+    loadActivity();
+  } catch (e) {
+    msg.classList.add("err");
+    msg.textContent = `Failed: ${e.message}${e.detail ? " · " + e.detail : ""}`;
+  } finally {
+    btn.disabled = false; btn.textContent = "Generate Code";
+  }
+});
+
 async function loadCost() {
   const state = $("#cost-state");
   try {
@@ -863,7 +970,7 @@ function escapeHtml(s) {
 const V2_LOADERS = [
   loadCostByFunction, loadCostByModel, loadQuotaEvents,
   loadRegeneration, loadSignupSources, loadActivity, loadActiveUsersTrend,
-  loadOnboardingFunnel,
+  loadOnboardingFunnel, loadPromoCodes,
 ];
 async function loadDashboard() {
   await Promise.allSettled([
@@ -897,7 +1004,7 @@ async function gateAndShow(session) {
     show("dash");
     ["#signups-state", "#cost-state", "#top-users-state", "#users-state",
      "#cbf-state", "#cbm-state", "#quota-state", "#regen-state", "#src-state", "#activity-state",
-     "#dau-trend-state", "#funnel-state"]
+     "#dau-trend-state", "#funnel-state", "#promo-state"]
       .forEach((s) => sectionErr($(s), e));
     toast(`Backend error: ${e.message}`, true);
   }
