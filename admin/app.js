@@ -224,6 +224,55 @@ async function loadActiveUsersTrend() {
   } catch (e) { sectionErr(state, e); }
 }
 
+// ── Onboarding funnel (v2.5.0, onboarding_events) — per-step user counts for
+// the post-signup `/setup` chain. Two steps (sub_purchase_started/succeeded
+// and continue_free) are parallel branches off sub_screen_reached, not a
+// strict line — see the `comparedTo` field the edge function already
+// resolved server-side; drop-off here is always "vs its own funnel parent."
+const FUNNEL_STEP_LABEL = {
+  signup_done: "Signed up",
+  name_done: "Entered name",
+  preferences_done: "Set taste preferences",
+  household_done: "Set up household",
+  quick_stock_reached: "Reached fill-kitchen",
+  sub_screen_reached: "Reached subscription screen",
+  sub_purchase_started: "Started purchase",
+  sub_purchase_succeeded: "Purchase succeeded",
+  continue_free: "Continued free",
+  onboarding_finished: "Finished onboarding",
+};
+async function loadOnboardingFunnel() {
+  const state = $("#funnel-state");
+  const tb = $("#funnel-tbl tbody");
+  const params = {};
+  const fromVal = $("#funnel-from").value;
+  const toVal = $("#funnel-to").value;
+  if (fromVal) params.from = fromVal;
+  if (toVal) params.to = toVal;
+  try {
+    const r = await callFn("onboarding_funnel", { params });
+    $("#funnel-from").value = r.from;
+    $("#funnel-to").value = r.to;
+    $("#funnel-note").textContent = `${fmtInt(r.signup_done)} signed up · ${r.from} → ${r.to}`;
+    tb.innerHTML = "";
+    if (!r.rows.length) { state.textContent = "No onboarding events in this range."; return; }
+    for (const row of r.rows) {
+      const tr = document.createElement("tr");
+      const dropoffCell = row.compared_to
+        ? `<span class="${row.dropoff_pct >= 30 ? "text-warn" : ""}">${row.dropoff_pct}%</span>`
+        : `<span class="muted small">—</span>`;
+      tr.innerHTML = `<td class="mono-lbl">${escapeHtml(FUNNEL_STEP_LABEL[row.step] || row.step)}</td>
+        <td class="num">${fmtInt(row.count)}</td>
+        <td>${shareBar((row.pct_of_signup || 0) / 100)}</td>
+        <td>${dropoffCell}</td>
+        <td class="num">${fmtInt(row.ios_count)}</td>
+        <td class="num">${fmtInt(row.android_count)}</td>`;
+      tb.appendChild(tr);
+    }
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
 async function loadCost() {
   const state = $("#cost-state");
   try {
@@ -814,6 +863,7 @@ function escapeHtml(s) {
 const V2_LOADERS = [
   loadCostByFunction, loadCostByModel, loadQuotaEvents,
   loadRegeneration, loadSignupSources, loadActivity, loadActiveUsersTrend,
+  loadOnboardingFunnel,
 ];
 async function loadDashboard() {
   await Promise.allSettled([
@@ -847,7 +897,7 @@ async function gateAndShow(session) {
     show("dash");
     ["#signups-state", "#cost-state", "#top-users-state", "#users-state",
      "#cbf-state", "#cbm-state", "#quota-state", "#regen-state", "#src-state", "#activity-state",
-     "#dau-trend-state"]
+     "#dau-trend-state", "#funnel-state"]
       .forEach((s) => sectionErr($(s), e));
     toast(`Backend error: ${e.message}`, true);
   }
@@ -874,6 +924,7 @@ $("#signout-btn").addEventListener("click", async () => { await sb.auth.signOut(
 $("#denied-signout").addEventListener("click", async () => { await sb.auth.signOut(); show("signin"); });
 $("#refresh-btn").addEventListener("click", () => { toast("Refreshing…"); loadDashboard(); });
 $("#user-search").addEventListener("input", () => renderUsers(filterUsers()));
+$("#funnel-apply").addEventListener("click", () => { toast("Loading funnel…"); loadOnboardingFunnel(); });
 initColumnToggle();
 
 // Modal close: button, backdrop click, Escape.

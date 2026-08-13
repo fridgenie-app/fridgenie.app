@@ -454,3 +454,14 @@ tr.detail-row.hidden { display: none; }
 .top-user-card-stats > span { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
 .top-user-card-stats .ucf-label { font-size: .6rem; }
 .top-user-card-num { font-variant-numeric: tabular-nums; font-size: .88rem; font-weight: 600; color: var(--text); }
+
+/* ── Onboarding funnel (v2.5.0) ────────────────────────────────────────── */
+.funnel-range { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.funnel-range input[type=date] {
+  font-family: inherit; font-size: .82rem; color: var(--text);
+  padding: 7px 10px; border: 1px solid var(--border-strong);
+  border-radius: 10px; background: #fff; outline: none;
+}
+.funnel-range input[type=date]:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(182,63,57,.12); }
+.text-warn { color: var(--red); font-weight: 600; }
+@media (max-width: 520px) { .funnel-range { width: 100%; } }
