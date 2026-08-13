@@ -465,3 +465,40 @@ tr.detail-row.hidden { display: none; }
 .funnel-range input[type=date]:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(182,63,57,.12); }
 .text-warn { color: var(--red); font-weight: 600; }
 @media (max-width: 520px) { .funnel-range { width: 100%; } }
+
+/* ── Promo Codes (admin-generated, v2.6.0) ───────────────────────────────── */
+.promo-form-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 16px;
+  margin-bottom: 16px;
+}
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field label { font-size: .74rem; font-weight: 600; color: var(--text-mid); }
+.field input[type=text], .field input[type=number], .field input[type=date], .field select {
+  font-family: inherit; font-size: .88rem; color: var(--text);
+  padding: 10px 12px; border: 1px solid var(--border-strong);
+  border-radius: 10px; background: #fff; outline: none; width: 100%;
+}
+.field input:focus, .field select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(182,63,57,.12); }
+.field-hint { font-size: .68rem; color: var(--text-light); line-height: 1.35; }
+.field-hint b { color: var(--text-mid); font-weight: 600; }
+.promo-form-actions { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+
+.promo-result {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+  background: rgba(63,125,90,.1); border: 1px solid rgba(63,125,90,.3);
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 18px;
+}
+.promo-result-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.2rem;
+  font-weight: 700; letter-spacing: .04em; color: var(--good);
+}
+.promo-result-note { font-size: .78rem; color: var(--text-mid); }
+
+.promo-status-btn {
+  font-family: inherit; font-size: .7rem; font-weight: 600; letter-spacing: .02em;
+  padding: 4px 11px; border-radius: 100px; cursor: pointer; border: 1px solid transparent;
+}
+.promo-status-btn.active { background: rgba(63,125,90,.14); color: var(--good); border-color: rgba(63,125,90,.3); }
+.promo-status-btn.inactive { background: var(--cream); color: var(--text-light); border-color: var(--border-strong); }
+.promo-status-btn:disabled { opacity: .55; cursor: default; }
+.promo-code-cell { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; }
