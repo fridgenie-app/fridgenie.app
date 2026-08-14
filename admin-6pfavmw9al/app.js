@@ -1094,9 +1094,17 @@ async function gateAndShow(session) {
 // supabase.auth.signInWithOtp() directly — that used to email a magic link
 // to any address typed into this form. admin-login checks profiles.is_admin
 // (service-role only) first and sends no email at all for a non-admin.
+// Two-step admin sign-in:
+//   1. Request a 6-digit code (gated by the admin-login edge fn — no email for
+//      non-admins).
+//   2. Verify that code on THIS device via verifyOtp. Because the code can be
+//      read on any device but is entered here, you sign in on the computer you
+//      started from — no magic-link redirect / cross-device hop.
+let pendingEmail = "";
+
 $("#signin-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
-  const email = $("#email").value.trim();
+  const email = $("#email").value.trim().toLowerCase();
   const btn = $("#signin-btn");
   const msg = $("#signin-msg");
   msg.className = "msg";
@@ -1105,7 +1113,7 @@ $("#signin-form").addEventListener("submit", async (ev) => {
     const res = await fetch(LOGIN_FN_URL, {
       method: "POST",
       headers: { apikey: CFG.PUBLISHABLE_KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ email, redirect_to: window.location.href.split("#")[0] }),
+      body: JSON.stringify({ email }),
     });
     const payload = await res.json().catch(() => ({}));
     if (res.status === 403) {
@@ -1118,15 +1126,60 @@ $("#signin-form").addEventListener("submit", async (ev) => {
       msg.classList.add("err");
       msg.textContent = `Error: ${payload.error || `http_${res.status}`}`;
     } else {
+      pendingEmail = email;
+      $("#signin-form").classList.add("hidden");
+      $("#verify-form").classList.remove("hidden");
       msg.classList.add("ok");
-      msg.textContent = "Check your email for the sign-in link.";
+      msg.textContent = "We emailed you a 6-digit code. Enter it below.";
+      $("#code").focus();
     }
   } catch {
     msg.classList.add("err");
     msg.textContent = "Network error — please try again.";
   } finally {
-    btn.disabled = false; btn.textContent = "Email me a magic link";
+    btn.disabled = false; btn.textContent = "Email me a code";
   }
+});
+
+// Step 2 — verify the emailed code, creating the session on this device.
+$("#verify-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const code = $("#code").value.trim();
+  const btn = $("#verify-btn");
+  const msg = $("#signin-msg");
+  msg.className = "msg";
+  if (!/^\d{6}$/.test(code)) {
+    msg.classList.add("err");
+    msg.textContent = "Enter the 6-digit code from your email.";
+    return;
+  }
+  btn.disabled = true; btn.textContent = "Verifying…";
+  try {
+    const { data, error } = await sb.auth.verifyOtp({ email: pendingEmail, token: code, type: "email" });
+    if (error) {
+      msg.classList.add("err");
+      msg.textContent = /expired/i.test(error.message || "")
+        ? "That code expired — request a new one."
+        : "Invalid code — check it and try again.";
+    } else if (data?.session) {
+      // onAuthStateChange(SIGNED_IN) gates + shows the dashboard.
+      msg.className = "msg"; msg.textContent = "";
+    }
+  } catch {
+    msg.classList.add("err");
+    msg.textContent = "Network error — please try again.";
+  } finally {
+    btn.disabled = false; btn.textContent = "Verify & sign in";
+  }
+});
+
+// "Use a different email" — return to step 1.
+$("#verify-back").addEventListener("click", () => {
+  $("#verify-form").classList.add("hidden");
+  $("#signin-form").classList.remove("hidden");
+  $("#code").value = "";
+  const msg = $("#signin-msg"); msg.className = "msg"; msg.textContent = "";
+  $("#email").focus();
 });
 
 $("#signout-btn").addEventListener("click", async () => { await sb.auth.signOut(); show("signin"); });
