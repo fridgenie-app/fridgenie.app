@@ -1130,7 +1130,7 @@ $("#signin-form").addEventListener("submit", async (ev) => {
       $("#signin-form").classList.add("hidden");
       $("#verify-form").classList.remove("hidden");
       msg.classList.add("ok");
-      msg.textContent = "We emailed you a 6-digit code. Enter it below.";
+      msg.textContent = "We emailed you an 8-digit code. Enter it below.";
       $("#code").focus();
     }
   } catch {
@@ -1148,9 +1148,9 @@ $("#verify-form").addEventListener("submit", async (ev) => {
   const btn = $("#verify-btn");
   const msg = $("#signin-msg");
   msg.className = "msg";
-  if (!/^\d{6}$/.test(code)) {
+  if (!/^\d{6,8}$/.test(code)) {
     msg.classList.add("err");
-    msg.textContent = "Enter the 6-digit code from your email.";
+    msg.textContent = "Enter the 8-digit code from your email.";
     return;
   }
   btn.disabled = true; btn.textContent = "Verifying…";
