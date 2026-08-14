@@ -26,7 +26,18 @@
         <input id="email" type="email" required autocomplete="email"
                placeholder="you@example.com" />
         <button type="submit" class="btn btn-primary" id="signin-btn">
-          Email me a magic link
+          Email me a code
+        </button>
+      </form>
+      <form id="verify-form" class="hidden">
+        <input id="code" type="text" inputmode="numeric" pattern="[0-9]*"
+               autocomplete="one-time-code" maxlength="6"
+               placeholder="6-digit code" />
+        <button type="submit" class="btn btn-primary" id="verify-btn">
+          Verify &amp; sign in
+        </button>
+        <button type="button" class="btn btn-ghost btn-sm" id="verify-back">
+          Use a different email
         </button>
       </form>
       <p id="signin-msg" class="msg"></p>

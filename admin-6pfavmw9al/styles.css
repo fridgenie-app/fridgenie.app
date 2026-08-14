@@ -63,13 +63,14 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 .auth-card { padding: 40px 34px; width: 100%; max-width: 380px; text-align: center; }
 .auth-sub { font-family: 'Shippori Antique B1', serif; color: var(--text-mid); margin: 6px 0 26px; }
 .denied-title { font-family: 'Shippori Mincho', serif; font-size: 1.4rem; margin: 18px 0 8px; }
-#signin-form { display: flex; flex-direction: column; gap: 12px; }
-input[type=email], .search {
+#signin-form, #verify-form { display: flex; flex-direction: column; gap: 12px; }
+input[type=email], #code, .search {
   font-family: inherit; font-size: .92rem; color: var(--text);
   padding: 13px 16px; border: 1px solid var(--border-strong);
   border-radius: 12px; background: #fff; outline: none; width: 100%;
 }
-input[type=email]:focus, .search:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(182,63,57,.12); }
+#code { text-align: center; letter-spacing: .34em; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+input[type=email]:focus, #code:focus, .search:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(182,63,57,.12); }
 .msg { margin-top: 14px; font-size: .84rem; min-height: 1.2em; }
 .msg.ok { color: var(--good); }
 .msg.err { color: var(--red); }
