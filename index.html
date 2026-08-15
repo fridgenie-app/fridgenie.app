@@ -71,6 +71,8 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:5
 .phones-pantry{display:flex;gap:24px;justify-content:center;align-items:flex-start;margin-top:8px}
 .phones-pantry .phone-mockup:first-child{width:270px;z-index:2}
 .phones-pantry .phone-mockup:last-child{width:270px;z-index:1;margin-top:24px}
+.phones-pantry.single{justify-content:center}
+.phones-pantry.single .phone-mockup{width:290px!important;margin-top:0!important}
 
 /* Voice & Receipt flow (tidied — no messy overlap) */
 .flow-steps{display:flex;justify-content:center;align-items:center;gap:18px;margin:6px 0 30px;flex-wrap:wrap}
@@ -245,9 +247,8 @@ body.auth-error-active{overflow:hidden}
       <h2>Your kitchen, always up to date</h2>
       <p>Add items with a tap. Track quantities and categories across fridge, freezer, and pantry — organized automatically so you always know what's on hand.</p>
     </div>
-    <div class="phones-pantry reveal">
-      <div class="phone-mockup"><img class="phone-screenshot" src="assets/home-lucy.png" alt="Home screen"></div>
-      <div class="phone-mockup"><img class="phone-screenshot" src="assets/pantry-screen-2.png" alt="Pantry detail screen"></div>
+    <div class="phones-pantry single reveal">
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/pantry-screen-2.png" alt="Fridge inventory screen"></div>
     </div>
   </div>
 </section>
