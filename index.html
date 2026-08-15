@@ -57,6 +57,9 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:5
 /* ── Decorative elements ── */
 .leaf-hero{position:absolute;right:-8px;top:74px;width:108px;height:auto;opacity:1;pointer-events:none;transform:rotate(6deg);z-index:-1}
 .leaf-pantry{position:absolute;left:-4px;top:50%;width:96px;height:auto;pointer-events:none;transform:rotate(15deg);z-index:0}
+.doodle{position:absolute;pointer-events:none;height:auto;z-index:0}
+.doodle-carrot{right:3%;top:30px;width:62px;transform:rotate(-8deg)}
+.doodle-herb{right:1%;top:26px;width:88px;transform:rotate(8deg)}
 
 /* ── Section headings ── */
 .section{padding:86px 0 0;position:relative;overflow:visible}
@@ -176,6 +179,7 @@ footer{padding:64px 0 24px;background:var(--bg);margin-top:20px}
   .phones-pantry .phone-mockup,.phones-receipt .phone-mockup,.phones-recipe .phone-mockup{width:250px!important;margin-top:0!important}
   .flow-steps{gap:10px}
   .leaf-hero{display:none}
+  .leaf-pantry,.doodle-carrot,.doodle-herb{display:none}
   .mid-cta{padding:40px 24px}
 }
 
@@ -211,7 +215,6 @@ body.auth-error-active{overflow:hidden}
     <a href="/" class="nav-wordmark">Jujube</a>
     <div class="nav-links">
       <a href="#features" class="nav-link">Features</a>
-      <a href="#pricing" class="nav-link">Pricing</a>
       <a href="#faq" class="nav-link">FAQ</a>
       <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" class="btn-get-beta" target="_blank">Get the App</a>
     </div>
@@ -221,7 +224,7 @@ body.auth-error-active{overflow:hidden}
 <!-- Hero -->
 <section class="hero">
   <div class="wrap">
-    <img class="leaf-hero" src="assets/draw-heart.png" alt="">
+    <img class="leaf-hero" src="assets/doodle-heartwhisk.png" alt="">
     <div class="hero-grid">
       <div class="hero-copy reveal">
         <h1>Cook from what<br>you already have.</h1>
@@ -241,7 +244,7 @@ body.auth-error-active{overflow:hidden}
 <!-- Smart Pantry -->
 <section class="section" id="features">
   <div class="wrap">
-    <img class="leaf-pantry" src="assets/draw-jujube.png" alt="">
+    <img class="leaf-pantry" src="assets/doodle-jujube.png" alt="">
     <div class="feat-head reveal">
       <div class="eyebrow">Smart Pantry</div>
       <h2>Your kitchen, always up to date</h2>
@@ -257,6 +260,7 @@ body.auth-error-active{overflow:hidden}
 <section class="section">
   <div class="wrap">
     <div class="feat-head reveal">
+      <img class="doodle doodle-carrot" src="assets/doodle-carrot.png" alt="">
       <div class="eyebrow">Voice &amp; Receipt Input</div>
       <h2>Add groceries in seconds</h2>
       <p>Say what you brought home or snap a receipt photo. Jujube parses everything and adds it to your pantry instantly — no manual entry.</p>
@@ -288,6 +292,7 @@ body.auth-error-active{overflow:hidden}
 <section class="section">
   <div class="wrap">
     <div class="feat-head reveal">
+      <img class="doodle doodle-herb" src="assets/doodle-herb.png" alt="">
       <div class="eyebrow">AI Recipe Discovery</div>
       <h2>Dinner, figured out</h2>
       <p>Tell Jujube what you're in the mood for. It searches your pantry and suggests recipes you can actually make right now — with what you already have.</p>
@@ -295,53 +300,6 @@ body.auth-error-active{overflow:hidden}
     <div class="phones-recipe reveal">
       <div class="phone-mockup"><img class="phone-screenshot" src="assets/recipes-1.png" alt="Recipe suggestions"></div>
       <div class="phone-mockup"><img class="phone-screenshot" src="assets/recipes-2.png" alt="Recipe detail"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================================================================
-     PRICING  ⚠️ PLACEHOLDER PRICES — replace the $X.XX values below with
-     the real App Store / RevenueCat prices. Search "PRICE:" to find them.
-     =================================================================== -->
-<section class="section" id="pricing">
-  <div class="wrap">
-    <div class="pricing-head reveal">
-      <div class="eyebrow" style="text-align:center">Pricing</div>
-      <h2>Start free. Upgrade when you're ready.</h2>
-      <p>Everything you need to cook smarter — with an optional Premium for power users.</p>
-      <div class="price-note">Prices below are placeholders — final numbers TBD</div>
-    </div>
-    <div class="price-grid reveal">
-      <div class="price-card">
-        <div class="price-name">Free</div>
-        <div class="price-tag">$0</div>
-        <div class="price-sub">No card required</div>
-        <ul class="price-list">
-          <li>Pantry, fridge &amp; freezer tracking</li>
-          <li>Receipt &amp; voice input</li>
-          <li>AI recipe suggestions (limited)</li>
-          <li>Shopping list</li>
-        </ul>
-        <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" class="price-cta ghost">Download free</a>
-      </div>
-      <div class="price-card featured">
-        <div class="price-badge">Most popular</div>
-        <div class="price-name">Premium</div>
-        <div class="price-tag">$X.XX<small>/mo</small></div>
-        <div class="price-sub">Unlimited AI, cancel anytime</div>
-        <ul class="price-list">
-          <li>Everything in Free</li>
-          <li>Unlimited AI recipe discovery</li>
-          <li>Household sharing</li>
-          <li>Priority support</li>
-        </ul>
-        <div class="price-tiers">
-          <div class="tier-row"><span class="tier-name">Monthly</span><span class="tier-price"><!-- PRICE:monthly -->$X.XX/mo</span></div>
-          <div class="tier-row"><span class="tier-name">Annual<span class="tier-best">Best value</span></span><span class="tier-price"><!-- PRICE:annual -->$XX.XX/yr</span></div>
-          <div class="tier-row"><span class="tier-name">Lifetime</span><span class="tier-price"><!-- PRICE:lifetime -->$XX.XX once</span></div>
-        </div>
-        <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" class="price-cta primary">Get Premium</a>
-      </div>
     </div>
   </div>
 </section>
@@ -412,7 +370,6 @@ body.auth-error-active{overflow:hidden}
       <div class="footer-col">
         <h4>Product</h4>
         <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
       </div>
       <div class="footer-col">
