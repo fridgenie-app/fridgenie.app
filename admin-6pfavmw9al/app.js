@@ -225,23 +225,51 @@ async function loadActiveUsersTrend() {
   } catch (e) { sectionErr(state, e); }
 }
 
-// ── Onboarding funnel (v2.5.0, onboarding_events) — per-step user counts for
-// the post-signup `/setup` chain. Two steps (sub_purchase_started/succeeded
-// and continue_free) are parallel branches off sub_screen_reached, not a
-// strict line — see the `comparedTo` field the edge function already
-// resolved server-side; drop-off here is always "vs its own funnel parent."
+// ── Onboarding funnel (fix pass 14 — the REAL 2.5.1 flow, pre-auth included).
+// Two stages with different identities, mirrored from the edge function's
+// funnel.ts: PRE-AUTH rows (first-run video → invite fork → paywall →
+// sign-in) are counted per distinct anon INSTALL id; POST-AUTH rows (the
+// /setup chain) per distinct USER id. The dual-identity signup_done row
+// stitches the two — its drop-off vs "Reached sign-in" is computed
+// server-side on stitched installs. Branches (invite / plan / promo) are
+// parallel, so drop-off is always "vs its own funnel parent" (compared_to,
+// resolved server-side), and "% of stage entry" baselines on the stage's
+// first step (video_reached pre-auth, signup_done post-auth).
 const FUNNEL_STEP_LABEL = {
+  // Pre-auth (per install)
+  video_reached: "Saw first-run video",
+  invite_fork_reached: "Reached invite fork",
+  invite_code_entered: "Entered invite code",
+  paywall_reached: "Reached paywall",
+  plan_selected: "Selected a plan",
+  promo_link_tapped: "Tapped promo link",
+  signin_reached: "Reached sign-in",
+  // Post-auth (per user)
   signup_done: "Signed up",
+  payment_step_reached: "Reached payment step",
+  purchase_started: "Started purchase",
+  purchase_succeeded: "Purchase succeeded",
+  promo_redeem_succeeded: "Redeemed promo code",
+  invite_join_succeeded: "Invite join succeeded",
   name_done: "Entered name",
-  preferences_done: "Set taste preferences",
+  heard_from_done: "Answered how-did-you-hear",
+  taste_done: "Set taste levels",
+  cuisine_done: "Picked cuisines",
+  dietary_done: "Set dietary preferences",
+  allergies_done: "Set allergies",
   household_done: "Set up household",
-  quick_stock_reached: "Reached fill-kitchen",
-  sub_screen_reached: "Reached subscription screen",
-  sub_purchase_started: "Started purchase",
-  sub_purchase_succeeded: "Purchase succeeded",
-  continue_free: "Continued free",
+  kitchen_reached: "Reached fill-kitchen",
   onboarding_finished: "Finished onboarding",
 };
+function funnelPhaseRow(text) {
+  const tr = document.createElement("tr");
+  const td = document.createElement("td");
+  td.colSpan = 6;
+  td.className = "muted small";
+  td.textContent = text;
+  tr.appendChild(td);
+  return tr;
+}
 async function loadOnboardingFunnel() {
   const state = $("#funnel-state");
   const tb = $("#funnel-tbl tbody");
@@ -254,17 +282,30 @@ async function loadOnboardingFunnel() {
     const r = await callFn("onboarding_funnel", { params });
     $("#funnel-from").value = r.from;
     $("#funnel-to").value = r.to;
-    $("#funnel-note").textContent = `${fmtInt(r.signup_done)} signed up · ${r.from} → ${r.to}`;
+    $("#funnel-note").textContent =
+      `${fmtInt(r.video_reached)} installs entered · ${fmtInt(r.signup_done)} signed up · ${r.from} → ${r.to}`;
     tb.innerHTML = "";
     if (!r.rows.length) { state.textContent = "No onboarding events in this range."; return; }
+    let lastPhase = null;
     for (const row of r.rows) {
+      if (row.phase !== lastPhase) {
+        lastPhase = row.phase;
+        tb.appendChild(funnelPhaseRow(
+          row.phase === "pre_auth"
+            ? "Pre-auth first-run flow — counted per install (anonymous id)"
+            : `Post-auth /setup — counted per user · stitched to pre-auth on ${fmtInt(r.stitched_signups)} of ${fmtInt(r.signup_done)} signups`,
+        ));
+      }
       const tr = document.createElement("tr");
+      const parentLabel = row.compared_to
+        ? (FUNNEL_STEP_LABEL[row.compared_to] || row.compared_to)
+        : "";
       const dropoffCell = row.compared_to
-        ? `<span class="${row.dropoff_pct >= 30 ? "text-warn" : ""}">${row.dropoff_pct}%</span>`
+        ? `<span class="${row.dropoff_pct >= 30 ? "text-warn" : ""}" title="vs ${escapeHtml(parentLabel)}">${row.dropoff_pct}%</span>`
         : `<span class="muted small">—</span>`;
       tr.innerHTML = `<td class="mono-lbl">${escapeHtml(FUNNEL_STEP_LABEL[row.step] || row.step)}</td>
         <td class="num">${fmtInt(row.count)}</td>
-        <td>${shareBar((row.pct_of_signup || 0) / 100)}</td>
+        <td>${shareBar((row.pct_of_entry || 0) / 100)}</td>
         <td>${dropoffCell}</td>
         <td class="num">${fmtInt(row.ios_count)}</td>
         <td class="num">${fmtInt(row.android_count)}</td>`;
