@@ -125,6 +125,9 @@ async function callFn(action, { method = "GET", body, params } = {}) {
 // ── minimal SVG bar chart ───────────────────────────────────────────────────
 function barChart(el, data, { valueKey, labelKey, fmt = fmtInt }) {
   el.innerHTML = "";
+  // .chart is a fixed 190px box for the SVG. An empty-state message inside it
+  // would otherwise sit on top of 190px of dead space.
+  el.classList.toggle("chart-empty", !data || !data.length);
   if (!data || !data.length) { el.innerHTML = `<p class="muted small">No data.</p>`; return; }
   const W = el.clientWidth || 480, H = el.clientHeight || 190;
   const padB = 22, padL = 6, padT = 14, padR = 6;
@@ -1087,16 +1090,147 @@ function escapeHtml(s) {
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-const V2_LOADERS = [
-  loadCostByFunction, loadCostByModel, loadQuotaEvents,
-  loadRegeneration, loadSignupSources, loadActivity, loadActiveUsersTrend,
-  loadOnboardingFunnel, loadPromoCodes,
-];
+// ── Recipe-body cache hit rate ──────────────────────────────────────────────
+// The 30-60s call. `user_facing` already excludes background prefetch warms
+// server-side, so this reads as "what a real tap felt like" and not "what the
+// prefetcher happened to be doing".
+const fmtSecs = (ms) => (ms == null ? "–" : ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`);
+
+async function loadRecipeCache() {
+  const state = $("#rcache-state");
+  try {
+    const r = await callFn("recipe_cache_rate");
+    const uf = r.user_facing;
+    const rateEl = $("#rcache-rate");
+
+    // No events yet is NOT a 0% hit rate — telemetry only starts when
+    // generate-recipe is redeployed, so say so instead of reporting a scary 0.
+    if (!uf.total) {
+      rateEl.textContent = "–";
+      rateEl.classList.remove("warn");
+      $("#rcache-note").textContent = "collecting";
+      const chartEl = $("#rcache-chart");
+      chartEl.classList.add("chart-empty");
+      chartEl.innerHTML = `<p class="muted small">No opens recorded yet.</p>`;
+    } else {
+      rateEl.textContent = `${uf.hit_pct}%`;
+      // Below ~70% means most opens are paying the full generation wait.
+      rateEl.classList.toggle("warn", uf.hit_pct != null && uf.hit_pct < 70);
+      $("#rcache-note").textContent = `${fmtInt(uf.total)} recipe opens`;
+      barChart($("#rcache-chart"), r.daily, { valueKey: "hit_pct", labelKey: "date", fmt: (v) => `${v}%` });
+    }
+
+    $("#rcache-hits").textContent = fmtInt(uf.hits);
+    $("#rcache-miss").textContent = fmtInt(uf.misses);
+    $("#rcache-enrich").textContent = fmtInt(uf.enrich);
+    $("#rcache-hit-p95").textContent = fmtSecs(r.latency_ms.hit_p95);
+    $("#rcache-miss-p95").textContent = fmtSecs(r.latency_ms.miss_p95);
+
+    const tb = $("#rcache-tbl tbody");
+    tb.innerHTML = (r.by_surface || []).map((row) => `
+      <tr>
+        <td>${escapeHtml(row.surface)}</td>
+        <td class="num">${fmtInt(row.hits)}</td>
+        <td class="num">${fmtInt(row.misses)}</td>
+        <td class="num">${fmtInt(row.enrich)}</td>
+        <td class="num">${row.hit_pct == null ? "–" : row.hit_pct + "%"}</td>
+      </tr>`).join("") || `<tr><td colspan="5" class="muted">No data.</td></tr>`;
+
+    // Pre-instrumentation lower bound, so the panel says something useful
+    // before the live counter has 30 days behind it.
+    const est = r.estimate;
+    $("#rcache-estimate").textContent = est.hit_pct == null
+      ? ""
+      : `Before this counter existed: of ${fmtInt(est.billed_opens)} billed recipe opens in the last 30d, `
+        + `${fmtInt(est.billed_hits)} were served from cache and ${fmtInt(est.billed_misses)} needed a generation `
+        + `(~${est.hit_pct}%). That is a lower bound — free re-opens, favourites and Today's Dish left no trace.`;
+
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── Dish suggestion cache (the other cache: which dishes to show) ───────────
+async function loadDishCache() {
+  const state = $("#dcache-state");
+  try {
+    const r = await callFn("dish_cache_health");
+    const c = r.cache_hit_rate_30d;
+    const total = (c.cache_hits || 0) + (c.generated || 0);
+    const rateEl = $("#dcache-rate");
+    if (!total) {
+      rateEl.textContent = "–";
+      rateEl.classList.remove("warn");
+      $("#dcache-note").textContent = "no traffic";
+    } else {
+      rateEl.textContent = `${c.rate_pct}%`;
+      rateEl.classList.toggle("warn", c.rate_pct < 40);
+      $("#dcache-note").textContent = `${fmtInt(total)} suggestion requests`;
+    }
+    $("#dcache-hits").textContent = fmtInt(c.cache_hits);
+    $("#dcache-gen").textContent = fmtInt(c.generated);
+    $("#dcache-total").textContent = fmtInt(r.total_rows);
+    $("#dcache-emb").textContent = r.total_rows
+      ? `${fmtInt(r.embedded_rows)} (${Math.round((r.embedded_rows / r.total_rows) * 100)}%)`
+      : fmtInt(r.embedded_rows);
+    $("#dcache-alias").textContent = fmtInt(r.alias_merge_count_30d);
+    // The UNIQUE(name_key, cuisine_key) index makes a new duplicate impossible
+    // via normal writes, so anything but 0 here is a real signal.
+    const dupEl = $("#dcache-dups");
+    dupEl.textContent = fmtInt(r.dup_groups);
+    dupEl.classList.toggle("warn", (r.dup_groups || 0) > 0);
+    state.textContent = "";
+  } catch (e) { sectionErr(state, e); }
+}
+
+// ── tabs ────────────────────────────────────────────────────────────────────
+// Which loaders belong to which tab. The console used to fire all 14 backend
+// calls on every visit; now a tab's loaders run the first time it is opened and
+// are not re-run on subsequent switches (Refresh re-runs the visible tab).
+// loadOverview is excluded: it fills the KPI tiles AND doubles as the admin
+// gate, so it always runs first in gateAndShow().
+const TAB_LOADERS = {
+  overview: [loadActiveUsersTrend, loadSignups],
+  growth: [loadOnboardingFunnel, loadSignupSources, loadPromoCodes],
+  ai: [loadCost, loadTopUsers, loadCostByFunction, loadCostByModel, loadQuotaEvents],
+  performance: [loadRecipeCache, loadDishCache, loadRegeneration],
+  users: [loadUsers, loadActivity],
+};
+const TAB_KEYS = Object.keys(TAB_LOADERS);
+const loadedTabs = new Set();
+let currentTab = TAB_KEYS[0];
+
+// The Set() dedupes in case a loader is ever listed under two tabs.
+async function runTab(tab, { force = false } = {}) {
+  const loaders = TAB_LOADERS[tab];
+  if (!loaders) return;
+  if (!force && loadedTabs.has(tab)) return;
+  loadedTabs.add(tab);
+  await Promise.allSettled([...new Set(loaders)].map((fn) => fn()));
+}
+
+function selectTab(tab, { push = true } = {}) {
+  if (!TAB_LOADERS[tab]) tab = TAB_KEYS[0];
+  currentTab = tab;
+  $$(".tab").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+  // Unhide BEFORE runTab: barChart sizes itself from el.clientWidth, which is 0
+  // inside a display:none panel, so a chart drawn on a still-hidden tab renders
+  // collapsed.
+  $$(".tabpanel").forEach((p) => p.classList.toggle("hidden", p.dataset.tab !== tab));
+  if (push && location.hash.slice(1) !== tab) history.replaceState(null, "", `#${tab}`);
+  runTab(tab);
+}
+
+function initTabs() {
+  $$(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => selectTab(btn.dataset.tab));
+  });
+  window.addEventListener("hashchange", () => selectTab(location.hash.slice(1), { push: false }));
+}
+
+// Full reload of everything currently on screen. Used by the Refresh button.
 async function loadDashboard() {
-  await Promise.allSettled([
-    loadOverview(), loadSignups(), loadCost(), loadTopUsers(), loadUsers(),
-    ...V2_LOADERS.map((fn) => fn()),
-  ]);
+  loadedTabs.clear();
+  await Promise.allSettled([loadOverview(), runTab(currentTab, { force: true })]);
 }
 
 // ── auth flow ───────────────────────────────────────────────────────────────
@@ -1115,8 +1249,9 @@ async function gateAndShow(session) {
     // The overview call doubles as the admin gate: 403 => not admin.
     await loadOverview();
     show("dash");
-    // Load the rest after showing the shell.
-    Promise.allSettled([loadSignups(), loadCost(), loadTopUsers(), loadUsers(), ...V2_LOADERS.map((fn) => fn())]);
+    // Load only the tab we are landing on; the rest load when opened. The hash
+    // is honoured so a bookmarked/refreshed #performance comes back where it was.
+    selectTab(location.hash.slice(1) || TAB_KEYS[0], { push: false });
   } catch (e) {
     if (e.status === 403 || e.message === "not_authorized") { show("denied"); return; }
     // Backend not deployed / other error: still show the dashboard shell so the
@@ -1124,7 +1259,8 @@ async function gateAndShow(session) {
     show("dash");
     ["#signups-state", "#cost-state", "#top-users-state", "#users-state",
      "#cbf-state", "#cbm-state", "#quota-state", "#regen-state", "#src-state", "#activity-state",
-     "#dau-trend-state", "#funnel-state", "#promo-state"]
+     "#dau-trend-state", "#funnel-state", "#promo-state",
+     "#rcache-state", "#dcache-state"]
       .forEach((s) => sectionErr($(s), e));
     toast(`Backend error: ${e.message}`, true);
   }
@@ -1229,6 +1365,7 @@ $("#refresh-btn").addEventListener("click", () => { toast("Refreshing…"); load
 $("#user-search").addEventListener("input", () => renderUsers(filterUsers()));
 $("#funnel-apply").addEventListener("click", () => { toast("Loading funnel…"); loadOnboardingFunnel(); });
 initColumnToggle();
+initTabs();
 
 // Modal close: button, backdrop click, Escape.
 $("#modal-close").addEventListener("click", closeModal);

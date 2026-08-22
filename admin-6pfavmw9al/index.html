@@ -72,8 +72,16 @@
     </header>
 
     <main class="container">
-      <!-- Headline KPI tiles -->
-      <section class="tiles" id="tiles">
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Dashboard sections">
+        <button type="button" class="tab" role="tab" data-tab="overview" id="tab-overview" aria-controls="panel-overview" aria-selected="true">Overview</button>
+        <button type="button" class="tab" role="tab" data-tab="growth" id="tab-growth" aria-controls="panel-growth" aria-selected="false">Growth</button>
+        <button type="button" class="tab" role="tab" data-tab="ai" id="tab-ai" aria-controls="panel-ai" aria-selected="false">AI &amp; cost</button>
+        <button type="button" class="tab" role="tab" data-tab="performance" id="tab-performance" aria-controls="panel-performance" aria-selected="false">Performance</button>
+        <button type="button" class="tab" role="tab" data-tab="users" id="tab-users" aria-controls="panel-users" aria-selected="false">Users</button>
+      </nav>
+
+      <div class="tabpanel" id="panel-overview" data-tab="overview" role="tabpanel" aria-labelledby="tab-overview">
+<section class="tiles span-2" id="tiles">
         <div class="tile" data-k="total_users"><span class="tile-label">Total users</span><span class="tile-val">–</span></div>
         <div class="tile" data-k="pro_users"><span class="tile-label">Pro users</span><span class="tile-val">–</span></div>
         <div class="tile" data-k="dau"><span class="tile-label">DAU</span><span class="tile-val">–</span></div>
@@ -81,49 +89,14 @@
         <div class="tile" data-k="mau"><span class="tile-label">MAU</span><span class="tile-val">–</span></div>
         <div class="tile" data-k="cost_30d_usd"><span class="tile-label">AI spend · 30d</span><span class="tile-val">–</span></div>
       </section>
-
-      <!-- Daily actives (app opens) -->
-      <section class="card panel">
-        <div class="panel-head">
-          <h2>Daily actives · app opens</h2>
-          <span class="panel-note" id="dau-trend-note"></span>
-        </div>
-        <div id="dau-trend-chart" class="chart"></div>
-        <div id="dau-trend-state" class="panel-state"></div>
-      </section>
-
-      <!-- Onboarding funnel (2.5.1 flow incl. pre-auth, onboarding_events) -->
-      <section class="card panel">
-        <div class="panel-head users-head">
-          <h2>Onboarding funnel</h2>
-          <div class="users-head-tools funnel-range">
-            <input type="date" id="funnel-from" aria-label="From date" />
-            <span class="muted small">to</span>
-            <input type="date" id="funnel-to" aria-label="To date" />
-            <button type="button" class="btn btn-ghost btn-sm" id="funnel-apply">Apply</button>
+        <section class="card panel span-2">
+          <div class="panel-head">
+            <h2>Daily actives · app opens</h2>
+            <span class="panel-note" id="dau-trend-note"></span>
           </div>
-          <span class="panel-note" id="funnel-note"></span>
-        </div>
-        <div class="scroll">
-          <table class="tbl" id="funnel-tbl">
-            <thead>
-              <tr>
-                <th>Step</th>
-                <th class="num">Reached</th>
-                <th>% of stage entry</th>
-                <th>Drop-off vs parent</th>
-                <th class="num">iOS</th>
-                <th class="num">Android</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div id="funnel-state" class="panel-state"></div>
-      </section>
-
-      <div class="grid-2">
-        <!-- Signups -->
+          <div id="dau-trend-chart" class="chart"></div>
+          <div id="dau-trend-state" class="panel-state"></div>
+        </section>
         <section class="card panel">
           <div class="panel-head">
             <h2>Signups</h2>
@@ -132,20 +105,6 @@
           <div id="signups-chart" class="chart"></div>
           <div id="signups-state" class="panel-state"></div>
         </section>
-
-        <!-- AI daily spend -->
-        <section class="card panel">
-          <div class="panel-head">
-            <h2>AI spend · daily (30d)</h2>
-            <span class="panel-note" id="cost-note"></span>
-          </div>
-          <div id="cost-chart" class="chart"></div>
-          <div id="cost-state" class="panel-state"></div>
-        </section>
-      </div>
-
-      <div class="grid-2">
-        <!-- Content usage -->
         <section class="card panel">
           <div class="panel-head"><h2>Content usage</h2></div>
           <div class="mini-tiles" id="content-tiles">
@@ -155,54 +114,37 @@
             <div class="mini-tile"><span class="mini-label">AI recipes</span><span class="mini-val" data-k="ai_recipes">–</span></div>
           </div>
         </section>
-
-        <!-- Top users by tokens -->
-        <section class="card panel">
-          <div class="panel-head"><h2>Top users · tokens (30d)</h2></div>
-          <div class="scroll top-users-scroll">
-            <table class="tbl" id="top-users-tbl">
-              <thead><tr><th>User</th><th class="num">Tokens</th><th class="num">Calls</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <div class="top-user-cards" id="top-users-cards"></div>
-          <div id="top-users-state" class="panel-state"></div>
-        </section>
       </div>
 
-      <!-- AI cost breakdowns -->
-      <div class="grid-2">
-        <section class="card panel">
-          <div class="panel-head">
-            <h2>AI cost by function (30d)</h2>
-            <span class="panel-note" id="cbf-note"></span>
+      <div class="tabpanel hidden" id="panel-growth" data-tab="growth" role="tabpanel" aria-labelledby="tab-growth">
+        <section class="card panel span-2">
+          <div class="panel-head users-head">
+            <h2>Onboarding funnel</h2>
+            <div class="users-head-tools funnel-range">
+              <input type="date" id="funnel-from" aria-label="From date" />
+              <span class="muted small">to</span>
+              <input type="date" id="funnel-to" aria-label="To date" />
+              <button type="button" class="btn btn-ghost btn-sm" id="funnel-apply">Apply</button>
+            </div>
+            <span class="panel-note" id="funnel-note"></span>
           </div>
           <div class="scroll">
-            <table class="tbl" id="cbf-tbl">
-              <thead><tr><th>Function</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
+            <table class="tbl" id="funnel-tbl">
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th class="num">Reached</th>
+                  <th>% of stage entry</th>
+                  <th>Drop-off vs parent</th>
+                  <th class="num">iOS</th>
+                  <th class="num">Android</th>
+                </tr>
+              </thead>
               <tbody></tbody>
             </table>
           </div>
-          <div id="cbf-state" class="panel-state"></div>
+          <div id="funnel-state" class="panel-state"></div>
         </section>
-
-        <section class="card panel">
-          <div class="panel-head">
-            <h2>AI cost by model (30d)</h2>
-            <span class="panel-note" id="cbm-note"></span>
-          </div>
-          <div class="scroll">
-            <table class="tbl" id="cbm-tbl">
-              <thead><tr><th>Model</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <div id="cbm-state" class="panel-state"></div>
-        </section>
-      </div>
-
-      <!-- Signal cards: signup source · regeneration quality -->
-      <div class="grid-2">
         <section class="card panel">
           <div class="panel-head">
             <h2>Signups by source (30d)</h2>
@@ -216,7 +158,199 @@
           </div>
           <div id="src-state" class="panel-state"></div>
         </section>
+        <section class="card panel span-2">
+          <div class="panel-head">
+            <h2>Promo Codes</h2>
+            <span class="panel-note" id="promo-note"></span>
+          </div>
 
+          <form id="promo-form" class="promo-form">
+            <div class="promo-form-grid">
+              <div class="field">
+                <label for="promo-code">Code</label>
+                <input type="text" id="promo-code" maxlength="16" autocomplete="off" />
+                <span class="field-hint">6-16 letters/numbers. Blank = auto-generate.</span>
+                <p id="promo-code-err" class="field-err hidden"></p>
+              </div>
+              <div class="field">
+                <label for="promo-desc">Description</label>
+                <input type="text" id="promo-desc" autocomplete="off" />
+              </div>
+              <div class="field">
+                <label for="promo-max-uses">Max uses</label>
+                <input type="number" id="promo-max-uses" min="1" step="1" />
+                <span class="field-hint">How many <b>different people</b> can redeem this code. Blank = unlimited.</span>
+              </div>
+              <div class="field">
+                <label for="promo-expires">Redeem-by date</label>
+                <input type="date" id="promo-expires" />
+                <span class="field-hint">Deadline to <b>redeem</b> the code. Blank = never expires. This is not how long Pro lasts.</span>
+              </div>
+              <div class="field">
+                <label for="promo-duration">Grant duration</label>
+                <select id="promo-duration">
+                  <option value="lifetime" selected>Lifetime</option>
+                  <option value="three_month">3 months</option>
+                  <option value="six_month">6 months</option>
+                  <option value="yearly">12 months</option>
+                </select>
+                <span class="field-hint">How long the granted <b>Pro access</b> lasts once someone redeems it.</span>
+              </div>
+            </div>
+            <div class="promo-form-actions">
+              <button type="submit" class="btn btn-primary" id="promo-generate-btn">Generate Code</button>
+              <p id="promo-form-msg" class="msg"></p>
+            </div>
+          </form>
+
+          <div id="promo-result" class="promo-result hidden"></div>
+
+          <div class="scroll">
+            <table class="tbl" id="promo-tbl">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Description</th>
+                  <th class="num">Uses</th>
+                  <th>Grant duration</th>
+                  <th>Redeem-by</th>
+                  <th>Status</th>
+                  <th class="col-expand"></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="promo-pagination" id="promo-pagination">
+            <button type="button" class="btn btn-ghost btn-sm" id="promo-prev">Prev</button>
+            <span class="muted small" id="promo-page-info"></span>
+            <button type="button" class="btn btn-ghost btn-sm" id="promo-next">Next</button>
+          </div>
+          <div id="promo-state" class="panel-state"></div>
+        </section>
+      </div>
+
+      <div class="tabpanel hidden" id="panel-ai" data-tab="ai" role="tabpanel" aria-labelledby="tab-ai">
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>AI spend · daily (30d)</h2>
+            <span class="panel-note" id="cost-note"></span>
+          </div>
+          <div id="cost-chart" class="chart"></div>
+          <div id="cost-state" class="panel-state"></div>
+        </section>
+        <section class="card panel">
+          <div class="panel-head"><h2>Top users · tokens (30d)</h2></div>
+          <div class="scroll top-users-scroll">
+            <table class="tbl" id="top-users-tbl">
+              <thead><tr><th>User</th><th class="num">Tokens</th><th class="num">Calls</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="top-user-cards" id="top-users-cards"></div>
+          <div id="top-users-state" class="panel-state"></div>
+        </section>
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>AI cost by function (30d)</h2>
+            <span class="panel-note" id="cbf-note"></span>
+          </div>
+          <div class="scroll">
+            <table class="tbl" id="cbf-tbl">
+              <thead><tr><th>Function</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="cbf-state" class="panel-state"></div>
+        </section>
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>AI cost by model (30d)</h2>
+            <span class="panel-note" id="cbm-note"></span>
+          </div>
+          <div class="scroll">
+            <table class="tbl" id="cbm-tbl">
+              <thead><tr><th>Model</th><th class="num">Cost</th><th class="num">Calls</th><th>Share</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="cbm-state" class="panel-state"></div>
+        </section>
+        <section class="card panel span-2">
+          <div class="panel-head">
+            <h2>Users hitting daily limits (30d)</h2>
+            <span class="panel-note" id="quota-note"></span>
+          </div>
+          <div class="scroll">
+            <table class="tbl" id="quota-tbl">
+              <thead><tr><th>Feature</th><th class="num">Limit hits</th><th class="num">Unique users</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="quota-state" class="panel-state"></div>
+        </section>
+      </div>
+
+      <div class="tabpanel hidden" id="panel-performance" data-tab="performance" role="tabpanel" aria-labelledby="tab-performance">
+        <!-- Recipe-body cache hit rate (recipe_cache_events, 20260822000000) -->
+        <section class="card panel span-2">
+          <div class="panel-head">
+            <h2>Recipe cache · hit rate (30d)</h2>
+            <span class="panel-note" id="rcache-note"></span>
+          </div>
+          <p class="panel-sub">
+            Does opening a recipe come straight from the shared cache, or does it wait
+            30&ndash;60s for a fresh generation? Background prefetch warms are excluded &mdash;
+            this is what a real tap felt like.
+          </p>
+          <div class="stat-row">
+            <div class="stat-big">
+              <span class="stat-num" id="rcache-rate">–</span>
+              <span class="stat-cap">served from cache</span>
+            </div>
+            <div class="mini-tiles mini-tiles-auto">
+              <div class="mini-tile"><span class="mini-label">Instant (cache)</span><span class="mini-val" id="rcache-hits">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Waited (generated)</span><span class="mini-val" id="rcache-miss">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Translate-only</span><span class="mini-val" id="rcache-enrich">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Cache p95</span><span class="mini-val" id="rcache-hit-p95">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Generate p95</span><span class="mini-val" id="rcache-miss-p95">–</span></div>
+            </div>
+          </div>
+          <div id="rcache-chart" class="chart"></div>
+          <div class="scroll">
+            <table class="tbl" id="rcache-tbl">
+              <thead><tr><th>Surface</th><th class="num">Cache</th><th class="num">Generated</th><th class="num">Translate-only</th><th class="num">Hit rate</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="panel-foot muted small" id="rcache-estimate"></p>
+          <div id="rcache-state" class="panel-state"></div>
+        </section>
+        <!-- Dish suggestion cache (dish_serving_daily / dish_cache) -->
+        <section class="card panel">
+          <div class="panel-head">
+            <h2>Dish suggestion cache (30d)</h2>
+            <span class="panel-note" id="dcache-note"></span>
+          </div>
+          <p class="panel-sub">
+            The other cache: which dishes to suggest. A hit skips the recipe-suggest model call.
+          </p>
+          <div class="stat-row">
+            <div class="stat-big">
+              <span class="stat-num" id="dcache-rate">–</span>
+              <span class="stat-cap">suggestions from cache</span>
+            </div>
+            <div class="mini-tiles mini-tiles-auto">
+              <div class="mini-tile"><span class="mini-label">Cache hits</span><span class="mini-val" id="dcache-hits">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Generated</span><span class="mini-val" id="dcache-gen">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Dishes cached</span><span class="mini-val" id="dcache-total">–</span></div>
+              <div class="mini-tile"><span class="mini-label">With embedding</span><span class="mini-val" id="dcache-emb">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Alias merges (30d)</span><span class="mini-val" id="dcache-alias">–</span></div>
+              <div class="mini-tile"><span class="mini-label">Duplicate groups</span><span class="mini-val" id="dcache-dups">–</span></div>
+            </div>
+          </div>
+          <div id="dcache-state" class="panel-state"></div>
+        </section>
         <section class="card panel">
           <div class="panel-head">
             <h2>Recipe quality · regenerations (30d)</h2>
@@ -235,148 +369,61 @@
         </section>
       </div>
 
-      <!-- Quota-reached events -->
-      <section class="card panel">
-        <div class="panel-head">
-          <h2>Users hitting daily limits (30d)</h2>
-          <span class="panel-note" id="quota-note"></span>
-        </div>
-        <div class="scroll">
-          <table class="tbl" id="quota-tbl">
-            <thead><tr><th>Feature</th><th class="num">Limit hits</th><th class="num">Unique users</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div id="quota-state" class="panel-state"></div>
-      </section>
-
-      <!-- User list -->
-      <section class="card panel">
-        <div class="panel-head users-head">
-          <h2>Users</h2>
-          <div class="users-head-tools">
-            <input id="user-search" class="search" type="search" placeholder="Search email, name, household…" />
-            <div class="col-toggle">
-              <button type="button" class="btn btn-ghost btn-sm" id="col-toggle-btn">Fields</button>
-              <div class="col-toggle-menu hidden" id="col-toggle-menu"></div>
+      <div class="tabpanel hidden" id="panel-users" data-tab="users" role="tabpanel" aria-labelledby="tab-users">
+        <section class="card panel span-2">
+          <div class="panel-head users-head">
+            <h2>Users</h2>
+            <div class="users-head-tools">
+              <input id="user-search" class="search" type="search" placeholder="Search email, name, household…" />
+              <div class="col-toggle">
+                <button type="button" class="btn btn-ghost btn-sm" id="col-toggle-btn">Fields</button>
+                <div class="col-toggle-menu hidden" id="col-toggle-menu"></div>
+              </div>
             </div>
           </div>
-        </div>
-        <p class="muted small users-hint users-hint-desktop">Tap a row for detail &amp; actions.</p>
-        <p class="muted small users-hint users-hint-mobile">Tap a card for detail &amp; actions.</p>
-        <div class="scroll users-table-wrap">
-          <table class="tbl tbl-users" id="users-tbl">
-            <thead>
-              <tr>
-                <th class="col-user sticky-col">User</th>
-                <th data-col="method">Method</th>
-                <th data-col="signup">Signed up</th>
-                <th data-col="active">Last active
-                  <span class="info-dot" tabindex="0"
-                        title="The most recent of: a profile activity ping, an AI recipe call, or an app open/resume — never shows a time older than what we can prove happened.">?</span>
-                </th>
-                <th class="num" data-col="items">Items</th>
-                <th class="num" data-col="cost">AI cost 30d</th>
-                <th data-col="tier">Tier</th>
-                <th class="col-expand"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div class="user-cards" id="users-cards"></div>
-        <div id="users-state" class="panel-state"></div>
-      </section>
-
-      <!-- Recent admin activity -->
-      <section class="card panel">
-        <div class="panel-head"><h2>Recent admin activity</h2></div>
-        <div class="scroll">
-          <table class="tbl" id="activity-tbl">
-            <thead><tr><th>When</th><th>Action</th><th>Admin</th><th>Target</th><th>Details</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div id="activity-state" class="panel-state"></div>
-      </section>
-
-      <!-- Promo Codes -->
-      <section class="card panel">
-        <div class="panel-head">
-          <h2>Promo Codes</h2>
-          <span class="panel-note" id="promo-note"></span>
-        </div>
-
-        <form id="promo-form" class="promo-form">
-          <div class="promo-form-grid">
-            <div class="field">
-              <label for="promo-code">Code</label>
-              <input type="text" id="promo-code" maxlength="16" autocomplete="off" />
-              <span class="field-hint">6-16 letters/numbers. Blank = auto-generate.</span>
-              <p id="promo-code-err" class="field-err hidden"></p>
-            </div>
-            <div class="field">
-              <label for="promo-desc">Description</label>
-              <input type="text" id="promo-desc" autocomplete="off" />
-            </div>
-            <div class="field">
-              <label for="promo-max-uses">Max uses</label>
-              <input type="number" id="promo-max-uses" min="1" step="1" />
-              <span class="field-hint">How many <b>different people</b> can redeem this code. Blank = unlimited.</span>
-            </div>
-            <div class="field">
-              <label for="promo-expires">Redeem-by date</label>
-              <input type="date" id="promo-expires" />
-              <span class="field-hint">Deadline to <b>redeem</b> the code. Blank = never expires. This is not how long Pro lasts.</span>
-            </div>
-            <div class="field">
-              <label for="promo-duration">Grant duration</label>
-              <select id="promo-duration">
-                <option value="lifetime" selected>Lifetime</option>
-                <option value="three_month">3 months</option>
-                <option value="six_month">6 months</option>
-                <option value="yearly">12 months</option>
-              </select>
-              <span class="field-hint">How long the granted <b>Pro access</b> lasts once someone redeems it.</span>
-            </div>
+          <p class="muted small users-hint users-hint-desktop">Tap a row for detail &amp; actions.</p>
+          <p class="muted small users-hint users-hint-mobile">Tap a card for detail &amp; actions.</p>
+          <div class="scroll users-table-wrap">
+            <table class="tbl tbl-users" id="users-tbl">
+              <thead>
+                <tr>
+                  <th class="col-user sticky-col">User</th>
+                  <th data-col="method">Method</th>
+                  <th data-col="signup">Signed up</th>
+                  <th data-col="active">Last active
+                    <span class="info-dot" tabindex="0"
+                          title="The most recent of: a profile activity ping, an AI recipe call, or an app open/resume — never shows a time older than what we can prove happened.">?</span>
+                  </th>
+                  <th class="num" data-col="items">Items</th>
+                  <th class="num" data-col="cost">AI cost 30d</th>
+                  <th data-col="tier">Tier</th>
+                  <th class="col-expand"></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
-          <div class="promo-form-actions">
-            <button type="submit" class="btn btn-primary" id="promo-generate-btn">Generate Code</button>
-            <p id="promo-form-msg" class="msg"></p>
+          <div class="user-cards" id="users-cards"></div>
+          <div id="users-state" class="panel-state"></div>
+        </section>
+        <section class="card panel span-2">
+          <div class="panel-head"><h2>Recent admin activity</h2></div>
+          <div class="scroll">
+            <table class="tbl" id="activity-tbl">
+              <thead><tr><th>When</th><th>Action</th><th>Admin</th><th>Target</th><th>Details</th></tr></thead>
+              <tbody></tbody>
+            </table>
           </div>
-        </form>
-
-        <div id="promo-result" class="promo-result hidden"></div>
-
-        <div class="scroll">
-          <table class="tbl" id="promo-tbl">
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Description</th>
-                <th class="num">Uses</th>
-                <th>Grant duration</th>
-                <th>Redeem-by</th>
-                <th>Status</th>
-                <th class="col-expand"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div class="promo-pagination" id="promo-pagination">
-          <button type="button" class="btn btn-ghost btn-sm" id="promo-prev">Prev</button>
-          <span class="muted small" id="promo-page-info"></span>
-          <button type="button" class="btn btn-ghost btn-sm" id="promo-next">Next</button>
-        </div>
-        <div id="promo-state" class="panel-state"></div>
-      </section>
+          <div id="activity-state" class="panel-state"></div>
+        </section>
+      </div>
 
       <footer class="foot muted small">
         Jujube admin · read-only analytics via <code>is_admin()</code> RLS + the
         <code>admin-console</code> edge function. Service-role key never reaches the browser.
       </footer>
-    </main>
+    
+</main>
   </div>
 
   <!-- Modal (pantry / usage log) -->

@@ -143,6 +143,10 @@ input[type=email]:focus, #code:focus, .search:focus { border-color: var(--red); 
 
 /* Charts */
 .chart { width: 100%; height: 190px; }
+/* A panel whose load failed leaves .chart untouched; without this it reserves
+   190px of blank space directly under the error message. */
+.chart:empty { height: 0; }
+.chart.chart-empty { height: auto; }
 .chart svg { width: 100%; height: 100%; display: block; overflow: visible; }
 .bar { fill: var(--red-light); transition: fill .15s; }
 .bar:hover { fill: var(--red); }
@@ -513,3 +517,52 @@ tr.detail-row.hidden { display: none; }
 .promo-delete-btn:disabled { opacity: .5; cursor: default; }
 .promo-pagination { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
 .promo-pagination .btn:disabled { opacity: .4; cursor: default; }
+
+/* ── Tabbed dashboard ────────────────────────────────────────────────────────
+   The console used to be one ~14-panel scroll. Panels are now grouped into
+   tabs and each tab's data loads on first open, so a visit costs 3-5 backend
+   calls instead of all 14 at once. */
+.tabs {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  margin-bottom: 20px; padding-bottom: 2px;
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: .86rem; font-weight: 600; letter-spacing: .01em;
+  color: var(--text-light);
+  padding: 9px 14px 10px; border-radius: 10px 10px 0 0;
+  /* Reserve the indicator on every tab so selecting one does not shift the row. */
+  border-bottom: 2px solid transparent; margin-bottom: -3px;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.tab:hover { color: var(--text-mid); background: var(--cream); }
+.tab[aria-selected="true"] { color: var(--red); border-bottom-color: var(--red); background: transparent; }
+.tab:focus-visible { outline: 2px solid var(--red-accent); outline-offset: 2px; }
+
+/* Panels inside a tab share one grid, so a half-width panel pairs with its
+   neighbour exactly as the old .grid-2 wrappers did. */
+.tabpanel { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.tabpanel > * { min-width: 0; }
+.tabpanel > .span-2 { grid-column: 1 / -1; }
+.tabpanel.hidden { display: none; }
+@media (max-width: 820px) {
+  .tabpanel { grid-template-columns: 1fr; }
+  .tabpanel > .span-2 { grid-column: auto; }
+  .tabs { gap: 0; }
+  .tab { padding: 9px 10px 10px; font-size: .8rem; }
+}
+/* .tiles sets its own grid; span-2 only needs to place it in the parent grid. */
+.tabpanel > .tiles { margin-bottom: 0; }
+
+/* ── Cache panels ──────────────────────────────────────────────────────────── */
+.panel-sub { font-size: .8rem; color: var(--text-light); line-height: 1.5; margin: -4px 0 16px; }
+.panel-foot { margin-top: 14px; line-height: 1.5; }
+/* Same cream tiles as the Content usage panel, but column count follows the
+   panel width instead of being pinned at 2 — these panels carry 5-6 stats. */
+.mini-tiles-auto { grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); flex: 1 1 100%; }
+.mini-tiles-auto .mini-val { font-size: 1.15rem; }
+/* Sits beside the headline number on a wide panel, wraps under it on a narrow one. */
+.stat-row > .mini-tiles-auto { flex: 1 1 420px; }
+.tbl th.num, .tbl td.num { text-align: right; }
