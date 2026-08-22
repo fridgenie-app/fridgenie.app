@@ -84,7 +84,11 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .btn-ghost{background:rgba(158,21,51,.06);color:var(--ink);border:1px solid var(--line)}
 .btn-light{background:#fff;color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.16)}
 
-/* ── device frame (same geometry as the App Store renders) ── */
+/* ── device frame (same geometry as the App Store renders) ──
+   --w MUST be a length. The bezel, band and screen radius are all calc()'d
+   from it, and a percentage border-radius resolves per-axis (width for the
+   horizontal radius, height for the vertical), which turns every corner into
+   a stretched ellipse on a phone twice as tall as it is wide. */
 .device{--bez:calc(var(--w) * .0327);--band:calc(var(--w) * .009);--sr:calc((var(--w) - 2 * var(--bez)) * .141);
   width:var(--w);flex:0 0 auto;padding:var(--band);
   border-radius:calc(var(--sr) + var(--bez));
@@ -150,7 +154,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 /* ── kitchen trio ── */
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;align-items:start}
 .trio-item{text-align:center;display:flex;flex-direction:column;align-items:center}
-.trio-item .device{--w:100%;max-width:250px;margin-bottom:26px}
+.trio-item .device{--w:clamp(200px,24vw,250px);margin-bottom:26px}
 .trio-item h3{margin-bottom:8px}
 .trio-item p{font-size:.9rem;color:var(--muted);font-weight:500;max-width:30ch;margin:0 auto}
 
@@ -235,6 +239,7 @@ footer{padding:72px 0 44px}
   .feature-art.duo .device{--w:min(72vw,250px)}
   .feature-art.duo .device:last-child{margin-top:0}
   .feature-art .device{--w:min(72vw,262px)}
+  .trio-item .device{--w:min(72vw,250px)}
   .strip{gap:8px 20px}
   .strip span{font-size:.66rem}
   .foot-top{grid-template-columns:1fr}
